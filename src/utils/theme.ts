@@ -87,7 +87,7 @@ const theme = createTheme({
     },
     caption: {
       fontFamily: FONT_FAMILY,
-      fontSize: "10px",
+      fontSize: "10.4px",
       fontWeight: 300,
     },
     button: {
@@ -428,6 +428,27 @@ const theme = createTheme({
           "&:hover": {
             color: ColorPalette.PRIMARY_ACTION,
             textDecoration: "underline",
+          },
+        },
+      },
+    },
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: {
+          "& .Mui-selected": {
+            color: ColorPalette.SECONDARY_DEFAULT,
+          },
+          "& .MuiBottomNavigationAction-root": {
+            color: ColorPalette.GREY_DEFAULT,
+          },
+        },
+      },
+    },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            color: ColorPalette.PRIMARY_DEFAULT,
           },
         },
       },
