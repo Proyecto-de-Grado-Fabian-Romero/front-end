@@ -87,7 +87,7 @@ const theme = createTheme({
     },
     caption: {
       fontFamily: FONT_FAMILY,
-      fontSize: "10px",
+      fontSize: "10.4px",
       fontWeight: 300,
     },
     button: {
@@ -108,9 +108,11 @@ const theme = createTheme({
           paddingTop: "32px",
           [theme.breakpoints.down("sm")]: {
             marginTop: 48,
+            padding: "24px 2%",
           },
           [theme.breakpoints.up("md")]: {
             marginTop: 0,
+            padding: "24px 5%",
           },
           [theme.breakpoints.up("lg")]: {
             marginTop: 0,
@@ -143,13 +145,13 @@ const theme = createTheme({
           borderRadius: "16px",
           fontWeight: 500,
           [theme.breakpoints.up("xs")]: {
-            fontSize: 18,
+            fontSize: 14,
           },
           [theme.breakpoints.up("md")]: {
-            fontSize: 20,
+            fontSize: 16,
           },
           [theme.breakpoints.up("lg")]: {
-            fontSize: 22,
+            fontSize: 16,
           },
           textTransform: "capitalize",
           "&.MuiButton-contained": {
@@ -168,9 +170,9 @@ const theme = createTheme({
             },
           },
           "&.MuiButton-text": {
-            color: ColorPalette.PRIMARY_DEFAULT,
+            color: ColorPalette.NEUTRAL_BLACK,
             "&:hover": {
-              color: ColorPalette.PRIMARY_HOVER,
+              color: ColorPalette.PRIMARY_DEFAULT,
               textTransform: "underline",
             },
           },
@@ -428,6 +430,27 @@ const theme = createTheme({
           "&:hover": {
             color: ColorPalette.PRIMARY_ACTION,
             textDecoration: "underline",
+          },
+        },
+      },
+    },
+    MuiBottomNavigation: {
+      styleOverrides: {
+        root: {
+          "& .Mui-selected": {
+            color: ColorPalette.SECONDARY_DEFAULT,
+          },
+          "& .MuiBottomNavigationAction-root": {
+            color: ColorPalette.GREY_DEFAULT,
+          },
+        },
+      },
+    },
+    MuiBottomNavigationAction: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            color: ColorPalette.PRIMARY_DEFAULT,
           },
         },
       },
