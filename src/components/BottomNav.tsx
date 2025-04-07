@@ -3,60 +3,23 @@ import React, { useState } from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
-import {
-  CalendarToday,
-  Notifications,
-  Person,
-  Search,
-  Key,
-  Image,
-  MonetizationOn,
-  Book,
-} from "@mui/icons-material";
+import { useMediaQuery, useTheme, Typography } from "@mui/material";
 import { UserType } from "@/utils/constants/user-constants";
-import { Typography, useMediaQuery, useTheme } from "@mui/material";
+import { getBottomNavItems } from "@/utils/constants/nav-configs";
 
-// Define navigation configs based on user type
-const NAV_CONFIGS: Record<
-  string,
-  { label: string; icon: React.ReactElement }[]
-> = {
-  [UserType.RENTER]: [
-    { label: "Explora", icon: <Search /> },
-    { label: "Reservas", icon: <Book /> },
-    { label: "Notificaciones", icon: <Notifications /> },
-    { label: "Perfil", icon: <Person /> },
-  ],
-  [UserType.OWNER]: [
-    { label: "Reservas", icon: <Book /> },
-    { label: "Ambientes", icon: <Key /> },
-    { label: "Calendario", icon: <CalendarToday /> },
-    { label: "Explora", icon: <Search /> },
-    { label: "Perfil", icon: <Person /> },
-  ],
-  [UserType.ADMIN]: [
-    { label: "Capturas", icon: <Image /> },
-    { label: "Calendario", icon: <CalendarToday /> },
-    { label: "Deudas", icon: <MonetizationOn /> },
-    { label: "Perfil", icon: <Person /> },
-  ],
-};
-
-type BottomNavProps = {
+interface BottomNavProps {
   userType?: UserType;
-};
+}
 
-/**
- * This component represents the bottom navigation for small devices in the app
- * @param userType is the type of user of the app
- */
 const BottomNav: React.FC<BottomNavProps> = ({
-  userType = UserType.RENTER,
+  userType = UserType.UNLOGGED,
 }) => {
   const [value, setValue] = useState(0);
-  const navItems = NAV_CONFIGS[userType] || NAV_CONFIGS.general;
+  const navItems = getBottomNavItems(userType);
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"), {
+    noSsr: true,
+  });
 
   if (!isSmallScreen) return null;
 
@@ -79,7 +42,9 @@ const BottomNav: React.FC<BottomNavProps> = ({
                 sx={{ wordBreak: "auto-phrase" }}
                 variant="caption"
               >
-                {item.label}
+                {item.label.split(" ").length > 1
+                  ? item.label.split(" ").slice(1).join(" ")
+                  : item.label}
               </Typography>
             }
             icon={item.icon}

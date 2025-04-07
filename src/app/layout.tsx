@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/utils/theme";
 import { Container, CssBaseline } from "@mui/material";
 import BottomNav from "@/components/BottomNav";
+import Header from "@/components/Header";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -27,6 +28,7 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            <Header />
             <Container maxWidth={false}>{children}</Container>
             <BottomNav />
           </ThemeProvider>
