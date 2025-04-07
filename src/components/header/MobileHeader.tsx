@@ -1,17 +1,17 @@
 "use client";
 import React from "react";
-import { Toolbar, IconButton, Typography, Box, Badge } from "@mui/material";
+import { Toolbar, IconButton, Box, Badge } from "@mui/material";
 import { UserType } from "@/utils/constants/user-constants";
 import { getHeaderNavItems } from "@/utils/constants/nav-configs";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import Image from "next/image";
+import LogoImage from "./LogoImage";
 
 interface MobileHeaderProps {
   userType?: UserType;
 }
 
 const MobileHeader: React.FC<MobileHeaderProps> = ({
-  userType = UserType.RENTER,
+  userType = UserType.UNLOGGED,
 }) => {
   const hasNotifications = false;
 
@@ -20,8 +20,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   return (
     <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <Image src="/images/logo.png" alt="Logo" style={{ height: 32 }} />
-        <Typography variant="h6">SPACIO</Typography>
+        <LogoImage size={32} />
       </Box>
       <Box>
         {userType !== UserType.UNLOGGED && userType !== UserType.RENTER && (
@@ -34,9 +33,6 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
             </Badge>
           </IconButton>
         )}
-        <IconButton color="inherit">
-          {headerItems.find((item) => item.label === "Perfil")?.icon}
-        </IconButton>
       </Box>
     </Toolbar>
   );

@@ -48,6 +48,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
               </Typography>
             }
             icon={item.icon}
+            href={item.to}
           />
         ))}
       </BottomNavigation>

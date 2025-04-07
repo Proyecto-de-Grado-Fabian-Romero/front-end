@@ -9,7 +9,7 @@ interface HeaderProps {
   userType?: UserType;
 }
 
-const Header: React.FC<HeaderProps> = ({ userType = UserType.UNLOGGED }) => {
+const Header: React.FC<HeaderProps> = ({ userType = UserType.RENTER }) => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
 

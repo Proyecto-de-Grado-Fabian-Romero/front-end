@@ -59,6 +59,7 @@ export const NAV_CONFIGS: Record<
   {
     label: string;
     icon: React.ReactElement;
+    to: PageRoutes;
     showInHeader: boolean;
     showInBottomNav: boolean;
   }[]

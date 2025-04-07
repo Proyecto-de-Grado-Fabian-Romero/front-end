@@ -1,18 +1,11 @@
 "use client";
 import React from "react";
-import {
-  Toolbar,
-  IconButton,
-  Typography,
-  Box,
-  Button,
-  Badge,
-} from "@mui/material";
+import { Toolbar, IconButton, Box, Button, Badge } from "@mui/material";
 import Link from "next/link";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { UserType } from "@/utils/constants/user-constants";
 import { getHeaderNavItems } from "@/utils/constants/nav-configs";
-import Image from "next/image";
+import LogoImage from "./LogoImage";
 
 interface DesktopHeaderProps {
   userType?: UserType;
@@ -36,8 +29,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
         component={Link}
         href={PageRoutes.Home}
       >
-        <Image src="/images/logo.png" alt="Logo" style={{ height: 40 }} />
-        <Typography variant="h6">SPACIO</Typography>
+        <LogoImage />
       </Box>
 
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -56,12 +48,13 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                     key={item.label}
                     startIcon={item.icon}
                     color="inherit"
+                    href={item.to}
                   >
                     {item.label}
                   </Button>
                 ),
             )}
-            <IconButton color="inherit">
+            <IconButton color="inherit" href={PageRoutes.Notifications}>
               <Badge color="error" variant="dot" invisible={!hasNotifications}>
                 {
                   headerItems.find((item) => item.label === "Notificaciones")
@@ -69,7 +62,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                 }
               </Badge>
             </IconButton>
-            <IconButton color="inherit">
+            <IconButton color="inherit" href={PageRoutes.Profile}>
               {headerItems.find((item) => item.label === "Perfil")?.icon}
             </IconButton>
           </>
