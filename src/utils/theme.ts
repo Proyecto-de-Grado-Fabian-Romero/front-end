@@ -108,7 +108,7 @@ const theme = createTheme({
           paddingTop: "32px",
           [theme.breakpoints.down("sm")]: {
             marginTop: 48,
-            padding: "24px 2%",
+            // padding: "24px 2%",
           },
           [theme.breakpoints.up("md")]: {
             marginTop: 0,
@@ -179,31 +179,43 @@ const theme = createTheme({
         }),
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: ColorPalette.SECONDARY_DEFAULT,
+          color: ColorPalette.NEUTRAL_WHITE,
+          borderRadius: 8
+        },
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: "outlined",
       },
       styleOverrides: {
         root: {
+          backgroundColor: ColorPalette.NEUTRAL_WHITE,
           "& .MuiInputLabel-root": {
+            backgroundColor: ColorPalette.NEUTRAL_WHITE,
             color: ColorPalette.GREY_DEFAULT,
             fontSize: "16px",
           },
           "& .MuiInputBase-input": {
+            backgroundColor: ColorPalette.NEUTRAL_WHITE,
             color: ColorPalette.NEUTRAL_BLACK,
             fontSize: "16px",
           },
           "& .MuiOutlinedInput-root": {
             borderRadius: "12px",
-            backgroundColor: ColorPalette.SECONDARY_ACTION,
+            backgroundColor: ColorPalette.NEUTRAL_WHITE,
             "& fieldset": {
-              borderColor: ColorPalette.SECONDARY_DEFAULT,
+              borderColor: "none",
             },
             "&:hover fieldset": {
-              borderColor: ColorPalette.SECONDARY_DEFAULT,
+              borderColor: "none",
             },
             "&.Mui-focused fieldset": {
-              borderColor: ColorPalette.PRIMARY_DEFAULT,
+              borderColor: "none",
             },
             "& .MuiInputAdornment-root": {
               paddingLeft: "10px",
@@ -452,6 +464,17 @@ const theme = createTheme({
           "&.Mui-selected": {
             color: ColorPalette.PRIMARY_DEFAULT,
           },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          fontSize: "16px",
+          paddingRight: "6px",
+          paddingLeft: "6px",
+          boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.25)",
+          background: ColorPalette.NEUTRAL_WHITE,
         },
       },
     },

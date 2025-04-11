@@ -1,7 +1,7 @@
 // This enum represents constant neutral
 enum NeutralColors {
   BLACK = "#000000",
-  WHITE = "#FFFFF",
+  WHITE = "#FFFFFF",
 }
 
 // This enum represents the color palette constants for the ui

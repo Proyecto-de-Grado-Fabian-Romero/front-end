@@ -1,7 +1,13 @@
+import Banner from "@/sections/home/Banner";
+import { Box } from "@mui/material";
 import React from "react";
 
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <Box>
+      <Banner />
+    </Box>
+  );
 };
 
 export default Home;
