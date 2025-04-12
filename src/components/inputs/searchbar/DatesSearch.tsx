@@ -1,3 +1,4 @@
+"use client";
 import { Grid } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import moment from "moment";

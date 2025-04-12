@@ -14,12 +14,12 @@ const SearchComponent = () => {
   const [selectedEnv, setSelectedEnv] = useState("Hospedajes");
   const [city, setCity] = useState("Cochabamba, Bolivia");
   const [startDate, setStartDate] = useState<Moment | null>(moment());
-  const [endDate, setEndDate] = useState<Moment | null>(moment());
+  const [endDate, setEndDate] = useState<Moment | null>(moment().add(1, "day"));
   const [startTime, setStartTime] = useState<Moment | null>(
-    moment().hour(9).minute(0)
+    moment().hour(9).minute(0),
   );
   const [endTime, setEndTime] = useState<Moment | null>(
-    moment().hour(19).minute(0)
+    moment().hour(19).minute(0),
   );
 
   const theme = useTheme();

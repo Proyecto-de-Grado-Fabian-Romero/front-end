@@ -6,7 +6,7 @@ import moment from "moment";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import DatesSearch from "./DatesSearch";
 import { cities, environments } from "@/utils/constants/constants";
-import { Filter, FilterList } from "@mui/icons-material";
+import { FilterList } from "@mui/icons-material";
 
 interface SearchDesktopProps {
   startDate: moment.Moment | null;
@@ -106,7 +106,12 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
         </Button>
       </Grid>
       <Grid size={{ xs: 2, sm: 2, md: 0.5 }}>
-        <IconButton >
+        <IconButton
+          sx={{
+            backgroundColor: ColorPalette.SECONDARY_DEFAULT,
+            color: ColorPalette.NEUTRAL_WHITE,
+          }}
+        >
           <FilterList fontSize="large" />
         </IconButton>
       </Grid>

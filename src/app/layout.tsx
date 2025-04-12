@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "@/utils/theme";
-import { Container, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 

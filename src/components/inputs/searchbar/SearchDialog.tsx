@@ -19,6 +19,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import DatesSearch from "./DatesSearch";
 import { cities, environments } from "@/utils/constants/constants";
+import { FilterList } from "@mui/icons-material";
 
 interface SearchDialogProps {
   startDate: moment.Moment | null;
@@ -69,11 +70,12 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
       </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" sx={{ display: "block" }}>
             ¿Qué tipo de ambiente estás buscando?
           </Typography>
           {environments.map((env) => (
             <Chip
+              key={env}
               label={env}
               sx={{
                 backgroundColor:
@@ -120,16 +122,36 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
           ))}
         </TextField>
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          sx={{ mt: 3, borderRadius: 2 }}
-          startIcon={<SearchIcon />}
-          onClick={() => setOpen(false)}
+        <Grid
+          container
+          spacing={1}
+          alignItems="center"
+          justifyContent={"center"}
+          mt={3}
         >
-          Buscar Ahora
-        </Button>
+          <Grid size={{ xs: 10 }}>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ borderRadius: 2 }}
+              startIcon={<SearchIcon />}
+              onClick={() => setOpen(false)}
+            >
+              Buscar Ahora
+            </Button>
+          </Grid>
+          <Grid size={{ xs: 2 }}>
+            <IconButton
+              sx={{
+                backgroundColor: ColorPalette.SECONDARY_DEFAULT,
+                color: ColorPalette.NEUTRAL_WHITE,
+              }}
+            >
+              <FilterList fontSize="medium" />
+            </IconButton>
+          </Grid>
+        </Grid>
       </DialogContent>
     </Dialog>
   );

@@ -142,7 +142,7 @@ const theme = createTheme({
         root: ({ theme }) => ({
           paddingLeft: "60px",
           paddingRight: "60px",
-          borderRadius: "16px",
+          borderRadius: "8px",
           fontWeight: 500,
           [theme.breakpoints.up("xs")]: {
             fontSize: 14,
@@ -182,9 +182,7 @@ const theme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          backgroundColor: ColorPalette.SECONDARY_DEFAULT,
-          color: ColorPalette.NEUTRAL_WHITE,
-          borderRadius: 8
+          borderRadius: 8,
         },
       },
     },

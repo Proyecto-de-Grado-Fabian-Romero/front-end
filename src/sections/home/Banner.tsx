@@ -12,7 +12,7 @@ const Banner = () => {
     <Box
       sx={{
         backgroundImage:
-          "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/banner_bg.jpg')",
+          "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/home/banner_bg.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -23,6 +23,8 @@ const Banner = () => {
         alignItems: "center",
         justifyContent: "center",
         width: "100vw",
+        maxWidth: "100vw",
+        overflowX: "hidden",
       }}
     >
       <Box
