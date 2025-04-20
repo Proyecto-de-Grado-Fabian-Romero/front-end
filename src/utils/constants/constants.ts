@@ -1,9 +1,9 @@
 export const environments = [
-  "Hospedajes",
-  "Oficinas",
-  "Coworkings",
-  "Eventos",
-  "Salas de Conferencias",
+  { label: "Hospedajes", key: "hospedajes" },
+  { label: "Oficinas", key: "oficinas" },
+  { label: "Coworkings", key: "coworkings" },
+  { label: "Eventos", key: "eventos" },
+  { label: "Salas de Conferencias", key: "conferencias" },
 ];
 
 export const cities = [

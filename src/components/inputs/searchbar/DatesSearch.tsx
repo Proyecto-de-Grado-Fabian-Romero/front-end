@@ -27,7 +27,7 @@ const DatesSearch: React.FC<DatesSearchProps> = ({
   setEndTime,
   selectedEnv,
 }) => {
-  const isHospedaje = selectedEnv === "Hospedajes";
+  const isHospedaje = selectedEnv === "hospedajes";
 
   const handleStartDateChange = (date: moment.Moment | null) => {
     setStartDate(date);

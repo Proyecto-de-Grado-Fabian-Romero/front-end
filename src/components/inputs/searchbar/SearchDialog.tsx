@@ -36,6 +36,8 @@ interface SearchDialogProps {
   setCity: React.Dispatch<React.SetStateAction<string>>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSearch: () => void;
+  setFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchDialog: React.FC<SearchDialogProps> = ({
@@ -53,6 +55,8 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
   setSelectedEnv,
   open,
   setOpen,
+  handleSearch,
+  setFiltersOpen,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -75,18 +79,18 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
           </Typography>
           {environments.map((env) => (
             <Chip
-              key={env}
-              label={env}
+              key={env.key}
+              label={env.label}
               sx={{
                 backgroundColor:
-                  selectedEnv === env
+                  selectedEnv === env.key
                     ? `${ColorPalette.PRIMARY_DEFAULT} !important`
                     : `${ColorPalette.NEUTRAL_WHITE} !important`,
-                fontWeight: selectedEnv === env ? 600 : 500,
-                color: selectedEnv === env ? "#fff" : "#000",
+                fontWeight: selectedEnv === env.key ? 600 : 500,
+                color: selectedEnv === env.key ? "#fff" : "#000",
                 transition: "none",
               }}
-              onClick={() => setSelectedEnv(env)}
+              onClick={() => setSelectedEnv(env.key)}
             />
           ))}
         </Grid>
@@ -136,7 +140,10 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
               color="primary"
               sx={{ borderRadius: 2 }}
               startIcon={<SearchIcon />}
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                handleSearch();
+              }}
             >
               Buscar Ahora
             </Button>
@@ -147,6 +154,7 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
                 backgroundColor: ColorPalette.SECONDARY_DEFAULT,
                 color: ColorPalette.NEUTRAL_WHITE,
               }}
+              onClick={() => setFiltersOpen(true)}
             >
               <FilterList fontSize="medium" />
             </IconButton>
