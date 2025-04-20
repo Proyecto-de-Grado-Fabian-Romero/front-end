@@ -17,11 +17,11 @@
   33% {
     background: #fff;
     box-shadow:
-      -24px 0 #F24F13,
+      -24px 0 #f24f13,
       24px 0 #fff;
   }
   66% {
-    background: #F24F13;
+    background: #f24f13;
     box-shadow:
       -24px 0 #000,
       24px 0 #000;
@@ -30,6 +30,6 @@
     background: #000;
     box-shadow:
       -24px 0 #000,
-      24px 0 #F24F13;
+      24px 0 #f24f13;
   }
 }
