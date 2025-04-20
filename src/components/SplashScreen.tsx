@@ -1,4 +1,6 @@
 "use client";
+import "@/styles/splash.css";
+import Image from "next/image";
 
 export default function SplashScreen() {
   return (
@@ -6,11 +8,13 @@ export default function SplashScreen() {
       style={{
         height: "100vh",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <h1>Cargando Spacio...</h1>
+      <Image src={"/images/logo.png"} alt="logo" width={240} height={240} />
+      <div className="loader"></div>
     </div>
   );
 }
