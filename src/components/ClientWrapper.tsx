@@ -26,7 +26,7 @@ function InitLoader({ children }: { children: React.ReactNode }) {
         dispatch(setServices(servicesData));
       } catch {
         alert(
-          "Hubo un error cargando áreas o servicios, recarga la página por favor"
+          "Hubo un error cargando áreas o servicios, recarga la página por favor",
         );
       } finally {
         setLoadingAreasServices(false);

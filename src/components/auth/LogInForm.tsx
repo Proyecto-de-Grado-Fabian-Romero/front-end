@@ -9,7 +9,6 @@ import {
   InputAdornment,
   Alert,
   CircularProgress,
-  useTheme,
 } from "@mui/material";
 import { Email, Lock, ArrowBack, ArrowForward } from "@mui/icons-material";
 import Image from "next/image";
@@ -23,7 +22,6 @@ import { loginRequest } from "@/services/authService";
 export default function LogInForm() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -43,6 +41,7 @@ export default function LogInForm() {
       const userData = await loginRequest(email, password);
       dispatch(setUser(userData));
       router.back();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message);
     } finally {

@@ -1,17 +1,19 @@
 "use client";
 import React from "react";
 import { AppBar, useTheme, useMediaQuery } from "@mui/material";
-import { UserType } from "@/utils/constants/user-constants";
+import { useSelector } from "react-redux";
 import MobileHeader from "./header/MobileHeader";
 import DesktopHeader from "./header/DesktopHeader";
+import { RootState } from "@/store";
+import { UserType } from "@/utils/constants/user-constants";
 
-interface HeaderProps {
-  userType?: UserType;
-}
-
-const Header: React.FC<HeaderProps> = ({ userType = UserType.RENTER }) => {
+const Header: React.FC = () => {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
+  const role = useSelector((state: RootState) => state.user.role);
+  const userType: UserType =
+    (role?.toLowerCase() as UserType) || UserType.UNLOGGED;
 
   return (
     <AppBar

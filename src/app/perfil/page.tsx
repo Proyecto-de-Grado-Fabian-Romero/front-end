@@ -1,7 +1,7 @@
 "use client";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { Box, Typography, Avatar, Button, Container } from "@mui/material";
+import { Box, Typography, Avatar, Container } from "@mui/material";
 import LoggedOutProfile from "@/components/profile/LoggedOutProfile";
 
 export default function ProfilePage() {
@@ -18,7 +18,7 @@ export default function ProfilePage() {
     );
   }
 
-  console.log(user.photoFileUrl)
+  console.log(user.photoFileUrl);
 
   return (
     <Container>

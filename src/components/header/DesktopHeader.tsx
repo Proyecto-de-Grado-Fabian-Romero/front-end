@@ -35,7 +35,9 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         {userType === UserType.UNLOGGED ? (
           <>
-            <Button color="inherit" href={PageRoutes.LogIn}>Iniciar Sesión</Button>
+            <Button color="inherit" href={PageRoutes.LogIn}>
+              Iniciar Sesión
+            </Button>
             <Button variant="contained">Regístrate</Button>
           </>
         ) : (

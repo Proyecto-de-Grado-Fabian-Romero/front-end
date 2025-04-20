@@ -10,5 +10,5 @@ export enum PageRoutes {
   Search = "/buscar",
   Environment_Details = "/details",
   LogIn = "/ingresar",
-  SignUp = "/registro"
+  SignUp = "/registro",
 }
