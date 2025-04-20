@@ -8,6 +8,7 @@ import {
   Grid,
   Skeleton,
   Typography,
+  Pagination,
 } from "@mui/material";
 import EnvironmentCard from "@/components/card/EnvironmentCard";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,8 +17,12 @@ import { Environment } from "@/types/AllEnvironments";
 const EnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = 16;
 
   useEffect(() => {
     const fetchEnvironments = async () => {
@@ -63,7 +68,7 @@ const EnvironmentsPage = () => {
         };
 
         const res = await fetch(
-          "http://localhost:5150/api/environments/available",
+          `http://localhost:5150/api/environments/available?page=${page}&limit=${limit}`,
           {
             method: "POST",
             headers: {
@@ -75,6 +80,7 @@ const EnvironmentsPage = () => {
 
         const data = await res.json();
         setEnvironments(data.items || []);
+        setTotalPages(data.totalPages || 1);
       } catch {
         alert("Hubo un error, recarga la página por favor.");
       } finally {
@@ -83,7 +89,13 @@ const EnvironmentsPage = () => {
     };
 
     fetchEnvironments();
-  }, [searchParams]);
+  }, [searchParams, page]);
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", value.toString());
+    router.push(`/buscar?${params.toString()}`);
+  };
 
   return (
     <Container maxWidth={false} sx={{ py: 4 }}>
@@ -105,13 +117,25 @@ const EnvironmentsPage = () => {
           </Button>
         </Box>
       ) : (
-        <Grid container spacing={2} sx={{ width: "100%" }}>
-          {environments.map((env) => (
-            <Grid key={env.publicId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-              <EnvironmentCard environment={env} />
-            </Grid>
-          ))}
-        </Grid>
+        <>
+          <Grid container spacing={2} sx={{ width: "100%" }}>
+            {environments.map((env) => (
+              <Grid key={env.publicId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+                <EnvironmentCard environment={env} />
+              </Grid>
+            ))}
+          </Grid>
+          {totalPages > 1 && (
+            <Box mt={4} display="flex" justifyContent="center">
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
       )}
     </Container>
   );
