@@ -13,6 +13,7 @@ import {
 import EnvironmentCard from "@/components/card/EnvironmentCard";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Environment } from "@/types/AllEnvironments";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const EnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
@@ -94,7 +95,7 @@ const EnvironmentsPage = () => {
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", value.toString());
-    router.push(`/buscar?${params.toString()}`);
+    router.push(`/${PageRoutes.Search}?${params.toString()}`);
   };
 
   return (

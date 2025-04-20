@@ -6,10 +6,13 @@ import { fetchAreas, fetchServices } from "@/services/fetchOptions";
 import { Provider, useDispatch } from "react-redux";
 import { setAreas, setServices } from "@/store/slices/optionsSlice";
 import { store } from "@/store";
+import { fetchCurrentSession } from "@/services/authService";
 
 function InitLoader({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [loadingAreasServices, setLoadingAreasServices] = useState(true);
+  const [loadingSession, setLoadingSession] = useState(true);
 
   useEffect(() => {
     async function loadData() {
@@ -22,14 +25,26 @@ function InitLoader({ children }: { children: React.ReactNode }) {
         dispatch(setAreas(areasData));
         dispatch(setServices(servicesData));
       } catch {
-        alert("Hubo un error, por favor recarga la página.");
+        alert(
+          "Hubo un error cargando áreas o servicios, recarga la página por favor",
+        );
       } finally {
-        setLoading(false);
+        setLoadingAreasServices(false);
       }
     }
 
     loadData();
   }, [dispatch]);
+
+  useEffect(() => {
+    fetchCurrentSession(dispatch).finally(() => setLoadingSession(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!loadingAreasServices && !loadingSession) {
+      setLoading(false);
+    }
+  }, [loadingAreasServices, loadingSession]);
 
   if (loading) return <SplashScreen />;
 

@@ -6,7 +6,6 @@ import theme from "@/utils/theme";
 import { CssBaseline } from "@mui/material";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
-import { UserType } from "@/utils/constants/user-constants";
 import ClientWrapper from "@/components/ClientWrapper";
 
 const montserrat = Montserrat({
@@ -31,7 +30,7 @@ export default function RootLayout({
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Header userType={UserType.UNLOGGED} />
+              <Header />
               {children}
               <BottomNav />
             </ThemeProvider>
