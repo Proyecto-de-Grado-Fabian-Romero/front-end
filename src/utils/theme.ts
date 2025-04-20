@@ -165,8 +165,8 @@ const theme = createTheme({
             borderColor: ColorPalette.SECONDARY_DEFAULT,
             color: ColorPalette.SECONDARY_DEFAULT,
             "&:hover": {
-              backgroundColor: ColorPalette.SECONDARY_HOVER,
-              color: ColorPalette.SECONDARY_HOVER,
+              color: ColorPalette.PRIMARY_DEFAULT,
+              borderColor: ColorPalette.PRIMARY_DEFAULT,
             },
           },
           "&.MuiButton-text": {
@@ -183,6 +183,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
+          "&:hover": {
+            backgroundColor: ColorPalette.SECONDARY_HOVER,
+            color: ColorPalette.NEUTRAL_WHITE,
+          },
         },
       },
     },

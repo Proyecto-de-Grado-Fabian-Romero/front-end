@@ -21,6 +21,8 @@ interface SearchDesktopProps {
   setSelectedEnv: React.Dispatch<React.SetStateAction<string>>;
   city: string;
   setCity: React.Dispatch<React.SetStateAction<string>>;
+  handleSearch: () => void;
+  setFiltersOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchDesktop: React.FC<SearchDesktopProps> = ({
@@ -36,6 +38,8 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
   city,
   setCity,
   setSelectedEnv,
+  handleSearch,
+  setFiltersOpen,
 }) => {
   return (
     <Grid
@@ -57,8 +61,8 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
           fullWidth
         >
           {environments.map((env) => (
-            <MenuItem key={env} value={env}>
-              {env}
+            <MenuItem key={env.key} value={env.key}>
+              {env.label}
             </MenuItem>
           ))}
         </TextField>
@@ -101,6 +105,7 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
           startIcon={<SearchIcon />}
           fullWidth
           sx={{ height: "52px" }}
+          onClick={handleSearch}
         >
           Buscar
         </Button>
@@ -111,6 +116,7 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
             backgroundColor: ColorPalette.SECONDARY_DEFAULT,
             color: ColorPalette.NEUTRAL_WHITE,
           }}
+          onClick={() => setFiltersOpen(true)}
         >
           <FilterList fontSize="large" />
         </IconButton>

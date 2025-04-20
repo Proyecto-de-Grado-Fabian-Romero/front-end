@@ -1,18 +1,18 @@
-interface EnvironmentType {
+export interface EnvironmentType {
   name: string;
   publicKey: string;
   description: string | null;
   iconUrl: string | null;
 }
 
-interface PricingPolicy {
+export interface PricingPolicy {
   basePrice: number;
   currency: string;
   priceUnit: string;
   extraGuestPrice: number;
 }
 
-interface Environment {
+export interface Environment {
   publicId: string;
   title: string;
   description: string;

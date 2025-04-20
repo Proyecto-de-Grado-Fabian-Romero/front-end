@@ -8,8 +8,6 @@ import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 import { UserType } from "@/utils/constants/user-constants";
 import ClientWrapper from "@/components/ClientWrapper";
-import { Provider } from "react-redux";
-import { store } from "@/store";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -29,18 +27,16 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${montserrat.variable}`}>
-        <Provider store={store}>
+        <ClientWrapper>
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <ClientWrapper>
-                <Header userType={UserType.UNLOGGED} />
-                {children}
-                <BottomNav />
-              </ClientWrapper>
+              <Header userType={UserType.UNLOGGED} />
+              {children}
+              <BottomNav />
             </ThemeProvider>
           </AppRouterCacheProvider>
-        </Provider>
+        </ClientWrapper>
       </body>
     </html>
   );

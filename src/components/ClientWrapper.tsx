@@ -2,16 +2,12 @@
 
 import { useEffect, useState } from "react";
 import SplashScreen from "@/components/SplashScreen";
-import { OptionItem } from "@/types/OptionItem";
 import { fetchAreas, fetchServices } from "@/services/fetchOptions";
-import { useDispatch } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import { setAreas, setServices } from "@/store/slices/optionsSlice";
+import { store } from "@/store";
 
-export default function ClientWrapper({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function InitLoader({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +21,7 @@ export default function ClientWrapper({
 
         dispatch(setAreas(areasData));
         dispatch(setServices(servicesData));
-      } catch (error) {
+      } catch {
         alert("Hubo un error, por favor recarga la página.");
       } finally {
         setLoading(false);
@@ -38,4 +34,16 @@ export default function ClientWrapper({
   if (loading) return <SplashScreen />;
 
   return <>{children}</>;
+}
+
+export default function ClientWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Provider store={store}>
+      <InitLoader>{children}</InitLoader>
+    </Provider>
+  );
 }
