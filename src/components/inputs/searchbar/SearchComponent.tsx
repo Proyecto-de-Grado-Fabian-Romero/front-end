@@ -6,11 +6,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment, { Moment } from "moment";
 import { useRouter } from "next/navigation";
-
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import SearchDesktop from "./SearchDesktop";
 import SearchDialog from "./SearchDialog";
 import FiltersModal from "@/components/modal/FiltersModal";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const SearchComponent = () => {
   const router = useRouter();
@@ -24,10 +24,10 @@ const SearchComponent = () => {
   const [startDate, setStartDate] = useState<Moment | null>(moment());
   const [endDate, setEndDate] = useState<Moment | null>(moment().add(1, "day"));
   const [startTime, setStartTime] = useState<Moment | null>(
-    moment().hour(9).minute(0),
+    moment().hour(9).minute(0)
   );
   const [endTime, setEndTime] = useState<Moment | null>(
-    moment().hour(19).minute(0),
+    moment().hour(19).minute(0)
   );
   const [minCapacity, setMinCapacity] = useState(0);
 
@@ -66,7 +66,7 @@ const SearchComponent = () => {
       if (value > 0) params.append(`area_${key}`, value.toString());
     }
 
-    router.push(`/buscar?${params.toString()}`);
+    router.push(`/${PageRoutes.Search}?${params.toString()}`);
   };
 
   return (

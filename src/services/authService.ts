@@ -1,0 +1,34 @@
+import { setUser } from "@/store/slices/userSlice";
+import { Dispatch } from "redux";
+
+export async function fetchCurrentSession(dispatch: Dispatch) {
+  try {
+    const res = await fetch("http://localhost:5123/api/Users/me", {
+      credentials: "include",
+    });
+
+    if (res.ok) {
+      const user = await res.json();
+      dispatch(setUser(user));
+    }
+  } catch {
+    dispatch(setUser(null));
+  }
+}
+
+export async function loginRequest(email: string, password: string) {
+  const response = await fetch("http://localhost:5123/api/Users/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Credenciales inválidas");
+  }
+
+  return await response.json();
+}
