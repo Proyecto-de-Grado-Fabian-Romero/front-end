@@ -12,8 +12,14 @@ interface Props {
 const EnvironmentCard = ({ environment }: Props) => {
   const router = useRouter();
 
-  const { title, photoUrls, instantBooking, capacity, pricingPolicies, publicId } =
-    environment;
+  const {
+    title,
+    photoUrls,
+    instantBooking,
+    capacity,
+    pricingPolicies,
+    publicId,
+  } = environment;
 
   const handleNavigate = () => {
     router.push(`${PageRoutes.Environment_Details}/${publicId}`);

@@ -26,7 +26,7 @@ export default function EnvironmentDetailsPage() {
     const fetchEnvironment = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5150/api/environments/single?publicId=${publicId}`
+          `http://localhost:5150/api/environments/single?publicId=${publicId}`,
         );
         const result = await res.json();
         setData(result);

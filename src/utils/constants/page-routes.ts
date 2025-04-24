@@ -11,5 +11,5 @@ export enum PageRoutes {
   Environment_Details = "/detalles",
   LogIn = "/ingresar",
   SignUp = "/registro",
-  New_Environment = "/nuevo-ambiente"
+  New_Environment = "/nuevo-ambiente",
 }
