@@ -56,17 +56,19 @@ const EnvironmentsPage = () => {
           servicePublicKeys: services,
           areas,
           instantBookingRequired:
-            searchParams.get("instantBooking") === "true" ? true : undefined,
+            searchParams.get("instantBooking") === "true" ? true : false,
           minPrice: searchParams.get("minPrice")
             ? parseFloat(searchParams.get("minPrice")!)
             : undefined,
           maxPrice: searchParams.get("maxPrice")
             ? parseFloat(searchParams.get("maxPrice")!)
-            : undefined,
+            : 2000,
           minCapacity: searchParams.get("minCapacity")
             ? parseFloat(searchParams.get("minCapacity")!)
             : 0,
         };
+
+        console.log(requestBody)
 
         const res = await fetch(
           `http://localhost:5150/api/environments/available?page=${page}&limit=${limit}`,
