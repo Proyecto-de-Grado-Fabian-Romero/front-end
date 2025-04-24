@@ -57,7 +57,7 @@ const CreateEnvironmentForm = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -83,7 +83,7 @@ const CreateEnvironmentForm = () => {
     setLoading(true);
     setError("");
 
-    console.log(formData)
+    console.log(formData);
 
     // Validaciones previas
     if (
@@ -295,7 +295,7 @@ const CreateEnvironmentForm = () => {
             <MenuItem key={a.publicKey} value={a.publicKey}>
               <Checkbox
                 checked={formData.areas.some(
-                  (ar) => ar.AreaPublicKey === a.publicKey
+                  (ar) => ar.AreaPublicKey === a.publicKey,
                 )}
               />
               <ListItemText primary={a.name} />

@@ -8,7 +8,8 @@ export enum PageRoutes {
   Calendar = "/calendar",
   Debts = "/deudas",
   Search = "/buscar",
-  Environment_Details = "/details",
+  Environment_Details = "/detalles",
   LogIn = "/ingresar",
   SignUp = "/registro",
+  New_Environment = "/nuevo-ambiente"
 }
