@@ -1,8 +1,9 @@
+"use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Fab, Box, Container } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Box, Container } from "@mui/material";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 
 const EnvironmentsPage = () => {
   const router = useRouter();
@@ -15,18 +16,7 @@ const EnvironmentsPage = () => {
     <Container maxWidth={false} sx={{ py: 4 }}>
       <Box sx={{ p: 3 }}></Box>
 
-      <Fab
-        color="primary"
-        aria-label="add"
-        onClick={handleClick}
-        sx={{
-          position: "fixed",
-          bottom: 16,
-          right: 16,
-        }}
-      >
-        <AddIcon />
-      </Fab>
+      <ResponsiveFab onClick={handleClick} />
     </Container>
   );
 };
