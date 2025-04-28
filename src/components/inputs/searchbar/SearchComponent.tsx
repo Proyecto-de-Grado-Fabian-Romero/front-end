@@ -66,7 +66,7 @@ const SearchComponent = () => {
       if (value > 0) params.append(`area_${key}`, value.toString());
     }
 
-    router.push(`/${PageRoutes.Search}?${params.toString()}`);
+    router.push(`${PageRoutes.Search}?${params.toString()}`);
   };
 
   return (
