@@ -16,6 +16,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import VirtualTour from "@/components/tour/VirtualTour";
 import { Environment } from "@/types/GetEnvironment";
+import Image from "next/image";
 
 export default function EnvironmentDetailsPage() {
   const { publicId } = useParams();
@@ -76,16 +77,20 @@ export default function EnvironmentDetailsPage() {
       >
         {data.photos?.map((photo) => (
           <SwiperSlide key={photo.fileId}>
-            <img
-              src={photo.url}
-              alt={photo.fileName}
-              style={{
-                width: "100%",
-                height: "auto",
-                objectFit: "cover",
-                borderRadius: 12,
-              }}
-            />
+            <div style={{ width: "100%", position: "relative" }}>
+              <Image
+                src={photo.url}
+                alt={photo.fileName}
+                fill
+                style={{
+                  objectFit: "cover",
+                  borderRadius: 12,
+                  width: "100%",
+                  height: "auto",
+                }}
+                sizes="100vw"
+              />
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Box, Typography, Grid, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import Image from "next/image";
 
 interface ImageUploaderProps {
   images: File[];
@@ -78,11 +79,21 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages }) => {
                   border: "1px solid #ccc",
                 }}
               >
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={`preview-${index}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={URL.createObjectURL(file)}
+                    alt={`preview-${index}`}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+
                 <IconButton
                   size="small"
                   sx={{ position: "absolute", top: 0, right: 0 }}

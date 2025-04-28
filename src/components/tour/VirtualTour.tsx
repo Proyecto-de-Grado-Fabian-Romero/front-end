@@ -38,7 +38,7 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
         setTimeout(() => {
           skyEl.setAttribute("src", currentScene.fileUrl);
         }, 50);
-      } catch (error) {}
+      } catch {}
     }
   }, [currentScene]);
 
