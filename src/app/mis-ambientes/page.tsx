@@ -25,8 +25,8 @@ const EnvironmentsPage = () => {
           "http://localhost:5150/api/environments/owner?page=1&limit=10",
           {
             method: "GET",
-            credentials: "include", 
-          }
+            credentials: "include",
+          },
         );
 
         const data = await res.json();

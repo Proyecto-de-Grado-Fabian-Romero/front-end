@@ -36,12 +36,12 @@ const EnvironmentsPage = () => {
           environmentTypePublicKey: searchParams.get("type") || undefined,
           startDate: searchParams.get("startDate")
             ? Math.floor(
-                new Date(searchParams.get("startDate")!).getTime() / 1000
+                new Date(searchParams.get("startDate")!).getTime() / 1000,
               )
             : undefined,
           endDate: searchParams.get("endDate")
             ? Math.floor(
-                new Date(searchParams.get("endDate")!).getTime() / 1000
+                new Date(searchParams.get("endDate")!).getTime() / 1000,
               )
             : undefined,
           servicePublicKeys: services,
@@ -69,7 +69,7 @@ const EnvironmentsPage = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(requestBody),
-          }
+          },
         );
 
         const data = await res.json();
