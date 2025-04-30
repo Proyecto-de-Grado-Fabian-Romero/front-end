@@ -1,19 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Skeleton,
-  Typography,
-  Pagination,
-} from "@mui/material";
-import EnvironmentCard from "@/components/card/EnvironmentCard";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Environment } from "@/types/AllEnvironments";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
 
 const EnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
@@ -68,8 +59,6 @@ const EnvironmentsPage = () => {
             : 0,
         };
 
-        console.log(requestBody);
-
         const res = await fetch(
           `http://localhost:5150/api/environments/available?page=${page}&limit=${limit}`,
           {
@@ -94,53 +83,21 @@ const EnvironmentsPage = () => {
     fetchEnvironments();
   }, [searchParams, page]);
 
-  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", value.toString());
     router.push(`/${PageRoutes.Search}?${params.toString()}`);
   };
 
   return (
-    <Container maxWidth={false} sx={{ py: 4 }}>
-      {loading ? (
-        <Grid container spacing={2} sx={{ width: "100%" }}>
-          {Array.from(new Array(16)).map((_, index) => (
-            <Grid key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-              <Skeleton variant="rectangular" height={300} />
-            </Grid>
-          ))}
-        </Grid>
-      ) : environments.length === 0 ? (
-        <Box textAlign="center" mt={10}>
-          <Typography variant="h6" gutterBottom>
-            No hay Ambientes que coincidan con tu criterio de búsqueda
-          </Typography>
-          <Button variant="contained" onClick={() => router.back()}>
-            Volver atrás
-          </Button>
-        </Box>
-      ) : (
-        <>
-          <Grid container spacing={2} sx={{ width: "100%" }}>
-            {environments.map((env) => (
-              <Grid key={env.publicId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                <EnvironmentCard environment={env} />
-              </Grid>
-            ))}
-          </Grid>
-          {totalPages > 1 && (
-            <Box mt={4} display="flex" justifyContent="center">
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
-            </Box>
-          )}
-        </>
-      )}
-    </Container>
+    <EnvironmentGrid
+      environments={environments}
+      loading={loading}
+      totalPages={totalPages}
+      page={page}
+      onPageChange={handlePageChange}
+      emptyMessage="No hay Ambientes que coincidan con tu criterio de búsqueda"
+    />
   );
 };
 

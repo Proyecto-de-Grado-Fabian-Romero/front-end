@@ -22,8 +22,8 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
         const json = await res.json();
         setTourData(json);
         setCurrentScene(json.scenes?.[0]);
-      } catch (error) {
-        console.error("Error fetching tour 360:", error);
+      } catch {
+        alert("No se pudo cargar el tour virtual, recarga la página por favor");
       }
     };
 

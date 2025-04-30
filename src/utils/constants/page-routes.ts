@@ -2,6 +2,7 @@ export enum PageRoutes {
   Home = "/",
   Notifications = "/notificaciones",
   Owner_Environments = "/mis-ambientes",
+  Owner_Single_Environment = "/mi-ambiente",
   Booking = "/reservas",
   Profile = "/perfil",
   Shots_360 = "/capturas-360",
