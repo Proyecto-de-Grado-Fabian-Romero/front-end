@@ -59,8 +59,6 @@ const EnvironmentsPage = () => {
             : 0,
         };
 
-        console.log(requestBody);
-
         const res = await fetch(
           `http://localhost:5150/api/environments/available?page=${page}&limit=${limit}`,
           {

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 import { Environment } from "@/types/AllEnvironments";
@@ -22,7 +22,7 @@ const EnvironmentsPage = () => {
     const fetchOwnerEnvironments = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5150/api/environments/owner?page=1&limit=10",
+          `http://localhost:5150/api/environments/owner?page=${page}&limit=${limit}`,
           {
             method: "GET",
             credentials: "include",
