@@ -54,7 +54,7 @@ const EnvironmentsPage = () => {
   };
 
   return (
-    <Box>
+    <>
       <Box sx={{ p: 3 }}></Box>
 
       <EnvironmentGrid
@@ -67,7 +67,7 @@ const EnvironmentsPage = () => {
       />
 
       <ResponsiveFab onClick={handleFabAdd} />
-    </Box>
+    </>
   );
 };
 

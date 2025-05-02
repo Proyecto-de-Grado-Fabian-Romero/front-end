@@ -1,0 +1,98 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { useRouter, useSearchParams } from "next/navigation";
+import Tour360Filter from "@/components/inputs/select/Tour360Filter";
+import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
+
+interface Tour360Request {
+  environmentId: string;
+  environmentName: string;
+  ownerId: string;
+  requestDate: number;
+  scheduledDate?: number;
+  status: string;
+  technicianName?: string;
+  notes?: string;
+}
+
+const Tour360RequestsPage = () => {
+  const [requests, setRequests] = useState<Tour360Request[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = 8;
+  const statusFilter = searchParams.get("status") || "";
+
+  useEffect(() => {
+    const fetchRequests = async () => {
+      setLoading(true);
+      try {
+        const url = new URL("http://localhost:5101/api/tour360requests");
+        url.searchParams.append("page", page.toString());
+        url.searchParams.append("limit", limit.toString());
+        if (statusFilter) {
+          url.searchParams.append("status", statusFilter);
+        }
+
+        const res = await fetch(url.toString());
+        const data = await res.json();
+        setRequests(data.items || []);
+        setTotalPages(data.totalPages || 1);
+      } catch {
+        alert("Error al cargar las solicitudes.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequests();
+  }, [page, statusFilter]);
+
+  const handlePageChange = (value: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", value.toString());
+    router.push(`/tour360requests?${params.toString()}`);
+  };
+
+  const handleStatusChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set("status", value);
+    } else {
+      params.delete("status");
+    }
+    params.set("page", "1");
+    router.push(`/tour360requests?${params.toString()}`);
+  };
+
+  return (
+    <Container maxWidth={false} sx={{ py: 4 }}>
+      <Typography variant="h4" mb={4} mt={5}>
+        Solicitudes de Tour 360
+      </Typography>
+
+      <Box mb={4} display="flex" justifyContent="flex-end">
+        <Tour360Filter
+          statusFilter={statusFilter}
+          onStatusChange={handleStatusChange}
+        />
+      </Box>
+
+      <Tour360RequestsGrid
+        requests={requests}
+        loading={loading}
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+    </Container>
+  );
+};
+
+export default Tour360RequestsPage;

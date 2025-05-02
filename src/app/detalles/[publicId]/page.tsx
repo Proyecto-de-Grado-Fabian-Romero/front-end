@@ -31,8 +31,8 @@ export default function EnvironmentDetailsPage() {
         );
         const result = await res.json();
         setData(result);
-      } catch (err) {
-        console.error("Error al cargar el ambiente", err);
+      } catch {
+        alert("Error al cargar el ambiente, intenta de nuevo.");
       } finally {
         setLoading(false);
       }
