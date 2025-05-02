@@ -17,7 +17,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
   const [value, setValue] = useState(0);
   const navItems = getBottomNavItems(userType);
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"), {
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"), {
     noSsr: true,
   });
 

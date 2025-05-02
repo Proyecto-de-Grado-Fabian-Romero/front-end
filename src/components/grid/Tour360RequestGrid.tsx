@@ -31,7 +31,7 @@ const Tour360RequestsGrid = ({
 
   if (loading) {
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ width: "100%" }}>
         {Array.from(new Array(limit)).map((_, index) => (
           <Grid key={index + "load"} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
             <Skeleton variant="rectangular" height={200} />
@@ -53,9 +53,12 @@ const Tour360RequestsGrid = ({
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={{ width: "100%" }}>
         {requests.map((request) => (
-          <Grid key={request.environmentId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grid
+            key={request.environmentId}
+            size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+          >
             <Tour360RequestCard
               environmentName={request.environmentName}
               status={request.status}

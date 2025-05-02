@@ -27,7 +27,7 @@ const EnvironmentsPage = () => {
           {
             method: "GET",
             credentials: "include",
-          }
+          },
         );
 
         const data = await res.json();
