@@ -26,6 +26,7 @@ import { FormDataCreateEnv } from "@/types/Environments";
 import ImageUploader from "@/components/inputs/form/InputUploader";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import { createEnvironment } from "@/services/environmentService";
 
 const CreateEnvironmentForm = () => {
   const router = useRouter();
@@ -85,9 +86,6 @@ const CreateEnvironmentForm = () => {
     setLoading(true);
     setError("");
 
-    console.log(formData);
-
-    // Validaciones previas
     if (
       !formData.title ||
       !formData.description ||
@@ -114,31 +112,8 @@ const CreateEnvironmentForm = () => {
       return;
     }
 
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "images" && Array.isArray(value)) {
-        (value as File[]).forEach((file) => data.append("images", file));
-      } else if (Array.isArray(value)) {
-        data.append(key, JSON.stringify(value));
-      } else if (typeof value === "boolean" || typeof value === "number") {
-        data.append(key, value.toString());
-      } else if (value !== undefined && value !== null) {
-        data.append(key, value.toString());
-      }
-    });
-
     try {
-      const response = await fetch("http://localhost:5150/api/environments", {
-        method: "POST",
-        body: data,
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text || "Error al crear el ambiente");
-      }
-
+      await createEnvironment(formData);
       router.push(PageRoutes.Owner_Environments);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

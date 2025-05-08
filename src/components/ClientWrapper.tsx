@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import SplashScreen from "@/components/SplashScreen";
-import { fetchAreas, fetchServices } from "@/services/fetchOptions";
+import { fetchAreas, fetchServices } from "@/services/environmentService";
 import { Provider, useDispatch } from "react-redux";
 import { setAreas, setServices } from "@/store/slices/optionsSlice";
 import { store } from "@/store";

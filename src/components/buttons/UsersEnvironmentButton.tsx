@@ -4,6 +4,7 @@ import OwnerEnvironmentButtons from "./OwnerEnvironmentButtons";
 type Props = {
   basePrice: number;
   rentalUnit: string;
+  envPubId: string;
   forOwner?: boolean;
 };
 
@@ -11,6 +12,7 @@ const UsersEnvironmentButtons = ({
   basePrice,
   rentalUnit,
   forOwner,
+  envPubId,
 }: Props) => {
   return (
     <Box
@@ -35,7 +37,7 @@ const UsersEnvironmentButtons = ({
         alignItems="center"
       >
         {forOwner ? (
-          <OwnerEnvironmentButtons />
+          <OwnerEnvironmentButtons envPubId={envPubId} />
         ) : (
           <>
             <Box flex={1}>

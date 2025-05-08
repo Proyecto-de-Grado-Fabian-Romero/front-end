@@ -20,8 +20,8 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import PricingDisplay from "@/components/display/PricingDisplay";
-import OwnerEnvironmentButtons from "@/components/buttons/OwnerEnvironmentButtons";
 import UsersEnvironmentButtons from "@/components/buttons/UsersEnvironmentButton";
+import { getEnvironmentByPublicId } from "@/services/environmentService";
 
 export default function EnvironmentDetailsPage() {
   const { publicId } = useParams();
@@ -32,14 +32,12 @@ export default function EnvironmentDetailsPage() {
   useEffect(() => {
     const fetchEnvironment = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5150/api/environments/single?publicId=${publicId}`
+        const result = await getEnvironmentByPublicId(
+          publicId?.toString() ?? ""
         );
-        const result = await res.json();
-        console.log(result);
         setData(result);
-      } catch {
-        alert("Error al cargar el ambiente, intenta de nuevo.");
+      } catch (err: any) {
+        alert(err.message);
       } finally {
         setLoading(false);
       }
@@ -172,18 +170,13 @@ export default function EnvironmentDetailsPage() {
         </>
       )}
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      <Box mt={16} />
 
       <UsersEnvironmentButtons
         basePrice={data.pricingPolicies[0].basePrice}
         rentalUnit={data.rentalUnit}
         forOwner={user.publicId === data.ownerId}
+        envPubId={data.publicId}
       />
     </Box>
   );

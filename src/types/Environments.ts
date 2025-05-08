@@ -20,6 +20,7 @@ type WeeklySchedule = {
   StartTime: number;
   EndTime: number;
 };
+
 export type FormDataCreateEnv = {
   title: string;
   description: string;
