@@ -7,6 +7,7 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 import { Environment } from "@/types/AllEnvironments";
 import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
+import { getOwnerEnvironments } from "@/services/environmentService";
 
 const EnvironmentsPage = () => {
   const router = useRouter();
@@ -20,28 +21,21 @@ const EnvironmentsPage = () => {
   const limit = 16;
 
   useEffect(() => {
-    const fetchOwnerEnvironments = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const res = await fetch(
-          `http://localhost:5150/api/environments/owner?page=${page}&limit=${limit}`,
-          {
-            method: "GET",
-            credentials: "include",
-          },
-        );
-
-        const data = await res.json();
+        const data = await getOwnerEnvironments(page, limit);
         setEnvironments(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
-        alert("Error cargando tus ambientes");
+        alert("Hubo un error cargando los ambientes, inténtalo de nuevo.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOwnerEnvironments();
-  }, [page, searchParams]);
+    fetchData();
+  }, [page]);
 
   const handleFabAdd = () => {
     router.push(PageRoutes.New_Environment);

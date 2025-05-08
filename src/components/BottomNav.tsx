@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import { useMediaQuery, useTheme, Typography } from "@mui/material";
 import { UserType } from "@/utils/constants/user-constants";
 import { getBottomNavItems } from "@/utils/constants/nav-configs";
+import { useRouter, usePathname } from "next/navigation"; // Importamos usePathname
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 interface BottomNavProps {
   userType?: UserType;
@@ -17,11 +19,15 @@ const BottomNav: React.FC<BottomNavProps> = ({
   const [value, setValue] = useState(0);
   const navItems = getBottomNavItems(userType);
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"), {
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"), {
     noSsr: true,
   });
 
-  if (!isSmallScreen) return null;
+  const router = useRouter();
+  const pathname = usePathname();
+
+  if (!isSmallScreen || pathname.includes(PageRoutes.Environment_Details))
+    return null;
 
   return (
     <Paper
@@ -48,7 +54,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
               </Typography>
             }
             icon={item.icon}
-            href={item.to}
+            onClick={() => router.push(`/${item.to}`)}
           />
         ))}
       </BottomNavigation>

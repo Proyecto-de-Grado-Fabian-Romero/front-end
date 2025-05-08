@@ -52,7 +52,7 @@ const EnvironmentGrid = ({
           </Button>
         </Box>
       ) : (
-        <Box>
+        <>
           <Grid container spacing={2} sx={{ width: "100%" }}>
             {environments.map((env) => (
               <Grid key={env.publicId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
@@ -70,7 +70,7 @@ const EnvironmentGrid = ({
               />
             </Box>
           )}
-        </Box>
+        </>
       )}
     </Container>
   );

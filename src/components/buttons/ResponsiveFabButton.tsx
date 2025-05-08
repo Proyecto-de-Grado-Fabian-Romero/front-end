@@ -9,16 +9,16 @@ interface ResponsiveFabProps {
 const ResponsiveFab: React.FC<ResponsiveFabProps> = ({ onClick }) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const isMedium = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isMedium = useMediaQuery(theme.breakpoints.up("sm"));
   const isLarge = useMediaQuery(theme.breakpoints.up("lg"));
 
   const { bottom, right } = useMemo(() => {
     if (isSmall) {
       return { bottom: 72, right: 16 };
-    } else if (isMedium) {
-      return { bottom: 52, right: 36 };
     } else if (isLarge) {
       return { bottom: 52, right: "10%" };
+    } else if (isMedium) {
+      return { bottom: 72, right: 16 };
     }
     return { bottom: 80, right: 24 };
   }, [isSmall, isMedium, isLarge]);

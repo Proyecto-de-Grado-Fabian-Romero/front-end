@@ -18,8 +18,6 @@ export default function ProfilePage() {
     );
   }
 
-  console.log(user.photoFileUrl);
-
   return (
     <Container>
       <Box p={4}>

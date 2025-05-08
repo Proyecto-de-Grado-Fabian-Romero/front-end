@@ -5,6 +5,7 @@ import "aframe";
 import "aframe-extras";
 import "aframe-event-set-component";
 import { Scene360, Tour360 } from "@/types/Tour360";
+import { fetchTourData } from "@/services/environmentService";
 
 type VirtualTourProps = {
   tour360Id: string;
@@ -18,8 +19,7 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await fetch(`http://localhost:5150/api/tour/${tour360Id}`);
-        const json = await res.json();
+        const json = await fetchTourData(tour360Id);
         setTourData(json);
         setCurrentScene(json.scenes?.[0]);
       } catch {

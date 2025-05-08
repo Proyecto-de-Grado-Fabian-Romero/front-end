@@ -20,6 +20,7 @@ type WeeklySchedule = {
   StartTime: number;
   EndTime: number;
 };
+
 export type FormDataCreateEnv = {
   title: string;
   description: string;
@@ -30,7 +31,7 @@ export type FormDataCreateEnv = {
   servicePublicKeys: string[];
   areas: AreaQuantity[];
   images: File[];
-  equipmentJson: string;
+  equipment: string;
   pricingPolicies: PricingPolicy[];
   discountPolicies: DiscountPolicy[];
   weeklySchedules: WeeklySchedule[];

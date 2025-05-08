@@ -9,7 +9,7 @@ import { UserType } from "@/utils/constants/user-constants";
 
 const Header: React.FC = () => {
   const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
 
   const role = useSelector((state: RootState) => state.user.role);
   const userType: UserType =

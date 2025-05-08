@@ -5,6 +5,7 @@ import { Box, Container, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import Tour360Filter from "@/components/inputs/select/Tour360Filter";
 import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
+import { getTour360Requests } from "@/services/adminService";
 
 interface Tour360Request {
   environmentId: string;
@@ -33,19 +34,11 @@ const Tour360RequestsPage = () => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const url = new URL("http://localhost:5101/api/tour360requests");
-        url.searchParams.append("page", page.toString());
-        url.searchParams.append("limit", limit.toString());
-        if (statusFilter) {
-          url.searchParams.append("status", statusFilter);
-        }
-
-        const res = await fetch(url.toString());
-        const data = await res.json();
+        const data = await getTour360Requests(page, limit, statusFilter);
         setRequests(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
-        alert("Error al cargar las solicitudes.");
+        alert("Hubo un error cargando las solicitudes, inténtalo de nuevo");
       } finally {
         setLoading(false);
       }

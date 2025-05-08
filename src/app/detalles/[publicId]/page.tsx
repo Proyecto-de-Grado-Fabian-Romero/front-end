@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Chip, Grid, Typography, CircularProgress } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,22 +10,29 @@ import "swiper/css/pagination";
 import VirtualTour from "@/components/tour/VirtualTour";
 import { Environment } from "@/types/GetEnvironment";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import PricingDisplay from "@/components/display/PricingDisplay";
+import UsersEnvironmentButtons from "@/components/buttons/UsersEnvironmentButton";
+import { getEnvironmentByPublicId } from "@/services/environmentService";
 
 export default function EnvironmentDetailsPage() {
   const { publicId } = useParams();
   const [data, setData] = useState<Environment | null>(null);
   const [loading, setLoading] = useState(true);
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchEnvironment = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:5150/api/environments/single?publicId=${publicId}`,
+        const result = await getEnvironmentByPublicId(
+          publicId?.toString() ?? "",
         );
-        const result = await res.json();
         setData(result);
       } catch {
-        alert("Error al cargar el ambiente, intenta de nuevo.");
+        alert(
+          "No se pudo obtener información del ambiente, inténtalo de nuevo.",
+        );
       } finally {
         setLoading(false);
       }
@@ -65,7 +65,7 @@ export default function EnvironmentDetailsPage() {
   }
 
   return (
-    <Box sx={{ padding: 2, maxWidth: 800, margin: "auto" }}>
+    <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -77,7 +77,9 @@ export default function EnvironmentDetailsPage() {
       >
         {data.photos?.map((photo) => (
           <SwiperSlide key={photo.fileId}>
-            <div style={{ width: "100%", position: "relative" }}>
+            <div
+              style={{ width: "100%", position: "relative", height: "400px" }}
+            >
               <Image
                 src={photo.url}
                 alt={photo.fileName}
@@ -86,9 +88,7 @@ export default function EnvironmentDetailsPage() {
                   objectFit: "cover",
                   borderRadius: 12,
                   width: "100%",
-                  height: "auto",
                 }}
-                sizes="100vw"
               />
             </div>
           </SwiperSlide>
@@ -101,16 +101,27 @@ export default function EnvironmentDetailsPage() {
 
       <Typography color="text.secondary">{data.location}</Typography>
 
-      <Box display="flex" gap={2} mt={1}>
-        <Chip label={`Min. ${data.minRentalTime} hora`} />
+      <Box
+        display="flex"
+        gap={2}
+        mt={1}
+        flexWrap="wrap"
+        justifyContent="flex-start"
+      >
+        <Chip label={`Min. ${data.minRentalTime} ${data.rentalUnit}`} />
         <Chip label={`Máx. ${data.capacity} personas`} />
         <Chip label={`Tipo: ${data.type.name}`} />
       </Box>
 
-      <Typography mt={2}>{data.description}</Typography>
+      <Typography mt={3}>{data.description}</Typography>
+      <br />
+
+      <hr />
 
       <Box mt={3}>
-        <Typography fontWeight="bold">Servicios incluidos</Typography>
+        <Typography variant="subtitle1" fontWeight="bold">
+          Servicios incluidos
+        </Typography>
         <Grid container spacing={1} mt={1}>
           {data.services.map((s) => (
             <Grid key={s.name}>
@@ -122,8 +133,12 @@ export default function EnvironmentDetailsPage() {
 
       <Box mt={3}></Box>
 
+      <hr />
+
       <Box mt={3}>
-        <Typography fontWeight="bold">Áreas</Typography>
+        <Typography variant="subtitle1" fontWeight="bold">
+          Áreas
+        </Typography>
         <ul>
           {data.environmentAreas.map((areaItem) => (
             <li key={areaItem.area.publicKey}>
@@ -137,19 +152,27 @@ export default function EnvironmentDetailsPage() {
         {data.tour360Id && <VirtualTour tour360Id={data.tour360Id} />}
       </Box>
 
-      <Box
-        mt={4}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h6" fontWeight="bold">
-          Bs. {data.pricingPolicies?.[0]?.basePrice} / hora
-        </Typography>
-        <Button variant="contained" color="primary">
-          Reservar
-        </Button>
-      </Box>
+      {user.publicId === data.ownerId && (
+        <>
+          <br />
+          <hr />
+          <Typography variant="subtitle1" fontWeight="bold">
+            Políticas de Precios:
+          </Typography>
+          {data.pricingPolicies.map((p) => (
+            <PricingDisplay key={p.basePrice + p.extraGuestPrice} pricing={p} />
+          ))}
+        </>
+      )}
+
+      <Box mt={16} />
+
+      <UsersEnvironmentButtons
+        basePrice={data.pricingPolicies[0].basePrice}
+        rentalUnit={data.rentalUnit}
+        forOwner={user.publicId === data.ownerId}
+        envPubId={data.publicId}
+      />
     </Box>
   );
 }

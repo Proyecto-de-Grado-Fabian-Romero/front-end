@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Environment } from "@/types/AllEnvironments";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
+import { fetchEnvironments } from "@/services/environmentService";
 
 const EnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
@@ -17,60 +18,10 @@ const EnvironmentsPage = () => {
   const limit = 16;
 
   useEffect(() => {
-    const fetchEnvironments = async () => {
+    const loadEnvironments = async () => {
       try {
-        const areas: { AreaPublicKey: string; MinQuantity: number }[] = [];
-        searchParams.forEach((value, key) => {
-          if (key.startsWith("area_")) {
-            areas.push({
-              AreaPublicKey: key.replace("area_", ""),
-              MinQuantity: parseInt(value),
-            });
-          }
-        });
-
-        const services = searchParams.get("services")?.split(",") || [];
-
-        const requestBody = {
-          location: searchParams.get("city") || undefined,
-          environmentTypePublicKey: searchParams.get("type") || undefined,
-          startDate: searchParams.get("startDate")
-            ? Math.floor(
-                new Date(searchParams.get("startDate")!).getTime() / 1000,
-              )
-            : undefined,
-          endDate: searchParams.get("endDate")
-            ? Math.floor(
-                new Date(searchParams.get("endDate")!).getTime() / 1000,
-              )
-            : undefined,
-          servicePublicKeys: services,
-          areas,
-          instantBookingRequired:
-            searchParams.get("instantBooking") === "true" ? true : false,
-          minPrice: searchParams.get("minPrice")
-            ? parseFloat(searchParams.get("minPrice")!)
-            : undefined,
-          maxPrice: searchParams.get("maxPrice")
-            ? parseFloat(searchParams.get("maxPrice")!)
-            : 2000,
-          minCapacity: searchParams.get("minCapacity")
-            ? parseFloat(searchParams.get("minCapacity")!)
-            : 0,
-        };
-
-        const res = await fetch(
-          `http://localhost:5150/api/environments/available?page=${page}&limit=${limit}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestBody),
-          },
-        );
-
-        const data = await res.json();
+        setLoading(true);
+        const data = await fetchEnvironments(searchParams, page, limit);
         setEnvironments(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
@@ -80,8 +31,8 @@ const EnvironmentsPage = () => {
       }
     };
 
-    fetchEnvironments();
-  }, [searchParams, page]);
+    loadEnvironments();
+  }, [searchParams, page, limit]);
 
   const handlePageChange = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
