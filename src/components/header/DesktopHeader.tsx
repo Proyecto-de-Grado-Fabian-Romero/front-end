@@ -6,6 +6,7 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import { UserType } from "@/utils/constants/user-constants";
 import { getHeaderNavItems } from "@/utils/constants/nav-configs";
 import LogoImage from "./LogoImage";
+import { useRouter } from "next/navigation";
 
 interface DesktopHeaderProps {
   userType?: UserType;
@@ -16,6 +17,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
 }) => {
   const hasNotifications = true;
   const headerItems = getHeaderNavItems(userType);
+  const router = useRouter();
 
   return (
     <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -50,11 +52,12 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                     key={item.label}
                     startIcon={item.icon}
                     color="inherit"
-                    href={item.to}
+                    onClick={() => router.push(`${item.to}`)}
+                    sx={{ paddingLeft: 3, paddingRight: 2 }}
                   >
                     {item.label}
                   </Button>
-                ),
+                )
             )}
             <IconButton color="inherit" href={PageRoutes.Notifications}>
               <Badge color="error" variant="dot" invisible={!hasNotifications}>

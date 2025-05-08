@@ -33,7 +33,8 @@ const EnvironmentsPage = () => {
         const data = await res.json();
         setEnvironments(data.items || []);
         setTotalPages(data.totalPages || 1);
-      } catch {
+      } catch(error: any) {
+        console.log(error)
         alert("Error cargando tus ambientes");
       } finally {
         setLoading(false);

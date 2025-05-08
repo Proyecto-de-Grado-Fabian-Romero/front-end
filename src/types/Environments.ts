@@ -30,7 +30,7 @@ export type FormDataCreateEnv = {
   servicePublicKeys: string[];
   areas: AreaQuantity[];
   images: File[];
-  equipmentJson: string;
+  equipment: string;
   pricingPolicies: PricingPolicy[];
   discountPolicies: DiscountPolicy[];
   weeklySchedules: WeeklySchedule[];

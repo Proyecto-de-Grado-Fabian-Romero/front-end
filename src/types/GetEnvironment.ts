@@ -40,9 +40,11 @@ export type Environment = {
     publicKey: string;
   };
   photos: Photo[];
+  rentalUnit: string;
   services: Service[];
   environmentAreas: AreaItem[];
-  equipment: string; // JSON string
+  equipment: string; 
   pricingPolicies: PricingPolicy[];
   tour360Id?: string;
+  ownerId: string;
 };

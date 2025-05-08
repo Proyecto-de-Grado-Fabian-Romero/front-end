@@ -18,9 +18,10 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await fetch(`http://localhost:5150/api/tour/${tour360Id}`);
+        const res = await fetch(`http://localhost:5150/api/tours/${tour360Id}`);
         const json = await res.json();
         setTourData(json);
+        console.log(json)
         setCurrentScene(json.scenes?.[0]);
       } catch {
         alert("No se pudo cargar el tour virtual, recarga la página por favor");
