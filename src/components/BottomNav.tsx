@@ -7,6 +7,7 @@ import { useMediaQuery, useTheme, Typography } from "@mui/material";
 import { UserType } from "@/utils/constants/user-constants";
 import { getBottomNavItems } from "@/utils/constants/nav-configs";
 import { useRouter, usePathname } from "next/navigation"; // Importamos usePathname
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 interface BottomNavProps {
   userType?: UserType;
@@ -23,9 +24,10 @@ const BottomNav: React.FC<BottomNavProps> = ({
   });
 
   const router = useRouter();
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  if (!isSmallScreen || pathname.includes("/detalles")) return null;
+  if (!isSmallScreen || pathname.includes(PageRoutes.Environment_Details))
+    return null;
 
   return (
     <Paper

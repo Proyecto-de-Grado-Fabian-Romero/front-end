@@ -43,7 +43,7 @@ export type Environment = {
   rentalUnit: string;
   services: Service[];
   environmentAreas: AreaItem[];
-  equipment: string; 
+  equipment: string;
   pricingPolicies: PricingPolicy[];
   tour360Id?: string;
   ownerId: string;

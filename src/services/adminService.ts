@@ -1,6 +1,6 @@
 export const requestTour360 = async (
   environmentId: string,
-  ownerId: string
+  ownerId: string,
 ) => {
   const response = await fetch("http://localhost:5101/api/tour360requests", {
     method: "POST",
@@ -11,9 +11,11 @@ export const requestTour360 = async (
       environmentId,
       ownerId,
     }),
+    credentials: "include",
   });
 
   if (!response.ok) {
+    console.log("HOLA!");
     throw new Error("Error making POST request");
   }
 
@@ -23,7 +25,7 @@ export const requestTour360 = async (
 export const getTour360Requests = async (
   page = 1,
   limit = 10,
-  status?: string
+  status?: string,
 ) => {
   try {
     const url = new URL("http://localhost:5101/api/tour360requests");

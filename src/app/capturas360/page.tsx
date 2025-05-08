@@ -37,7 +37,7 @@ const Tour360RequestsPage = () => {
         const data = await getTour360Requests(page, limit, statusFilter);
         setRequests(data.items || []);
         setTotalPages(data.totalPages || 1);
-      } catch{
+      } catch {
         alert("Hubo un error cargando las solicitudes, inténtalo de nuevo");
       } finally {
         setLoading(false);

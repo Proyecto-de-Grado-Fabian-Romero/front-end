@@ -57,7 +57,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                   >
                     {item.label}
                   </Button>
-                )
+                ),
             )}
             <IconButton color="inherit" href={PageRoutes.Notifications}>
               <Badge color="error" variant="dot" invisible={!hasNotifications}>

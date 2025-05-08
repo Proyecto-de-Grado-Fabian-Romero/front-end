@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Chip, Grid, Typography, CircularProgress } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,11 +26,13 @@ export default function EnvironmentDetailsPage() {
     const fetchEnvironment = async () => {
       try {
         const result = await getEnvironmentByPublicId(
-          publicId?.toString() ?? ""
+          publicId?.toString() ?? "",
         );
         setData(result);
-      } catch (err: any) {
-        alert(err.message);
+      } catch {
+        alert(
+          "No se pudo obtener información del ambiente, inténtalo de nuevo.",
+        );
       } finally {
         setLoading(false);
       }

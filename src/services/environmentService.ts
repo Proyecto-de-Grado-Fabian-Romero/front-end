@@ -62,7 +62,7 @@ export const createEnvironment = async (formData: FormDataCreateEnv) => {
 export const fetchEnvironments = async (
   searchParams: URLSearchParams,
   page: number,
-  limit: number
+  limit: number,
 ) => {
   try {
     const areas: Area[] = [];
@@ -109,7 +109,7 @@ export const fetchEnvironments = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
-      }
+      },
     );
 
     if (!res.ok) {
@@ -130,7 +130,7 @@ export const getOwnerEnvironments = async (page = 1, limit = 10) => {
       {
         method: "GET",
         credentials: "include",
-      }
+      },
     );
 
     if (!res.ok) {
@@ -139,8 +139,8 @@ export const getOwnerEnvironments = async (page = 1, limit = 10) => {
 
     const data = await res.json();
     return data;
-  } catch (err: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     throw new Error(err.message || "Error inesperado al obtener los ambientes");
   }
 };
@@ -148,7 +148,7 @@ export const getOwnerEnvironments = async (page = 1, limit = 10) => {
 export const getEnvironmentByPublicId = async (publicId: string) => {
   try {
     const res = await fetch(
-      `http://localhost:5150/api/environments/single?publicId=${publicId}`
+      `http://localhost:5150/api/environments/single?publicId=${publicId}`,
     );
 
     if (!res.ok) {
