@@ -44,7 +44,15 @@ const Upload360ImagesForm: React.FC<Props> = ({
   };
 
   return (
-    <Box sx={{ mb: 6 }}>
+    <Box
+      sx={{
+        mb: 6,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Typography variant="h5" gutterBottom>
         Sube las imágenes panorámicas 360° para el recorrido virtual
       </Typography>
