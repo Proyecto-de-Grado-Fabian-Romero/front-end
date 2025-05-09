@@ -1,18 +1,27 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import { PageRoutes } from "@/utils/constants/page-routes";
+import { AddOutlined } from "@mui/icons-material";
+import { Button, Card, CardContent, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 type Props = {
+  publicId: string;
+  environmentId: string;
   environmentName: string;
-  status: string;
+  status: number;
   requestDate: number;
   scheduledDate?: number;
 };
 
 const Tour360RequestCard = ({
+  publicId,
+  environmentId,
   environmentName,
   status,
   requestDate,
   scheduledDate,
 }: Props) => {
+  const router = useRouter();
+
   return (
     <Card>
       <CardContent>
@@ -30,21 +39,36 @@ const Tour360RequestCard = ({
             Fecha programada: {formatDate(scheduledDate)}
           </Typography>
         )}
+
+        {status <= 1 && (
+          <Button
+            startIcon={<AddOutlined />}
+            variant="contained"
+            onClick={() =>
+              router.push(
+                `${PageRoutes.Create_Virtual_Tour}?id=${publicId}&environmentId=${environmentId}`,
+              )
+            }
+            sx={{ paddingLeft: 3, paddingRight: 2, marginTop: 4 }}
+          >
+            Añadir Recorrido Virtual
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
 };
 
 // Helpers
-const translateStatus = (status: string) => {
+const translateStatus = (status: number) => {
   switch (status) {
-    case "Pending":
+    case 0:
       return "Pendiente";
-    case "Scheduled":
+    case 1:
       return "Programado";
-    case "Completed":
+    case 2:
       return "Completado";
-    case "Cancelled":
+    case 3:
       return "Cancelado";
     default:
       return status;

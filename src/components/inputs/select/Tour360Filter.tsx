@@ -1,8 +1,8 @@
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 type Props = {
-  statusFilter: string;
-  onStatusChange: (value: string) => void;
+  statusFilter: number;
+  onStatusChange: (value: number) => void;
 };
 
 const Tour360Filter = ({ statusFilter, onStatusChange }: Props) => {
@@ -11,14 +11,13 @@ const Tour360Filter = ({ statusFilter, onStatusChange }: Props) => {
       <InputLabel>Estado</InputLabel>
       <Select
         value={statusFilter}
-        onChange={(e) => onStatusChange(e.target.value)}
+        onChange={(e) => onStatusChange(parseInt(e.target.value.toString()))}
         label="Estado"
       >
-        <MenuItem value="">Todos</MenuItem>
-        <MenuItem value="Pending">Pendiente</MenuItem>
-        <MenuItem value="Scheduled">Programado</MenuItem>
-        <MenuItem value="Completed">Completado</MenuItem>
-        <MenuItem value="Cancelled">Cancelado</MenuItem>
+        <MenuItem value={0}>Pendiente</MenuItem>
+        <MenuItem value={1}>Programado</MenuItem>
+        <MenuItem value={2}>Completado</MenuItem>
+        <MenuItem value={3}>Cancelado</MenuItem>
       </Select>
     </FormControl>
   );
