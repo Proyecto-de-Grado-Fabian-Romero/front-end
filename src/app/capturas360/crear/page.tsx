@@ -21,13 +21,16 @@ const CreateVirtualTourPage = () => {
 
   return (
     <Container maxWidth={false} sx={{ py: 4 }}>
-      {/* {publicId && (
+      {publicId && uploadResults.length === 0 && (
         <Upload360ImagesForm
           publicId={publicId}
           onUploadComplete={(results) => setUploadResults(results)}
         />
-      )} */}
-      <CreateVirtualTourForm uploadedImages={uploadResults} />
+      )}
+
+      {uploadResults.length > 0 && (
+        <CreateVirtualTourForm uploadedImages={uploadResults} />
+      )}
     </Container>
   );
 };

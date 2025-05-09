@@ -1,16 +1,9 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { UploadImageResult } from "@/types/UploadImageResult";
+import SceneThumbnailSelector from "./SceneThumbnailSelector";
 
 type Props = {
   uploadedImages: UploadImageResult[];
@@ -26,30 +19,25 @@ const SceneSelector: React.FC<Props> = ({
   onAddScene,
 }) => {
   return (
-    <Box textAlign="center">
+    <Box textAlign="center" sx={{ maxWidth: 900, mx: "auto" }}>
       <Typography variant="h6" gutterBottom>
-        Aún no has añadido ninguna escena.
+        Aún no has añadido ninguna escena. Selecciona una imagen:
       </Typography>
 
-      <FormControl sx={{ mt: 2, minWidth: 300 }}>
-        <InputLabel id="image-select-label">
-          Selecciona una imagen 360°
-        </InputLabel>
-        <Select
-          labelId="image-select-label"
-          value={selectedImageId}
-          label="Selecciona una imagen 360°"
-          onChange={(e) => setSelectedImageId(e.target.value)}
-        >
-          {uploadedImages.map((img) => (
-            <MenuItem key={img.fileId} value={img.fileId}>
-              {img.fileName}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <SceneThumbnailSelector
+        scenes={uploadedImages.map((img) => ({
+          id: img.fileId,
+          name: img.fileName,
+          fileId: img.fileId,
+          fileName: img.fileName,
+          fileUrl: img.fileUrl,
+          pois: [],
+        }))}
+        selectedId={selectedImageId}
+        onSelect={setSelectedImageId}
+      />
 
-      <Box sx={{ mt: 2 }}>
+      <Box sx={{ mt: 4 }}>
         <Button
           variant="contained"
           color="primary"

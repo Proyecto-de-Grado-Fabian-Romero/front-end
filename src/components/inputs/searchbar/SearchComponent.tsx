@@ -84,7 +84,9 @@ const SearchComponent = () => {
               justifyContent: "flex-start",
               px: 2,
             }}
-            startIcon={<SearchIcon sx={{ color: "orangered" }} />}
+            startIcon={
+              <SearchIcon sx={{ color: ColorPalette.PRIMARY_DEFAULT }} />
+            }
           >
             Empieza tu búsqueda
           </Button>

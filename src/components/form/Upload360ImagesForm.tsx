@@ -34,7 +34,10 @@ const Upload360ImagesForm: React.FC<Props> = ({
     setError(null);
     setLoading(true);
     try {
-      const results = await uploadImages(images, "tours360");
+      const results = await uploadImages(
+        images,
+        `tours360/${crypto.randomUUID()}`,
+      );
       onUploadComplete(results);
     } catch (err) {
       setError("Ocurrió un error al subir las imágenes.");

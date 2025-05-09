@@ -4,7 +4,7 @@ import { authFetch } from "./authFetch";
 export async function uploadImages(
   files: File[],
   folder: string,
-  bucket: string = "spacio"
+  bucket: string = "spacio",
 ): Promise<UploadImageResult[]> {
   const formData = new FormData();
 
@@ -16,7 +16,6 @@ export async function uploadImages(
   const response = await authFetch(url, {
     method: "POST",
     body: formData,
-    credentials: "include",
   });
 
   if (!response.ok) {

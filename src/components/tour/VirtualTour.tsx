@@ -6,6 +6,7 @@ import "aframe-extras";
 import "aframe-event-set-component";
 import { Scene360, Tour360 } from "@/types/Tour360";
 import { fetchTourData } from "@/services/environmentService";
+import { ColorPalette } from "@/utils/constants/ui-constants";
 
 type VirtualTourProps = {
   tour360Id: string;
@@ -57,15 +58,12 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
         xr-mode-ui="enabled: true"
         style={{ width: "100%", height: "100%" }}
       >
-        <Entity
-          camera
-          position="0 1.6 0"
-          look-controls
-          wasd-controls
-          raycaster={{ objects: ".clickable" }}
-        >
+        {/* Cámara con raycaster VR */}
+        <Entity camera position="0 1.6 0" look-controls wasd-controls>
           <Entity
-            cursor={{ rayOrigin: "entity", fuse: false }}
+            id="camera"
+            cursor="rayOrigin: entity; fuse: false"
+            raycaster={{ objects: ".clickable" }}
             geometry={{
               primitive: "ring",
               radiusInner: 0.02,
@@ -76,28 +74,45 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
           />
         </Entity>
 
+        {/* Cursor adicional para mouse normal */}
         <Entity
-          ref={skyRef}
-          key={currentScene.id}
+          cursor="rayOrigin: mouse"
+          raycaster={{ objects: ".clickable" }}
+        />
+
+        {/* Fondo */}
+        <Entity
           primitive="a-sky"
+          key={currentScene.id}
           src={currentScene.fileUrl}
           material={{ shader: "flat", side: "back" }}
         />
 
+        {/* POIs */}
         {currentScene.pois.map((poi, index) => (
           <Entity
             key={`poi-${index}-${poi.sceneId}`}
-            primitive="a-image"
-            radius="0.25"
-            scale="1 1 1"
+            geometry={{ primitive: "sphere", radius: 0.2 }}
+            material={{
+              color: ColorPalette.PRIMARY_HOVER,
+              emissive: ColorPalette.PRIMARY_HOVER,
+              opacity: 0.9,
+              shader: "standard",
+            }}
+            animation__pulse={{
+              property: "scale",
+              dir: "alternate",
+              dur: 1000,
+              loop: true,
+              to: "1.3 1.3 1.3",
+            }}
             src="/arrow.png"
             position={poi.position}
+            scale="1 1 1"
             class="clickable"
-            event-set__mouseenter={{ "material.color": "blue" }}
-            event-set__mouseleave={{ "material.color": "white" }}
+            look-at="#camera"
             events={{
               click: () => handleSceneChange(poi.sceneId),
-              "grab-start": () => handleSceneChange(poi.sceneId),
             }}
           />
         ))}
