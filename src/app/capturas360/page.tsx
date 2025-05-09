@@ -7,17 +7,7 @@ import Tour360Filter from "@/components/inputs/select/Tour360Filter";
 import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
 import { getTour360Requests } from "@/services/adminService";
 import { PageRoutes } from "@/utils/constants/page-routes";
-
-interface Tour360Request {
-  environmentId: string;
-  environmentName: string;
-  ownerId: string;
-  requestDate: number;
-  scheduledDate?: number;
-  status: number;
-  technicianName?: string;
-  notes?: string;
-}
+import { Tour360Request } from "@/types/Tour360Request";
 
 const Tour360RequestsPage = () => {
   const [requests, setRequests] = useState<Tour360Request[]>([]);

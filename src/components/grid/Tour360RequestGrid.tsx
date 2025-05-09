@@ -1,16 +1,6 @@
 import { Box, Grid, Pagination, Skeleton, Typography } from "@mui/material";
 import Tour360RequestCard from "../card/Tour360RequestCard";
-
-type Tour360Request = {
-  environmentId: string;
-  environmentName: string;
-  ownerId: string;
-  requestDate: number;
-  scheduledDate?: number;
-  status: number;
-  technicianName?: string;
-  notes?: string;
-};
+import { Tour360Request } from "@/types/Tour360Request";
 
 type Props = {
   requests: Tour360Request[];
@@ -60,6 +50,7 @@ const Tour360RequestsGrid = ({
             size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
           >
             <Tour360RequestCard
+              publicId={request.publicId}
               environmentName={request.environmentName}
               status={request.status}
               requestDate={request.requestDate}

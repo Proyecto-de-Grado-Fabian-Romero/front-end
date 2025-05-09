@@ -4,6 +4,7 @@ import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 type Props = {
+  publicId: string;
   environmentName: string;
   status: number;
   requestDate: number;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 const Tour360RequestCard = ({
+  publicId,
   environmentName,
   status,
   requestDate,
@@ -40,7 +42,9 @@ const Tour360RequestCard = ({
           <Button
             startIcon={<AddOutlined />}
             variant="contained"
-            onClick={() => router.push(`${PageRoutes.Create_Virtual_Tour}`)}
+            onClick={() =>
+              router.push(`${PageRoutes.Create_Virtual_Tour}?id=${publicId}`)
+            }
             sx={{ paddingLeft: 3, paddingRight: 2, marginTop: 4 }}
           >
             Añadir Recorrido Virtual
