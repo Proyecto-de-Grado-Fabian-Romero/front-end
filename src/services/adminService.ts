@@ -1,21 +1,25 @@
+import { authFetch } from "./authFetch";
+
 export const requestTour360 = async (
   environmentId: string,
   ownerId: string,
 ) => {
-  const response = await fetch("http://localhost:5101/api/tour360requests", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await authFetch(
+    "http://localhost:5101/api/tour360requests",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        environmentId,
+        ownerId,
+      }),
+      credentials: "include",
     },
-    body: JSON.stringify({
-      environmentId,
-      ownerId,
-    }),
-    credentials: "include",
-  });
+  );
 
   if (!response.ok) {
-    console.log("HOLA!");
     throw new Error("Error making POST request");
   }
 
@@ -35,7 +39,10 @@ export const getTour360Requests = async (
       url.searchParams.append("status", status);
     }
 
-    const res = await fetch(url.toString());
+    const res = await authFetch(url.toString(), {
+      credentials: "include",
+    });
+
     if (!res.ok) {
       throw new Error("No se pudieron obtener las solicitudes");
     }

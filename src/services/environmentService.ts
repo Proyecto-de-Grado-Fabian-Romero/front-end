@@ -1,5 +1,6 @@
 import { Area } from "@/types/Area";
 import { FormDataCreateEnv } from "@/types/Environments";
+import { authFetch } from "./authFetch";
 
 export async function fetchAreas() {
   const res = await fetch("http://localhost:5150/api/areas");
@@ -41,7 +42,7 @@ export const createEnvironment = async (formData: FormDataCreateEnv) => {
   });
 
   try {
-    const response = await fetch("http://localhost:5150/api/environments", {
+    const response = await authFetch("http://localhost:5150/api/environments", {
       method: "POST",
       body: data,
       credentials: "include",
@@ -125,7 +126,7 @@ export const fetchEnvironments = async (
 
 export const getOwnerEnvironments = async (page = 1, limit = 10) => {
   try {
-    const res = await fetch(
+    const res = await authFetch(
       `http://localhost:5150/api/environments/owner?page=${page}&limit=${limit}`,
       {
         method: "GET",
