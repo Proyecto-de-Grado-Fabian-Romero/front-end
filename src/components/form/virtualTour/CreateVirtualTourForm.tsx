@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Scene360, POI } from "@/types/Tour360";
 import SceneSelector from "./SceneSelector";
 import ScenePreview from "./ScenePreview";
@@ -9,12 +9,20 @@ import AddPOIDialog from "./AddPOIDialog";
 import POIActionDialog from "./POIActionDialog";
 import { UploadImageResult } from "@/types/UploadImageResult";
 import SceneThumbnailSelector from "./SceneThumbnailSelector";
+import { useRouter } from "next/router";
+import ConfirmUploadDialog from "./ConfirmUploadDialog";
+import { PageRoutes } from "@/utils/constants/page-routes";
+import { uploadVirtualTour } from "@/services/adminService";
 
 type Props = {
   uploadedImages: UploadImageResult[];
+  environmentPublicId: string;
 };
 
-const CreateVirtualTourForm = ({ uploadedImages }: Props) => {
+const CreateVirtualTourForm = ({
+  uploadedImages,
+  environmentPublicId,
+}: Props) => {
   const [scenes, setScenes] = useState<Scene360[]>([]);
   const [selectedImageId, setSelectedImageId] = useState<string>("");
 
@@ -115,6 +123,25 @@ const CreateVirtualTourForm = ({ uploadedImages }: Props) => {
 
   const activeScene = scenes.find((s) => s.id === activeSceneId);
 
+  const router = useRouter();
+
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  const handleUpload = async () => {
+    try {
+      setUploading(true);
+      await uploadVirtualTour(environmentPublicId, scenes);
+
+      setConfirmDialogOpen(false);
+      router.push(`${PageRoutes.Environment_Details}/${environmentPublicId}`);
+    } catch {
+      alert("No se pudo subir el recorrido virtual. Intenta de nuevo");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <Box sx={{ mt: 4, width: "100%", maxWidth: 1200 }}>
       {scenes.length === 0 ? (
@@ -155,6 +182,24 @@ const CreateVirtualTourForm = ({ uploadedImages }: Props) => {
             onDelete={handleDeletePOI}
             onNavigate={handleNavigateToScene}
             poi={activePOI}
+          />
+
+          <Box textAlign="right" sx={{ mt: 3 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setConfirmDialogOpen(true)}
+              disabled={scenes.length === 0}
+            >
+              Subir Recorrido Virtual
+            </Button>
+          </Box>
+
+          <ConfirmUploadDialog
+            open={confirmDialogOpen}
+            loading={uploading}
+            onClose={() => setConfirmDialogOpen(false)}
+            onConfirm={handleUpload}
           />
         </Box>
       )}

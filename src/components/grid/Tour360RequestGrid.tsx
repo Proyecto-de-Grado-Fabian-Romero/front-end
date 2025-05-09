@@ -51,6 +51,7 @@ const Tour360RequestsGrid = ({
           >
             <Tour360RequestCard
               publicId={request.publicId}
+              environmentId={request.environmentId}
               environmentName={request.environmentName}
               status={request.status}
               requestDate={request.requestDate}

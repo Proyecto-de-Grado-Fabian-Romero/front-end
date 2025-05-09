@@ -1,3 +1,4 @@
+import { Scene360 } from "@/types/Tour360";
 import { authFetch } from "./authFetch";
 
 export const requestTour360 = async (
@@ -51,5 +52,27 @@ export const getTour360Requests = async (
     return data;
   } catch {
     throw new Error("Error inesperado");
+  }
+};
+
+export const uploadVirtualTour = async (
+  environmentPublicId: string,
+  scenes: Scene360[],
+): Promise<void> => {
+  const res = await authFetch(
+    `http://localhost:5150/api/tours?environmentPublicId=${environmentPublicId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ scenes }),
+      credentials: "include",
+    },
+  );
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Error al subir el recorrido: ${errorText}`);
   }
 };

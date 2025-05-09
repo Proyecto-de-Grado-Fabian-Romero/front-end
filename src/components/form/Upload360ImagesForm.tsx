@@ -14,13 +14,9 @@ import ImageUploader from "../inputs/form/InputUploader";
 
 interface Props {
   onUploadComplete: (results: UploadImageResult[]) => void;
-  publicId: string;
 }
 
-const Upload360ImagesForm: React.FC<Props> = ({
-  onUploadComplete,
-  publicId,
-}) => {
+const Upload360ImagesForm: React.FC<Props> = ({ onUploadComplete }) => {
   const [images, setImages] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,8 +35,8 @@ const Upload360ImagesForm: React.FC<Props> = ({
         `tours360/${crypto.randomUUID()}`,
       );
       onUploadComplete(results);
-    } catch (err) {
-      setError("Ocurrió un error al subir las imágenes.");
+    } catch {
+      setError("Ocurrió un error al subir las imágenes. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }

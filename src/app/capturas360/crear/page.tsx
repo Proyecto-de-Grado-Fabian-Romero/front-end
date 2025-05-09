@@ -10,6 +10,7 @@ import CreateVirtualTourForm from "@/components/form/virtualTour/CreateVirtualTo
 const CreateVirtualTourPage = () => {
   const searchParams = useSearchParams();
   const [publicId, setPublicId] = useState<string | null>(null);
+  const [environmentId, setEnvironmentId] = useState<string | null>(null);
   const [uploadResults, setUploadResults] = useState<UploadImageResult[]>([]);
 
   useEffect(() => {
@@ -19,17 +20,26 @@ const CreateVirtualTourPage = () => {
     }
   }, [searchParams, publicId]);
 
+  useEffect(() => {
+    const id = searchParams.get("environmentId");
+    if (id && !environmentId) {
+      setEnvironmentId(id);
+    }
+  }, [searchParams, environmentId]);
+
   return (
     <Container maxWidth={false} sx={{ py: 4 }}>
       {publicId && uploadResults.length === 0 && (
         <Upload360ImagesForm
-          publicId={publicId}
           onUploadComplete={(results) => setUploadResults(results)}
         />
       )}
 
       {uploadResults.length > 0 && (
-        <CreateVirtualTourForm uploadedImages={uploadResults} />
+        <CreateVirtualTourForm
+          uploadedImages={uploadResults}
+          environmentPublicId={environmentId ?? ""}
+        />
       )}
     </Container>
   );

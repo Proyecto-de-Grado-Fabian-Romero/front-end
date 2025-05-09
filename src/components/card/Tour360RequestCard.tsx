@@ -1,10 +1,11 @@
 import { PageRoutes } from "@/utils/constants/page-routes";
-import { AddOutlined, PlusOneOutlined } from "@mui/icons-material";
+import { AddOutlined } from "@mui/icons-material";
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 type Props = {
   publicId: string;
+  environmentId: string;
   environmentName: string;
   status: number;
   requestDate: number;
@@ -13,6 +14,7 @@ type Props = {
 
 const Tour360RequestCard = ({
   publicId,
+  environmentId,
   environmentName,
   status,
   requestDate,
@@ -43,7 +45,9 @@ const Tour360RequestCard = ({
             startIcon={<AddOutlined />}
             variant="contained"
             onClick={() =>
-              router.push(`${PageRoutes.Create_Virtual_Tour}?id=${publicId}`)
+              router.push(
+                `${PageRoutes.Create_Virtual_Tour}?id=${publicId}&environmentId=${environmentId}`,
+              )
             }
             sx={{ paddingLeft: 3, paddingRight: 2, marginTop: 4 }}
           >

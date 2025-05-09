@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Entity, Scene } from "aframe-react";
 import { POI, Scene360 } from "@/types/Tour360";
 import "aframe";
@@ -16,7 +16,6 @@ type Props = {
 const ScenePreview: React.FC<Props> = ({ scene, onSceneClick, onPOIClick }) => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
     const handler = (e: any) => {
       if (e?.target?.classList?.contains("clickable")) return;
 
@@ -152,19 +151,6 @@ const ScenePreview: React.FC<Props> = ({ scene, onSceneClick, onPOIClick }) => {
       </Box>
     </Box>
   );
-};
-
-const getRotationByType = (type: string) => {
-  switch (type) {
-    case "ground":
-      return "90 0 0";
-    case "door":
-      return "0 0 0";
-    case "other":
-      return "-30 0 0";
-    default:
-      return "0 0 0";
-  }
 };
 
 export default ScenePreview;
