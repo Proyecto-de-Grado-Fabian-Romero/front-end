@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Tour360Filter from "@/components/inputs/select/Tour360Filter";
 import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
 import { getTour360Requests } from "@/services/adminService";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 interface Tour360Request {
   environmentId: string;
@@ -13,7 +14,7 @@ interface Tour360Request {
   ownerId: string;
   requestDate: number;
   scheduledDate?: number;
-  status: string;
+  status: number;
   technicianName?: string;
   notes?: string;
 }
@@ -28,7 +29,7 @@ const Tour360RequestsPage = () => {
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = 8;
-  const statusFilter = searchParams.get("status") || "";
+  const statusFilter = parseInt(searchParams.get("status") || "0");
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -50,18 +51,18 @@ const Tour360RequestsPage = () => {
   const handlePageChange = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", value.toString());
-    router.push(`/tour360requests?${params.toString()}`);
+    router.push(`${PageRoutes.Shots_360}?${params.toString()}`);
   };
 
-  const handleStatusChange = (value: string) => {
+  const handleStatusChange = (value: number) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
-      params.set("status", value);
+      params.set("status", value.toString());
     } else {
       params.delete("status");
     }
     params.set("page", "1");
-    router.push(`/tour360requests?${params.toString()}`);
+    router.push(`${PageRoutes.Shots_360}?${params.toString()}`);
   };
 
   return (

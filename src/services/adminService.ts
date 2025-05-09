@@ -29,14 +29,14 @@ export const requestTour360 = async (
 export const getTour360Requests = async (
   page = 1,
   limit = 10,
-  status?: string,
+  status?: number,
 ) => {
   try {
     const url = new URL("http://localhost:5101/api/tour360requests");
     url.searchParams.append("page", page.toString());
     url.searchParams.append("limit", limit.toString());
     if (status) {
-      url.searchParams.append("status", status);
+      url.searchParams.append("status", status.toString());
     }
 
     const res = await authFetch(url.toString(), {

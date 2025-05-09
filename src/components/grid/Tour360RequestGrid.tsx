@@ -7,7 +7,7 @@ type Tour360Request = {
   ownerId: string;
   requestDate: number;
   scheduledDate?: number;
-  status: string;
+  status: number;
   technicianName?: string;
   notes?: string;
 };
