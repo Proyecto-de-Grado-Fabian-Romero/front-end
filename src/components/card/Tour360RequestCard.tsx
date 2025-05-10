@@ -1,7 +1,22 @@
+"use client";
+
+import { authFetch } from "@/services/authFetch";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import { AddOutlined } from "@mui/icons-material";
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import {
+  AddOutlined,
+  SyncOutlined,
+} from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type Props = {
   publicId: string;
@@ -16,11 +31,24 @@ const Tour360RequestCard = ({
   publicId,
   environmentId,
   environmentName,
-  status,
+  status: initialStatus,
   requestDate,
   scheduledDate,
 }: Props) => {
   const router = useRouter();
+  const [status, setStatus] = useState(initialStatus);
+  const [loading, setLoading] = useState(false);
+
+  const handleStatusChange = async (newStatus: number) => {
+    setLoading(true);
+    try {
+
+    } catch (error) {
+      console.error("Fallo la solicitud:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card>
@@ -28,9 +56,27 @@ const Tour360RequestCard = ({
         <Typography variant="h6" gutterBottom>
           {environmentName}
         </Typography>
-        <Typography variant="body2">
-          Estado: {translateStatus(status)}
+
+        <Typography variant="body2" gutterBottom>
+          Estado:{" "}
+          {loading ? (
+            <CircularProgress size={16} />
+          ) : (
+            <Select
+              value={status}
+              size="small"
+              onChange={(e) => handleStatusChange(Number(e.target.value))}
+              sx={{ ml: 1 }}
+              startAdornment={<SyncOutlined fontSize="small" />}
+            >
+              <MenuItem value={0}>Pendiente</MenuItem>
+              <MenuItem value={1}>Programado</MenuItem>
+              <MenuItem value={2}>Completado</MenuItem>
+              <MenuItem value={3}>Cancelado</MenuItem>
+            </Select>
+          )}
         </Typography>
+
         <Typography variant="body2">
           Fecha de solicitud: {formatDate(requestDate)}
         </Typography>
@@ -60,21 +106,6 @@ const Tour360RequestCard = ({
 };
 
 // Helpers
-const translateStatus = (status: number) => {
-  switch (status) {
-    case 0:
-      return "Pendiente";
-    case 1:
-      return "Programado";
-    case 2:
-      return "Completado";
-    case 3:
-      return "Cancelado";
-    default:
-      return status;
-  }
-};
-
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
   return date.toLocaleDateString("es-ES");
