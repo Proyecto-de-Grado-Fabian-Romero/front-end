@@ -76,3 +76,26 @@ export const uploadVirtualTour = async (
     throw new Error(`Error al subir el recorrido: ${errorText}`);
   }
 };
+
+export const updateTour360Status = async (
+  publicId: string,
+  newStatus: number,
+): Promise<boolean> => {
+  try {
+    const res = await authFetch(
+      `http://localhost:5101/api/tour360requests/${publicId}/status`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+        credentials: "include",
+      },
+    );
+
+    return res.ok;
+  } catch {
+    return false;
+  }
+};
