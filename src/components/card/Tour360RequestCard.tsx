@@ -1,12 +1,10 @@
 "use client";
 
-import { authFetch } from "@/services/authFetch";
+import { updateTour360Status } from "@/services/adminService";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import { AddOutlined, SyncOutlined } from "@mui/icons-material";
 import {
-  AddOutlined,
-  SyncOutlined,
-} from "@mui/icons-material";
-import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -41,13 +39,13 @@ const Tour360RequestCard = ({
 
   const handleStatusChange = async (newStatus: number) => {
     setLoading(true);
-    try {
-
-    } catch (error) {
-      console.error("Fallo la solicitud:", error);
-    } finally {
-      setLoading(false);
+    const success = await updateTour360Status(publicId, newStatus);
+    if (success) {
+      setStatus(newStatus);
+    } else {
+      alert("No se pudo actualizar el estado, inténtalo de nuevo");
     }
+    setLoading(false);
   };
 
   return (
@@ -57,8 +55,11 @@ const Tour360RequestCard = ({
           {environmentName}
         </Typography>
 
-        <Typography variant="body2" gutterBottom>
-          Estado:{" "}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="body2" gutterBottom>
+            Estado:{" "}
+          </Typography>
+
           {loading ? (
             <CircularProgress size={16} />
           ) : (
@@ -75,7 +76,7 @@ const Tour360RequestCard = ({
               <MenuItem value={3}>Cancelado</MenuItem>
             </Select>
           )}
-        </Typography>
+        </Box>
 
         <Typography variant="body2">
           Fecha de solicitud: {formatDate(requestDate)}
