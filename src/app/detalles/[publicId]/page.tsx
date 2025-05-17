@@ -15,7 +15,8 @@ import { RootState } from "@/store";
 import PricingDisplay from "@/components/display/PricingDisplay";
 import UsersEnvironmentButtons from "@/components/buttons/UsersEnvironmentButton";
 import { getEnvironmentByPublicId } from "@/services/environmentService";
-import { CLASS_ID_TO_NAME } from "@/utils/constants/class-names";
+import { CLASS_ID_TO_NAME, OBJECT_ICONS } from "@/utils/constants/class-names";
+import { HelpOutline } from "@mui/icons-material";
 
 export default function EnvironmentDetailsPage() {
   const { publicId } = useParams();
@@ -27,12 +28,12 @@ export default function EnvironmentDetailsPage() {
     const fetchEnvironment = async () => {
       try {
         const result = await getEnvironmentByPublicId(
-          publicId?.toString() ?? "",
+          publicId?.toString() ?? ""
         );
         setData(result);
       } catch {
         alert(
-          "No se pudo obtener información del ambiente, inténtalo de nuevo.",
+          "No se pudo obtener información del ambiente, inténtalo de nuevo."
         );
       } finally {
         setLoading(false);
@@ -64,6 +65,8 @@ export default function EnvironmentDetailsPage() {
       </Box>
     );
   }
+  console.log(data.equipment)
+  console.log(JSON.parse(data.equipment))
 
   return (
     <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>
@@ -135,13 +138,14 @@ export default function EnvironmentDetailsPage() {
       {data.equipment && (
         <Box mt={3}>
           <Typography variant="subtitle1" fontWeight="bold">
-            Detected Objects
+            Equipamiento
           </Typography>
           <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
             {Object.entries(JSON.parse(data.equipment)).map(([id, count]) => (
               <Chip
                 key={id}
-                label={`${CLASS_ID_TO_NAME[id] ?? `Object ${id}`} x${count}`}
+                icon={OBJECT_ICONS[id] ?? <HelpOutline />}
+                label={`${CLASS_ID_TO_NAME[id] ?? `${id}`} x${count}`}
               />
             ))}
           </Box>
