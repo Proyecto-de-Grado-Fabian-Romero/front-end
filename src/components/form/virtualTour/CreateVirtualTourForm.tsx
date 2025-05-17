@@ -9,7 +9,7 @@ import AddPOIDialog from "./AddPOIDialog";
 import POIActionDialog from "./POIActionDialog";
 import { UploadImageResult } from "@/types/UploadImageResult";
 import SceneThumbnailSelector from "./SceneThumbnailSelector";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import ConfirmUploadDialog from "./ConfirmUploadDialog";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { uploadVirtualTour } from "@/services/adminService";
