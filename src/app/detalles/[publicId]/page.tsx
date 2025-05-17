@@ -28,12 +28,12 @@ export default function EnvironmentDetailsPage() {
     const fetchEnvironment = async () => {
       try {
         const result = await getEnvironmentByPublicId(
-          publicId?.toString() ?? ""
+          publicId?.toString() ?? "",
         );
         setData(result);
       } catch {
         alert(
-          "No se pudo obtener información del ambiente, inténtalo de nuevo."
+          "No se pudo obtener información del ambiente, inténtalo de nuevo.",
         );
       } finally {
         setLoading(false);
@@ -65,8 +65,8 @@ export default function EnvironmentDetailsPage() {
       </Box>
     );
   }
-  console.log(data.equipment)
-  console.log(JSON.parse(data.equipment))
+  console.log(data.equipment);
+  console.log(JSON.parse(data.equipment));
 
   return (
     <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>
