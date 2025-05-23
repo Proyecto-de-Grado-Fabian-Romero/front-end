@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
-  Checkbox,
   FormControl,
-  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
   SelectChangeEvent,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,6 +22,7 @@ interface RentSettingFormProps {
   handleSelectChange: (e: SelectChangeEvent) => void;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   formData: FormDataCreateEnv;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataCreateEnv>>;
 }
 
 const RentSettingForm: React.FC<RentSettingFormProps> = ({
@@ -28,7 +30,15 @@ const RentSettingForm: React.FC<RentSettingFormProps> = ({
   handleSelectChange,
   handleCheckboxChange,
   formData,
+  setFormData,
 }) => {
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      rentalUnit: formData.typePublicKey === "hospedajes" ? "Días" : "Horas",
+    }));
+  }, [formData.typePublicKey]);
+
   return (
     <Box>
       <Typography variant="h6">Configuración de Alquiler</Typography>
@@ -36,21 +46,9 @@ const RentSettingForm: React.FC<RentSettingFormProps> = ({
         Establece las condiciones mínimas y máximas para el alquiler de este
         ambiente.
       </Typography>
-      <FormControl fullWidth sx={{ mt: 2 }}>
-        <InputLabel>Unidad de Tiempo de Alquiler</InputLabel>
-        <Select
-          name="rentalUnit"
-          value={formData.rentalUnit}
-          onChange={handleSelectChange}
-          input={<OutlinedInput label="Unidad de Alquiler" />}
-        >
-          <MenuItem value="Horas">Horas</MenuItem>
-          <MenuItem value="Días">Días</MenuItem>
-        </Select>
-      </FormControl>
       <TextField
         name="minRentalTime"
-        label="Tiempo mínimo de alquiler (en unidades seleccionadas)"
+        label={`Tiempo mínimo de alquiler (en ${formData.rentalUnit})`}
         placeholder="Ej: 2"
         type="number"
         fullWidth
@@ -59,24 +57,32 @@ const RentSettingForm: React.FC<RentSettingFormProps> = ({
       />
       <TextField
         name="maxRentalTime"
-        label="Tiempo máximo de alquiler (en unidades seleccionadas)"
+        label={`Tiempo máximo de alquiler (en ${formData.rentalUnit})`}
         placeholder="Ej: 8"
         type="number"
         fullWidth
         onChange={handleInputChange}
         sx={{ mt: 2 }}
       />
-      <FormControlLabel
-        sx={{ mt: 2 }}
-        control={
-          <Checkbox
+      <br />
+      <br />
+      <hr />
+      <br />
+
+      <FormControl component="fieldset" variant="standard">
+        <Typography variant="h6">Reservas instantáneas</Typography>
+        <FormGroup>
+          <Switch
             name="instantBooking"
             checked={formData.instantBooking}
             onChange={handleCheckboxChange}
+            color="primary"
           />
-        }
-        label="Permitir reservas instantáneas"
-      />
+        </FormGroup>
+        <FormHelperText>
+          Permite a los usuarios reservar sin esperar confirmación
+        </FormHelperText>
+      </FormControl>
     </Box>
   );
 };

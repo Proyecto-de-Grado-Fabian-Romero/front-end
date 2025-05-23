@@ -4,12 +4,10 @@ import {
   Box,
   Button,
   Typography,
-  Checkbox,
   SelectChangeEvent,
   Alert,
   CircularProgress,
   Grid,
-  FormControlLabel,
 } from "@mui/material";
 import { FormDataCreateEnv } from "@/types/Environments";
 import { useRouter } from "next/navigation";
@@ -20,6 +18,9 @@ import RentSettingForm from "./RentSettingForm";
 import LocationTypeForm from "./LocationTypeForm";
 import ServicesAreasForm from "./ServicesAreasForm";
 import ImagesForm from "./ImagesForm";
+import PricingPoliciesForm from "./PricingPoliciesForm";
+import DiscountPoliciesForm from "./DiscountPoliciesForm";
+import WeeklySchedulesForm from "./WeeklySchedulesForm";
 
 const CreateEnvironmentForm = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const CreateEnvironmentForm = () => {
     location: "",
     latitude: 0,
     longitude: 0,
-    typePublicKey: "",
+    typePublicKey: "hospedajes",
     servicePublicKeys: [],
     areas: [],
     images: [],
@@ -88,26 +89,45 @@ const CreateEnvironmentForm = () => {
       setLoading(false);
       return;
     }
+
     if (formData.servicePublicKeys.length === 0) {
       setError("Selecciona al menos un servicio.");
       setLoading(false);
       return;
     }
+
     if (formData.areas.length === 0) {
       setError("Selecciona al menos un área.");
       setLoading(false);
       return;
     }
+
     if (formData.minRentalTime > formData.maxRentalTime) {
       setError("El tiempo mínimo de alquiler no puede ser mayor al máximo.");
       setLoading(false);
       return;
     }
 
+    if (formData.pricingPolicies[0]?.BasePrice === 0) {
+      setError("El precio base no puede ser 0.");
+      setLoading(false);
+      return;
+    }
+
+    if (
+      formData.typePublicKey !== "hospedajes" &&
+      formData.weeklySchedules.length === 0
+    ) {
+      setError("Debes agregar al menos un horario semanal para el ocupante.");
+      setLoading(false);
+      return;
+    }
+
+    console.log(formData)
+
     try {
       await createEnvironment(formData);
-      router.push(PageRoutes.Owner_Environments);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // router.push(PageRoutes.Owner_Environments);
     } catch (err: any) {
       setError(err.message || "Hubo un problema al enviar el formulario");
     } finally {
@@ -128,11 +148,16 @@ const CreateEnvironmentForm = () => {
       <Grid container spacing={10}>
         <Grid size={{ xs: 12, md: 6 }}>
           <GeneralInfoForm handleInputChange={handleInputChange} />
-
           <br />
           <hr />
+          <LocationTypeForm
+            handleSelectChange={handleSelectChange}
+            formData={formData}
+          />
+          <br /> <hr />
           <RentSettingForm
             formData={formData}
+            setFormData={setFormData}
             handleInputChange={handleInputChange}
             handleCheckboxChange={handleCheckboxChange}
             handleSelectChange={handleSelectChange}
@@ -140,11 +165,6 @@ const CreateEnvironmentForm = () => {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <hr />
-          <LocationTypeForm
-            handleSelectChange={handleSelectChange}
-            formData={formData}
-          />
           <br />
           <hr />
           <ServicesAreasForm
@@ -154,30 +174,33 @@ const CreateEnvironmentForm = () => {
           />
           <br />
           <hr />
-          <ImagesForm formData={formData} setFormData={setFormData} />
-          <br />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name="request360Tour"
-                checked={formData.request360Tour}
-                onChange={handleCheckboxChange}
-              />
-            }
-            label="Solicitar creación de Tour Virtual 360°"
+          <ImagesForm
+            formData={formData}
+            setFormData={setFormData}
+            handleCheckboxChange={handleCheckboxChange}
           />
+          <br />
+          <hr />
+          <PricingPoliciesForm formData={formData} setFormData={setFormData} />
+          <br />
+          <hr />
+          <DiscountPoliciesForm formData={formData} setFormData={setFormData} />
+          {formData.typePublicKey !== "hospedajes" && (
+            <>
+              <br />
+              <hr />
+              <WeeklySchedulesForm
+                formData={formData}
+                setFormData={setFormData}
+              />
+            </>
+          )}
         </Grid>
 
         {/* Botón Submit */}
         <Grid size={{ xs: 12 }}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            Crear Ambiente
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            CREAR AMBIENTE
           </Button>
         </Grid>
 
