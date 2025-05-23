@@ -41,7 +41,7 @@ const DiscountPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
   const handleChange = (
     index: number,
     field: keyof FormDataCreateEnv["discountPolicies"][0],
-    value: number
+    value: number,
   ) => {
     const updated = [...formData.discountPolicies];
     updated[index] = { ...updated[index], [field]: value };
@@ -90,7 +90,7 @@ const DiscountPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
                   handleChange(
                     index,
                     "DiscountPercentage",
-                    Number(e.target.value)
+                    Number(e.target.value),
                   )
                 }
               />
@@ -142,7 +142,7 @@ const DiscountPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
                   handleChange(
                     openDialogIndex,
                     "DiscountPercentage",
-                    percentage
+                    percentage,
                   );
                 }
               }

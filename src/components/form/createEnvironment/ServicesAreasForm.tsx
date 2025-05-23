@@ -46,7 +46,7 @@ const ServicesAreasForm: React.FC<ServicesAreasFormProps> = ({
 
   const updateAreaQuantity = (key: string, quantity: number) => {
     const updated = formData.areas.map((a) =>
-      a.AreaPublicKey === key ? { ...a, Quantity: quantity } : a
+      a.AreaPublicKey === key ? { ...a, Quantity: quantity } : a,
     );
     setFormData((prev) => ({ ...prev, areas: updated }));
   };
@@ -102,7 +102,7 @@ const ServicesAreasForm: React.FC<ServicesAreasFormProps> = ({
             <MenuItem key={a.publicKey} value={a.publicKey}>
               <Checkbox
                 checked={formData.areas.some(
-                  (ar) => ar.AreaPublicKey === a.publicKey
+                  (ar) => ar.AreaPublicKey === a.publicKey,
                 )}
               />
               <ListItemText primary={a.name} />

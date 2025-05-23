@@ -46,7 +46,7 @@ const WeeklySchedulesForm: React.FC<Props> = ({ formData, setFormData }) => {
     day: number,
     start: number,
     end: number,
-    indexToIgnore: number
+    indexToIgnore: number,
   ) => {
     return formData.weeklySchedules.some((s, idx) => {
       if (idx === indexToIgnore || s.DayOfWeek !== day) return false;
@@ -76,13 +76,13 @@ const WeeklySchedulesForm: React.FC<Props> = ({ formData, setFormData }) => {
   };
 
   useEffect(() => {
-    setError("")
-  }, [formData.weeklySchedules])
+    setError("");
+  }, [formData.weeklySchedules]);
 
   const handleChange = (
     index: number,
     field: keyof FormDataCreateEnv["weeklySchedules"][0],
-    value: string
+    value: string,
   ) => {
     const updated = [...formData.weeklySchedules];
     const newValue = field === "DayOfWeek" ? Number(value) : toMinutes(value);

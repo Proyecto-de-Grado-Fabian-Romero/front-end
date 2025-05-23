@@ -65,8 +65,6 @@ export default function EnvironmentDetailsPage() {
       </Box>
     );
   }
-  console.log(data.equipment);
-  console.log(JSON.parse(data.equipment));
 
   return (
     <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>

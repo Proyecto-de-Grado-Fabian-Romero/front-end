@@ -53,7 +53,7 @@ const CreateEnvironmentForm = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -123,11 +123,9 @@ const CreateEnvironmentForm = () => {
       return;
     }
 
-    console.log(formData)
-
     try {
       await createEnvironment(formData);
-      // router.push(PageRoutes.Owner_Environments);
+      router.push(PageRoutes.Owner_Environments);
     } catch (err: any) {
       setError(err.message || "Hubo un problema al enviar el formulario");
     } finally {

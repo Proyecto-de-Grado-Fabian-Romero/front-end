@@ -4,6 +4,7 @@ export enum PageRoutes {
   Owner_Environments = "/mis-ambientes",
   Owner_Single_Environment = "/mi-ambiente",
   Booking = "/reservas",
+  Book = "/reservar",
   Profile = "/perfil",
   Shots_360 = "/capturas360",
   Create_Virtual_Tour = "/capturas360/crear",

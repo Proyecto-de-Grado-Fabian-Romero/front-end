@@ -17,7 +17,7 @@ import { FormDataCreateEnv } from "@/types/Environments";
 
 interface RentSettingFormProps {
   handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
   handleSelectChange: (e: SelectChangeEvent) => void;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

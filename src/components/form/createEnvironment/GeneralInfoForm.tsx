@@ -3,7 +3,7 @@ import { Box, TextField, Typography } from "@mui/material";
 
 interface GeneralInfoFormProps {
   handleInputChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
 }
 

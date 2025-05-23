@@ -27,7 +27,7 @@ const PricingPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
 
   const handleChange = (
     field: keyof FormDataCreateEnv["pricingPolicies"][0],
-    value: string | number
+    value: string | number,
   ) => {
     setFormData((prev) => ({
       ...prev,
