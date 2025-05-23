@@ -1,4 +1,4 @@
-import CreateEnvironmentForm from "@/components/form/CreateEnvironmentForm";
+import CreateEnvironmentForm from "@/components/form/createEnvironment/CreateEnvironmentForm";
 import { Container } from "@mui/material";
 import React from "react";
 
