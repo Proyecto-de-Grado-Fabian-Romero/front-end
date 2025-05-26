@@ -138,7 +138,7 @@ const Page: React.FC = () => {
           Precio estimado: ${calculatedPrice.toFixed(2)}
         </Typography>
         <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-          RESERVAR
+          {data.instantBooking ? "RESERVAR" : "SOLICITAR RESERVA"}
         </Button>
       </Box>
     </LocalizationProvider>

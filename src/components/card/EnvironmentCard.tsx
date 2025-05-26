@@ -3,7 +3,7 @@
 import { Environment } from "@/types/AllEnvironments";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
   environment: Environment;
@@ -21,8 +21,23 @@ const EnvironmentCard = ({ environment }: Props) => {
     publicId,
   } = environment;
 
+  const searchParams = useSearchParams();
+
   const handleNavigate = () => {
-    router.push(`${PageRoutes.Environment_Details}/${publicId}`);
+    const params = new URLSearchParams();
+
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
+    const minCapacity = searchParams.get("minCapacity");
+
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    if (minCapacity) params.set("minCapacity", minCapacity);
+
+    const queryString = params.toString();
+    const path = `${PageRoutes.Environment_Details}/${publicId}${queryString ? `?${queryString}` : ""}`;
+
+    router.push(path);
   };
 
   return (

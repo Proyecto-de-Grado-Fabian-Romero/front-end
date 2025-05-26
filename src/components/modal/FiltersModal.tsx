@@ -41,7 +41,7 @@ interface FiltersModalProps {
   setAreaCounts: (counts: Record<string, number>) => void;
   selectedEnv: string;
   minCapacity: number;
-  setMinCapacity: (value: number) => void;
+  setMinCapacity: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function FiltersModal({
@@ -70,7 +70,7 @@ export default function FiltersModal({
     delta: number,
     state: Record<string, number>,
     setState: (s: Record<string, number>) => void,
-    maxLimit = Infinity,
+    maxLimit = Infinity
   ) => {
     const newValue = Math.max(0, Math.min((state[key] || 0) + delta, maxLimit));
     setState({
@@ -83,7 +83,7 @@ export default function FiltersModal({
     setSelectedServices(
       selectedServices.includes(key)
         ? selectedServices.filter((s) => s !== key)
-        : [...selectedServices, key],
+        : [...selectedServices, key]
     );
   };
 
@@ -194,7 +194,7 @@ export default function FiltersModal({
                     area.publicKey,
                     -1,
                     areaCounts,
-                    setAreaCounts,
+                    setAreaCounts
                   )
                 }
               >
@@ -212,7 +212,7 @@ export default function FiltersModal({
                     1,
                     areaCounts,
                     setAreaCounts,
-                    4,
+                    4
                   )
                 }
                 disabled={areaCounts[area.publicKey] >= 4}
@@ -236,29 +236,41 @@ export default function FiltersModal({
           <FormLabel component="legend" sx={{ fontWeight: 600 }}>
             Cantidad de asistentes
           </FormLabel>
-          <RadioGroup
-            value={minCapacity}
-            onChange={(e) => setMinCapacity(parseInt(e.target.value))}
-          >
-            <Grid container>
-              <Grid size={{ xs: 6 }}>
-                <RadioControlLabel
-                  value={1}
-                  control={<Radio />}
-                  label="1 - 5 personas"
-                />
-                <RadioControlLabel
-                  value={5}
-                  control={<Radio />}
-                  label="5 - 10 personas"
-                />
-                <RadioControlLabel
-                  value={10}
-                  control={<Radio />}
-                  label="10 - 20 personas"
-                />
-              </Grid>
-              {selectedEnv !== "hospedajes" && (
+          {selectedEnv === "hospedajes" ? (
+            <Box display="flex" alignItems="center" gap={2}>
+              <IconButton
+                onClick={() => setMinCapacity((prev) => Math.max(prev - 1, 1))}
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Typography variant="h6">{minCapacity}</Typography>
+              <IconButton onClick={() => setMinCapacity((prev) => prev + 1)}>
+                <AddIcon />
+              </IconButton>
+            </Box>
+          ) : (
+            <RadioGroup
+              value={minCapacity}
+              onChange={(e) => setMinCapacity(parseInt(e.target.value))}
+            >
+              <Grid container>
+                <Grid size={{ xs: 6 }}>
+                  <RadioControlLabel
+                    value={1}
+                    control={<Radio />}
+                    label="1 - 5 personas"
+                  />
+                  <RadioControlLabel
+                    value={5}
+                    control={<Radio />}
+                    label="5 - 10 personas"
+                  />
+                  <RadioControlLabel
+                    value={10}
+                    control={<Radio />}
+                    label="10 - 20 personas"
+                  />
+                </Grid>
                 <Grid size={{ xs: 6 }}>
                   <RadioControlLabel
                     value={20}
@@ -271,9 +283,9 @@ export default function FiltersModal({
                     label="50+ personas"
                   />
                 </Grid>
-              )}
-            </Grid>
-          </RadioGroup>
+              </Grid>
+            </RadioGroup>
+          )}
         </FormControl>
 
         <Divider sx={{ my: 2 }} />

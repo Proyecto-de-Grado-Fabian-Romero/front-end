@@ -5,18 +5,22 @@ import { DiscountPolicy } from "@/types/GetEnvironment";
 interface DiscountsDisplayProps {
   policies: DiscountPolicy[];
   isHospedaje: boolean;
+  mt?: number;
 }
 
 const DiscountsDisplay: React.FC<DiscountsDisplayProps> = ({
   policies,
   isHospedaje,
+  mt = 1,
 }) => {
-  console.log(policies);
   if (!policies.length) return null;
 
   return (
-    <Box mt={1}>
-      <Typography variant="subtitle1">Descuentos disponibles:</Typography>
+    <Box mt={mt}>
+      {mt > 1 && <hr />}
+      <Typography variant="subtitle1" mt={2} mb={-2}>
+        Descuentos disponibles:
+      </Typography>
       <List>
         {policies.map((policy, index) => (
           <ListItem key={index} disablePadding>

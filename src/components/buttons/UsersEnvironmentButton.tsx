@@ -11,7 +11,7 @@ import OwnerEnvironmentButtons from "./OwnerEnvironmentButtons";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserType } from "@/utils/constants/user-constants";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { PageRoutes } from "@/utils/constants/page-routes";
 
@@ -33,12 +33,22 @@ const UsersEnvironmentButtons = ({
     (role?.toLowerCase() as UserType) || UserType.UNLOGGED;
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
+  const searchParams = useSearchParams();
 
   const handleReserveClick = () => {
+    const startDate = searchParams.get("startDate") ?? "";
+    const endDate = searchParams.get("endDate") ?? "";
+    const minCapacity = searchParams.get("minCapacity") ?? "";
+
+    const params = new URLSearchParams();
+    params.set("startDate", startDate);
+    params.set("endDate", endDate);
+    params.set("minCapacity", minCapacity);
+
     if (userType === UserType.UNLOGGED) {
       setOpenDialog(true);
     } else {
-      router.push(`${PageRoutes.Book}/${envPubId}`);
+      router.push(`${PageRoutes.Book}/${envPubId}?${params.toString()}`);
     }
   };
 

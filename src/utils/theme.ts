@@ -47,7 +47,7 @@ const theme = createTheme({
       wordBreak: "break-word",
     },
     fontFamily: FONT_FAMILY,
-    fontSize: 14,
+    fontSize: 16,
     h1: {
       fontFamily: FONT_FAMILY,
       fontSize: "24px",
@@ -67,7 +67,7 @@ const theme = createTheme({
     h6: { fontFamily: FONT_FAMILY, fontWeight: 600 },
     body1: {
       fontFamily: FONT_FAMILY,
-      fontSize: "14px",
+      fontSize: "16px",
       fontWeight: 400,
     },
     body2: {
@@ -92,7 +92,7 @@ const theme = createTheme({
     },
     button: {
       fontFamily: FONT_FAMILY,
-      fontSize: "14px",
+      fontSize: "18px",
       fontWeight: 500,
     },
   },

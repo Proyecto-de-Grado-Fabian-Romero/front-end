@@ -53,4 +53,5 @@ export type Environment = {
   discountPolicies: DiscountPolicy[];
   tour360Id?: string;
   ownerId: string;
+  instantBooking: boolean;
 };

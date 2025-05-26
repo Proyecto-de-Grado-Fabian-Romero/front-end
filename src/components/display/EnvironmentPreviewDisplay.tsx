@@ -24,7 +24,11 @@ const EnvironmentPreviewDisplay: React.FC<EnvironmentPreviewDisplayProps> = ({
           {data.description.substring(0, 100)}...
         </Typography>
         <br />
-        <Typography variant="h6" fontWeight="bold">
+        <Typography variant="body1" color="text.secondary">
+          👥 {data.capacity} asistentes
+        </Typography>
+        <br />
+        <Typography variant="subtitle2" fontWeight="bold">
           Desde {data.pricingPolicies[0]?.currency}{" "}
           {data.pricingPolicies[0]?.basePrice} por{" "}
           {data.rentalUnit.toLowerCase().slice(0, -1)}
