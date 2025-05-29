@@ -4,11 +4,6 @@ import {
   FormControl,
   FormGroup,
   FormHelperText,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
   Switch,
   TextField,
   Typography,
@@ -19,7 +14,6 @@ interface RentSettingFormProps {
   handleInputChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
-  handleSelectChange: (e: SelectChangeEvent) => void;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   formData: FormDataCreateEnv;
   setFormData: React.Dispatch<React.SetStateAction<FormDataCreateEnv>>;
@@ -27,7 +21,6 @@ interface RentSettingFormProps {
 
 const RentSettingForm: React.FC<RentSettingFormProps> = ({
   handleInputChange,
-  handleSelectChange,
   handleCheckboxChange,
   formData,
   setFormData,
@@ -37,7 +30,7 @@ const RentSettingForm: React.FC<RentSettingFormProps> = ({
       ...prev,
       rentalUnit: formData.typePublicKey === "hospedajes" ? "Días" : "Horas",
     }));
-  }, [formData.typePublicKey]);
+  }, [formData.typePublicKey, setFormData]);
 
   return (
     <Box>

@@ -126,6 +126,7 @@ const CreateEnvironmentForm = () => {
     try {
       await createEnvironment(formData);
       router.push(PageRoutes.Owner_Environments);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Hubo un problema al enviar el formulario");
     } finally {
@@ -158,7 +159,6 @@ const CreateEnvironmentForm = () => {
             setFormData={setFormData}
             handleInputChange={handleInputChange}
             handleCheckboxChange={handleCheckboxChange}
-            handleSelectChange={handleSelectChange}
           />
         </Grid>
 

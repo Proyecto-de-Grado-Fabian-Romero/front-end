@@ -11,12 +11,23 @@ const EnvironmentPreviewDisplay: React.FC<EnvironmentPreviewDisplayProps> = ({
   data,
 }) => {
   return (
-    <Card sx={{ display: "flex", mb: 4 }}>
+    <Card
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
+        mb: 4,
+      }}
+    >
       <CardMedia
         component="img"
         image={data.photos[0]?.url || "/no-image.jpg"}
         alt={data.title}
-        sx={{ width: 240 }}
+        sx={{
+          width: { xs: "100%", sm: 240 },
+          height: "auto",
+          objectFit: "cover",
+          aspectRatio: "4 / 3",
+        }}
       />
       <CardContent>
         <Typography variant="h6">{data.title}</Typography>

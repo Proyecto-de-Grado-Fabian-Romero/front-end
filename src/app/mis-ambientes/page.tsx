@@ -8,6 +8,9 @@ import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 import { Environment } from "@/types/AllEnvironments";
 import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
 import { getOwnerEnvironments } from "@/services/environmentService";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { UserRole } from "@/types/Users";
 
 const EnvironmentsPage = () => {
   const router = useRouter();
@@ -19,6 +22,12 @@ const EnvironmentsPage = () => {
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = 16;
+
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (user.role !== UserRole.Owner) router.replace(`/`);
+  }, [router, user.role]);
 
   useEffect(() => {
     const fetchData = async () => {

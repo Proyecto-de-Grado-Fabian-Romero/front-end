@@ -2,16 +2,26 @@
 
 import { Container } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Upload360ImagesForm from "@/components/form/Upload360ImagesForm";
 import { UploadImageResult } from "@/types/UploadImageResult";
 import CreateVirtualTourForm from "@/components/form/virtualTour/CreateVirtualTourForm";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { UserRole } from "@/types/Users";
 
 const CreateVirtualTourPage = () => {
   const searchParams = useSearchParams();
   const [publicId, setPublicId] = useState<string | null>(null);
   const [environmentId, setEnvironmentId] = useState<string | null>(null);
   const [uploadResults, setUploadResults] = useState<UploadImageResult[]>([]);
+  const router = useRouter();
+
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (user.role !== UserRole.Admin) router.replace(`/`);
+  }, [router, user.role]);
 
   useEffect(() => {
     const id = searchParams.get("id");

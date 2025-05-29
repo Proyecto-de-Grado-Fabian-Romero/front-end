@@ -70,7 +70,7 @@ export default function FiltersModal({
     delta: number,
     state: Record<string, number>,
     setState: (s: Record<string, number>) => void,
-    maxLimit = Infinity
+    maxLimit = Infinity,
   ) => {
     const newValue = Math.max(0, Math.min((state[key] || 0) + delta, maxLimit));
     setState({
@@ -83,7 +83,7 @@ export default function FiltersModal({
     setSelectedServices(
       selectedServices.includes(key)
         ? selectedServices.filter((s) => s !== key)
-        : [...selectedServices, key]
+        : [...selectedServices, key],
     );
   };
 
@@ -194,7 +194,7 @@ export default function FiltersModal({
                     area.publicKey,
                     -1,
                     areaCounts,
-                    setAreaCounts
+                    setAreaCounts,
                   )
                 }
               >
@@ -212,7 +212,7 @@ export default function FiltersModal({
                     1,
                     areaCounts,
                     setAreaCounts,
-                    4
+                    4,
                   )
                 }
                 disabled={areaCounts[area.publicKey] >= 4}

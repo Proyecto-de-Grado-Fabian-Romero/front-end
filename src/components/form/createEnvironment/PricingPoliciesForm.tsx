@@ -23,7 +23,7 @@ const PricingPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
         },
       ],
     }));
-  }, [formData.rentalUnit]);
+  }, [formData.rentalUnit, setFormData]);
 
   const handleChange = (
     field: keyof FormDataCreateEnv["pricingPolicies"][0],

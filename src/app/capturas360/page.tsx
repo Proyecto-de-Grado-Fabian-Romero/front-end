@@ -8,6 +8,9 @@ import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
 import { getTour360Requests } from "@/services/adminService";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { Tour360Request } from "@/types/Tour360Request";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { UserRole } from "@/types/Users";
 
 const Tour360RequestsPage = () => {
   const [requests, setRequests] = useState<Tour360Request[]>([]);
@@ -16,6 +19,11 @@ const Tour360RequestsPage = () => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const user = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (user.role !== UserRole.Admin) router.replace(`/`);
+  }, [router, user.role]);
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = 8;

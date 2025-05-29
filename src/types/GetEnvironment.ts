@@ -25,6 +25,12 @@ type PricingPolicy = {
   extraGuestPrice: number;
 };
 
+type WeeklySchedule = {
+  dayOfWeek: number;
+  startTime: number;
+  endTime: number;
+};
+
 export type DiscountPolicy = {
   minHours: number;
   discountPercentage: number;
@@ -51,6 +57,7 @@ export type Environment = {
   equipment: string;
   pricingPolicies: PricingPolicy[];
   discountPolicies: DiscountPolicy[];
+  weeklySchedules: WeeklySchedule[];
   tour360Id?: string;
   ownerId: string;
   instantBooking: boolean;
