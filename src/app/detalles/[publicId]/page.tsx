@@ -17,6 +17,7 @@ import UsersEnvironmentButtons from "@/components/buttons/UsersEnvironmentButton
 import { getEnvironmentByPublicId } from "@/services/environmentService";
 import { CLASS_ID_TO_NAME, OBJECT_ICONS } from "@/utils/constants/class-names";
 import { HelpOutline } from "@mui/icons-material";
+import DiscountsDisplay from "@/components/display/DiscountDisplay";
 
 export default function EnvironmentDetailsPage() {
   const { publicId } = useParams();
@@ -65,21 +66,19 @@ export default function EnvironmentDetailsPage() {
       </Box>
     );
   }
-  console.log(data.equipment);
-  console.log(JSON.parse(data.equipment));
 
-  return (
-    <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>
+  const renderPhotos = () =>
+    data.photos?.length > 0 && (
       <Swiper
         modules={[Autoplay, Pagination]}
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
-        loop={true}
+        loop
         spaceBetween={10}
         slidesPerView={1}
         style={{ borderRadius: "12px", marginBottom: "1rem" }}
       >
-        {data.photos?.map((photo) => (
+        {data.photos.map((photo) => (
           <SwiperSlide key={photo.fileId}>
             <div
               style={{ width: "100%", position: "relative", height: "400px" }}
@@ -98,6 +97,95 @@ export default function EnvironmentDetailsPage() {
           </SwiperSlide>
         ))}
       </Swiper>
+    );
+
+  const renderServices = () =>
+    data.services?.length > 0 && (
+      <Box mt={3}>
+        <Typography variant="subtitle1" fontWeight="bold">
+          Servicios incluidos
+        </Typography>
+        <Grid container spacing={1} mt={1}>
+          {data.services.map((s) => (
+            <Grid key={s.publicKey}>
+              <Chip label={s.name} />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    );
+
+  const renderEquipment = () => {
+    if (!data.equipment || data.equipment === "{}") return null;
+    const equipmentData = JSON.parse(data.equipment);
+    const equipmentKeys = Object.keys(equipmentData);
+    if (equipmentKeys.length === 0) return null;
+
+    return (
+      <Box mt={3}>
+        <Typography variant="subtitle1" fontWeight="bold">
+          Equipamiento
+        </Typography>
+        <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
+          {equipmentKeys.map((id) => (
+            <Chip
+              key={id}
+              icon={OBJECT_ICONS[id] ?? <HelpOutline />}
+              label={`${CLASS_ID_TO_NAME[id] ?? id} x${equipmentData[id]}`}
+            />
+          ))}
+        </Box>
+      </Box>
+    );
+  };
+
+  const renderAreas = () =>
+    data.environmentAreas?.length > 0 && (
+      <>
+        <Box mt={4}>
+          <hr />
+
+          <Typography variant="subtitle1" fontWeight="bold" mt={2}>
+            Áreas
+          </Typography>
+          <ul>
+            {data.environmentAreas.map((areaItem) => (
+              <li key={areaItem.area.publicKey}>
+                {areaItem.area.name} x{areaItem.quantity}
+              </li>
+            ))}
+          </ul>
+        </Box>
+      </>
+    );
+
+  const renderPricingPolicies = () =>
+    user.publicId === data.ownerId &&
+    data.pricingPolicies.length > 0 && (
+      <>
+        <br />
+        <hr />
+        <Typography variant="subtitle1" fontWeight="bold">
+          Políticas de Precios:
+        </Typography>
+        {data.pricingPolicies.map((p) => (
+          <PricingDisplay key={p.basePrice + p.extraGuestPrice} pricing={p} />
+        ))}
+      </>
+    );
+
+  const renderDiscountPolicies = () =>
+    data.discountPolicies.length > 0 && (
+      <DiscountsDisplay
+        policies={data.discountPolicies}
+        isHospedaje={data.type.publicKey === "hospedajes"}
+        mt={3}
+      />
+    );
+
+  return (
+    <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 6 }}>
+      {renderPhotos()}
 
       <Typography variant="h5" fontWeight="bold" mt={2}>
         {data.title}
@@ -118,76 +206,25 @@ export default function EnvironmentDetailsPage() {
       </Box>
 
       <Typography mt={3}>{data.description}</Typography>
+
       <br />
-
       <hr />
 
-      <Box mt={3}>
-        <Typography variant="subtitle1" fontWeight="bold">
-          Servicios incluidos
-        </Typography>
-        <Grid container spacing={1} mt={1}>
-          {data.services.map((s) => (
-            <Grid key={s.name}>
-              <Chip label={s.name} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {data.equipment && (
-        <Box mt={3}>
-          <Typography variant="subtitle1" fontWeight="bold">
-            Equipamiento
-          </Typography>
-          <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
-            {Object.entries(JSON.parse(data.equipment)).map(([id, count]) => (
-              <Chip
-                key={id}
-                icon={OBJECT_ICONS[id] ?? <HelpOutline />}
-                label={`${CLASS_ID_TO_NAME[id] ?? `${id}`} x${count}`}
-              />
-            ))}
-          </Box>
-        </Box>
-      )}
-
-      <hr />
-
-      <Box mt={3}>
-        <Typography variant="subtitle1" fontWeight="bold">
-          Áreas
-        </Typography>
-        <ul>
-          {data.environmentAreas.map((areaItem) => (
-            <li key={areaItem.area.publicKey}>
-              {areaItem.area.name} x{areaItem.quantity}
-            </li>
-          ))}
-        </ul>
-      </Box>
+      {renderServices()}
+      {renderEquipment()}
+      {renderAreas()}
 
       <Box mt={3}>
         {data.tour360Id && <VirtualTour tour360Id={data.tour360Id} />}
       </Box>
 
-      {user.publicId === data.ownerId && (
-        <>
-          <br />
-          <hr />
-          <Typography variant="subtitle1" fontWeight="bold">
-            Políticas de Precios:
-          </Typography>
-          {data.pricingPolicies.map((p) => (
-            <PricingDisplay key={p.basePrice + p.extraGuestPrice} pricing={p} />
-          ))}
-        </>
-      )}
+      {renderPricingPolicies()}
+      {renderDiscountPolicies()}
 
       <Box mt={16} />
 
       <UsersEnvironmentButtons
-        basePrice={data.pricingPolicies[0].basePrice}
+        basePrice={data.pricingPolicies[0]?.basePrice ?? 0}
         rentalUnit={data.rentalUnit}
         forOwner={user.publicId === data.ownerId}
         envPubId={data.publicId}

@@ -41,6 +41,18 @@ export const createEnvironment = async (formData: FormDataCreateEnv) => {
     }
   });
 
+  data.append("pricingPoliciesJson", JSON.stringify(formData.pricingPolicies));
+  data.append("areasJson", JSON.stringify(formData.areas));
+  data.append("weeklySchedulesJson", JSON.stringify(formData.weeklySchedules));
+  data.append(
+    "discountPoliciesJson",
+    JSON.stringify(formData.discountPolicies),
+  );
+  data.append(
+    "servicePublicKeysJson",
+    JSON.stringify(formData.servicePublicKeys),
+  );
+
   try {
     const response = await authFetch("http://localhost:5150/api/environments", {
       method: "POST",
