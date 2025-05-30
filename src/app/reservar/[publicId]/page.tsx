@@ -22,7 +22,7 @@ import { Environment } from "@/types/GetEnvironment";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import EnvironmentPreviewDisplay from "@/components/display/EnvironmentPreviewDisplay";
 import { ScheduleBlock } from "@/types/Booking";
-import ReservationForm from "@/components/form/booking/ReservationForm";
+import ReservationForm from "@/components/form/reservations/ReservationForm";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import { PageRoutes } from "@/utils/constants/page-routes";

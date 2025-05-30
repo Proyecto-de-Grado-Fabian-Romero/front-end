@@ -14,6 +14,7 @@ export type ReservationResponse = {
   totalPrice: number;
   createdAt: number; // timestamp
   timeRanges: ReservationTimeRange[];
+  rentalUnit: "Horas" | "Días";
 };
 
 export type CreateReservationPayload = {
