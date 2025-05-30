@@ -51,6 +51,7 @@ export default function EnvironmentDetailsPage() {
       <Box
         display="flex"
         justifyContent="center"
+        alignItems={"center"}
         mt={4}
         sx={{ height: "100vh" }}
       >
