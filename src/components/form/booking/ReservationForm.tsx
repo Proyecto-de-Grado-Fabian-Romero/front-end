@@ -145,23 +145,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             loading={loadingUnavailable}
             disabled={loadingUnavailable}
           />
-
-          {/* {renderDatePicker(
-            "Entrada",
-            dateRange[0],
-            (val) => setDateRange([val, dateRange[1]]),
-            moment(),
-            moment().add(1, "year"),
-            isDateUnavailable
-          )}
-          {renderDatePicker(
-            "Salida",
-            dateRange[1],
-            (val) => setDateRange([dateRange[0], val]),
-            dateRange[0] || moment(),
-            maxSalida,
-            isDateUnavailable
-          )} */}
         </Stack>
       ) : (
         <Stack spacing={1}>

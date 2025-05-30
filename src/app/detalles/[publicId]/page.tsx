@@ -29,12 +29,12 @@ export default function EnvironmentDetailsPage() {
     const fetchEnvironment = async () => {
       try {
         const result = await getEnvironmentByPublicId(
-          publicId?.toString() ?? "",
+          publicId?.toString() ?? ""
         );
         setData(result);
       } catch {
         alert(
-          "No se pudo obtener información del ambiente, inténtalo de nuevo.",
+          "No se pudo obtener información del ambiente, inténtalo de nuevo."
         );
       } finally {
         setLoading(false);
@@ -51,6 +51,7 @@ export default function EnvironmentDetailsPage() {
       <Box
         display="flex"
         justifyContent="center"
+        alignItems={"center"}
         mt={4}
         sx={{ height: "100vh" }}
       >
