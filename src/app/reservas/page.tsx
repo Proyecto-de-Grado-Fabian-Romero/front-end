@@ -30,7 +30,7 @@ const MyReservationsPage = () => {
   const status = searchParams.get("status") || "confirmed";
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
-  const type = searchParams.get("type") || "mine"; // "mine" or "others" (for owner)
+  const type = searchParams.get("type") || "mine";
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -52,12 +52,12 @@ const MyReservationsPage = () => {
         const { items, totalPages } = await getMyReservations(
           status,
           page,
-          limit,
+          limit
         );
         setReservations(items);
         setTotalPages(totalPages);
-      } catch (error) {
-        console.error("Error fetching reservations:", error);
+      } catch {
+        alert("No se pudo obtener tus reservas, intenta de nuevo");
       } finally {
         setLoading(false);
       }

@@ -52,7 +52,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const isDateUnavailable = (date: Moment) => {
     const timestamp = date.startOf("day").valueOf();
     return unavailableRanges.some(
-      (range) => timestamp >= range.start && timestamp <= range.end,
+      (range) => timestamp >= range.start && timestamp <= range.end
     );
   };
 
@@ -63,13 +63,13 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
       .add(time.minutes(), "minutes")
       .valueOf();
     return unavailableRanges.some(
-      (range) => timestamp >= range.start && timestamp <= range.end,
+      (range) => timestamp >= range.start && timestamp <= range.end
     );
   };
 
   const getAllowedTimeRangeForDate = (date: Moment) => {
     const schedule = environment.weeklySchedules.find(
-      (s) => s.dayOfWeek === date.day(),
+      (s) => s.dayOfWeek === date.day()
     );
     if (!schedule) return null;
     return {
@@ -81,7 +81,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
   const handleScheduleChange = (
     index: number,
     key: keyof ScheduleBlock,
-    value: Moment | null,
+    value: Moment | null
   ) => {
     const updated = [...scheduleBlocks];
     updated[index][key] = value;
@@ -106,11 +106,11 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         const data = await loadUnavailableRanges(
           environment.publicId,
           loadedRange.start,
-          loadedRange.end,
+          loadedRange.end
         );
         setUnavailableRanges(data);
       } catch (err) {
-        console.error("Error loading unavailable ranges", err);
+        alert("No se pudo cargar las fechas inhabilitadas.");
       } finally {
         setLoadingUnavailable(false);
       }
