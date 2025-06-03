@@ -33,7 +33,7 @@ const ReservationDetailPage = () => {
   const { publicId } = router.query;
 
   const [reservation, setReservation] = useState<ReservationResponse | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
@@ -59,7 +59,7 @@ const ReservationDetailPage = () => {
         }
 
         setReservation(res);
-      } catch (err) {
+      } catch {
         router.push(PageRoutes.Home);
       } finally {
         setLoading(false);
@@ -77,14 +77,14 @@ const ReservationDetailPage = () => {
         await updateReservationStatus(reservation.publicId, newStatus);
       } else {
         const start = Math.min(
-          ...reservation.timeRanges.map((r) => r.startDate)
+          ...reservation.timeRanges.map((r) => r.startDate),
         );
         const end = Math.max(...reservation.timeRanges.map((r) => r.endDate));
 
         const conflicts = await checkReservationConflicts(
           reservation.environmentId,
           start,
-          end
+          end,
         );
 
         if (conflicts) {
@@ -94,10 +94,10 @@ const ReservationDetailPage = () => {
         }
       }
       setSuccessMessage(
-        `Reserva ${newStatus === "confirmed" ? "confirmada" : "rechazada"} correctamente`
+        `Reserva ${newStatus === "confirmed" ? "confirmada" : "rechazada"} correctamente`,
       );
       setReservation({ ...reservation, status: newStatus });
-    } catch (err) {
+    } catch {
       alert("Error al actualizar estado de la reserva");
     } finally {
       setUpdatingStatus(false);

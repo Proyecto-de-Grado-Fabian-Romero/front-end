@@ -52,7 +52,7 @@ const MyReservationsPage = () => {
         const { items, totalPages } = await getMyReservations(
           status,
           page,
-          limit
+          limit,
         );
         setReservations(items);
         setTotalPages(totalPages);
