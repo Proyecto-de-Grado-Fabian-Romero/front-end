@@ -14,6 +14,7 @@ export type ReservationResponse = {
   totalPrice: number;
   createdAt: number; // timestamp
   ownerId: string;
+  renterId: string;
   timeRanges: ReservationTimeRange[];
   rentalUnit: "Horas" | "Días";
 };

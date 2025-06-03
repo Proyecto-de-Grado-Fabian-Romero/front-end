@@ -5,7 +5,7 @@ import {
 } from "@/types/Reservations";
 
 export const createReservation = async (
-  payload: CreateReservationPayload,
+  payload: CreateReservationPayload
 ): Promise<void> => {
   const res = await fetch("http://localhost:5150/api/reservations", {
     method: "POST",
@@ -23,7 +23,7 @@ export const createReservation = async (
 export const getMyReservations = async (
   status: string = "confirmed",
   page: number = 1,
-  limit: number = 10,
+  limit: number = 10
 ): Promise<PagedResult<ReservationResponse>> => {
   const params = new URLSearchParams({
     status,
@@ -36,7 +36,7 @@ export const getMyReservations = async (
     {
       method: "GET",
       credentials: "include",
-    },
+    }
   );
 
   if (!res.ok) {
@@ -45,4 +45,21 @@ export const getMyReservations = async (
 
   const data: PagedResult<ReservationResponse> = await res.json();
   return data;
+};
+
+export const getReservationById = async (
+  publicId: string
+): Promise<ReservationResponse> => {
+  const res = await fetch(
+    `http://localhost:5150/api/Reservations/${publicId}`,
+    {
+      credentials: "include",
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Error al obtener la reserva");
+  }
+
+  return res.json();
 };

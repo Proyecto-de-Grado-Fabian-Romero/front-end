@@ -1,6 +1,6 @@
 export enum UserType {
   UNLOGGED = "unlogged",
-  RENTER = "renter",
+  RENTER = "user",
   ADMIN = "admin",
   OWNER = "owner",
 }
