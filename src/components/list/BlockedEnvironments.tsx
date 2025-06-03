@@ -12,21 +12,16 @@ import {
 } from "@mui/material";
 import moment, { Moment } from "moment";
 import { getBlockedEnvironmentsByDay } from "@/services/availabilityService";
+import { BlockedDate } from "@/types/Availability";
 
 type Props = {
   date: Moment;
+  onLoad: (items: BlockedDate[]) => void;
 };
 
-const BlockedEnvironments: React.FC<Props> = ({ date }) => {
+const BlockedEnvironments: React.FC<Props> = ({ date, onLoad }) => {
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState<
-    {
-      environmentTitle: string;
-      environmentPhotoUrl?: string;
-      startDate: number;
-      endDate: number;
-    }[]
-  >([]);
+  const [items, setItems] = useState<BlockedDate[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,7 +31,7 @@ const BlockedEnvironments: React.FC<Props> = ({ date }) => {
         const timestamp = date.startOf("day").valueOf();
         const res = await getBlockedEnvironmentsByDay(timestamp);
         setItems(res);
-      } catch (err) {
+      } catch {
         setError("Error al cargar ambientes bloqueados.");
       } finally {
         setLoading(false);
@@ -45,6 +40,10 @@ const BlockedEnvironments: React.FC<Props> = ({ date }) => {
 
     fetchBlocked();
   }, [date]);
+
+  useEffect(() => {
+    onLoad(items);
+  }, [items, onLoad]);
 
   if (loading) {
     return (

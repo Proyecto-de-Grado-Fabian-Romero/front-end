@@ -5,7 +5,7 @@ import {
 } from "@/types/Reservations";
 
 export const createReservation = async (
-  payload: CreateReservationPayload
+  payload: CreateReservationPayload,
 ): Promise<void> => {
   const res = await fetch("http://localhost:5150/api/reservations", {
     method: "POST",
@@ -23,7 +23,7 @@ export const createReservation = async (
 export const getMyReservations = async (
   status: string = "confirmed",
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<PagedResult<ReservationResponse>> => {
   const params = new URLSearchParams({
     status,
@@ -36,7 +36,7 @@ export const getMyReservations = async (
     {
       method: "GET",
       credentials: "include",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -48,13 +48,13 @@ export const getMyReservations = async (
 };
 
 export const getReservationById = async (
-  publicId: string
+  publicId: string,
 ): Promise<ReservationResponse> => {
   const res = await fetch(
     `http://localhost:5150/api/Reservations/${publicId}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -66,7 +66,7 @@ export const getReservationById = async (
 
 export const updateReservationStatus = async (
   publicId: string,
-  newStatus: string
+  newStatus: string,
 ): Promise<void> => {
   const res = await fetch(
     `http://localhost:5150/api/Reservations/${publicId}/status`,
@@ -77,7 +77,7 @@ export const updateReservationStatus = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ status: newStatus }),
-    }
+    },
   );
 
   if (!res.ok) {
@@ -89,7 +89,7 @@ export const updateReservationStatus = async (
 export const checkReservationConflicts = async (
   environmentId: string,
   start: number,
-  end: number
+  end: number,
 ): Promise<boolean> => {
   const params = new URLSearchParams({
     environmentId,
@@ -102,7 +102,7 @@ export const checkReservationConflicts = async (
     {
       method: "GET",
       credentials: "include",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -114,13 +114,13 @@ export const checkReservationConflicts = async (
 };
 
 export const getReservationsByDay = async (
-  timestamp: number
+  timestamp: number,
 ): Promise<ReservationResponse[]> => {
   const res = await fetch(
     `http://localhost:5150/api/Reservations/day?timestamp=${timestamp}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!res.ok) {
