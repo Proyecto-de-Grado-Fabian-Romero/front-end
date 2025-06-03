@@ -112,3 +112,20 @@ export const checkReservationConflicts = async (
   const { hasConflict } = await res.json();
   return hasConflict;
 };
+
+export const getReservationsByDay = async (
+  timestamp: number,
+): Promise<ReservationResponse[]> => {
+  const res = await fetch(
+    `http://localhost:5150/api/Reservations/day?timestamp=${timestamp}`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Error al obtener las reservas del día");
+  }
+
+  return await res.json();
+};

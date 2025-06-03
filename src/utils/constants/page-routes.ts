@@ -8,7 +8,7 @@ export enum PageRoutes {
   Profile = "/perfil",
   Shots_360 = "/capturas360",
   Create_Virtual_Tour = "/capturas360/crear",
-  Calendar = "/calendar",
+  Calendar = "/calendario",
   Debts = "/deudas",
   Search = "/buscar",
   Environment_Details = "/detalles",

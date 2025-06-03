@@ -6,12 +6,16 @@ import { Environment } from "@/types/AllEnvironments";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
 import { fetchEnvironments } from "@/services/environmentService";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 const EnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const searchParams = useSearchParams();
+
+  const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
 
   const page = parseInt(searchParams.get("page") || "1", 10);
@@ -42,7 +46,7 @@ const EnvironmentsPage = () => {
 
   return (
     <EnvironmentGrid
-      environments={environments}
+      environments={environments.filter((env) => env.ownerId !== user.publicId)}
       loading={loading}
       totalPages={totalPages}
       page={page}
