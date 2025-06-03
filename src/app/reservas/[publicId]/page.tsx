@@ -7,15 +7,26 @@ import {
   CircularProgress,
   Box,
   Typography,
-  Chip,
   Button,
-  Card,
-  CardMedia,
-  CardContent,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import moment from "moment";
-import { getReservationById } from "@/services/reservationService";
+import {
+  checkReservationConflicts,
+  getReservationById,
+  updateReservationStatus,
+} from "@/services/reservationService";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import ConfirmReservationDialog from "@/components/modal/ConfirmReservationDialog";
+import EnvironmentReservationCard from "@/components/card/EnvironmentReservationCard";
+import ReservationStatusChip from "@/components/chip/ReservationStatusChip";
+
+const getLatestEndDate = (reservation: ReservationResponse | null): number => {
+  return reservation
+    ? Math.max(...reservation.timeRanges.map((r) => r.endDate))
+    : 0;
+};
 
 const ReservationDetailPage = () => {
   const router = useRouter();
@@ -25,8 +36,15 @@ const ReservationDetailPage = () => {
     null
   );
   const [loading, setLoading] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const userId = useSelector((state: RootState) => state.user.publicId);
+
+  const now = moment().valueOf();
+  const latestEnd = getLatestEndDate(reservation);
+  const isExpired = reservation?.status === "pending" && latestEnd < now;
 
   useEffect(() => {
     const fetchReservation = async () => {
@@ -51,6 +69,41 @@ const ReservationDetailPage = () => {
     fetchReservation();
   }, [publicId, userId, router]);
 
+  const handleStatusChange = async (newStatus: "confirmed" | "rejected") => {
+    if (!reservation) return;
+    setUpdatingStatus(true);
+    try {
+      if (newStatus !== "confirmed") {
+        await updateReservationStatus(reservation.publicId, newStatus);
+      } else {
+        const start = Math.min(
+          ...reservation.timeRanges.map((r) => r.startDate)
+        );
+        const end = Math.max(...reservation.timeRanges.map((r) => r.endDate));
+
+        const conflicts = await checkReservationConflicts(
+          reservation.environmentId,
+          start,
+          end
+        );
+
+        if (conflicts) {
+          setShowDialog(true);
+        } else {
+          await updateReservationStatus(reservation.publicId, "confirmed");
+        }
+      }
+      setSuccessMessage(
+        `Reserva ${newStatus === "confirmed" ? "confirmada" : "rechazada"} correctamente`
+      );
+      setReservation({ ...reservation, status: newStatus });
+    } catch (err) {
+      alert("Error al actualizar estado de la reserva");
+    } finally {
+      setUpdatingStatus(false);
+    }
+  };
+
   if (loading || !reservation) {
     return (
       <Box display="flex" justifyContent="center" mt={6}>
@@ -67,24 +120,7 @@ const ReservationDetailPage = () => {
         Detalle de Reserva
       </Typography>
 
-      <Card
-        sx={{
-          display: "flex",
-          mb: 2,
-          boxShadow: 3,
-          borderRadius: 2,
-        }}
-      >
-        <CardMedia
-          component="img"
-          sx={{ width: 120 }}
-          image={reservation.environmentPhotoUrl}
-          alt={reservation.environmentTitle}
-        />
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography variant="h6">{reservation.environmentTitle}</Typography>
-        </CardContent>
-      </Card>
+      <EnvironmentReservationCard reservation={reservation} />
 
       <Typography>
         {reservation.timeRanges.map((r) => {
@@ -105,32 +141,49 @@ const ReservationDetailPage = () => {
         </b>
       </Typography>
 
-      <Chip
-        label={reservation.status}
-        color={
-          reservation.status === "confirmed"
-            ? "info"
-            : reservation.status === "paid"
-              ? "success"
-              : reservation.status === "pending"
-                ? "warning"
-                : reservation.status === "rejected"
-                  ? "error"
-                  : "default"
-        }
-        sx={{ mt: 2 }}
+      <ReservationStatusChip reservation={reservation} />
+
+      <ConfirmReservationDialog
+        open={showDialog}
+        onClose={() => setShowDialog(false)}
+        onConfirm={async () => {
+          setShowDialog(false);
+          await updateReservationStatus(reservation.publicId, "confirmed");
+        }}
       />
 
-      {isOwner && reservation.status === "pending" && (
+      {isOwner && reservation.status === "pending" && !isExpired && (
         <Box mt={3}>
-          <Button variant="contained" color="success" sx={{ mr: 1 }}>
-            Confirmar
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ mr: 1 }}
+            onClick={() => handleStatusChange("confirmed")}
+            disabled={updatingStatus}
+          >
+            {updatingStatus ? "Actualizando..." : "Confirmar"}
           </Button>
-          <Button variant="outlined" color="error">
-            Rechazar
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleStatusChange("rejected")}
+            disabled={updatingStatus}
+          >
+            {updatingStatus ? "Actualizando..." : "Rechazar"}
           </Button>
         </Box>
       )}
+
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={3000}
+        onClose={() => setSuccessMessage(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert severity="success" onClose={() => setSuccessMessage(null)}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
