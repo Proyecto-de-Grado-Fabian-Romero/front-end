@@ -12,6 +12,7 @@ import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import OwnerDailyReservations from "@/components/list/OwnerDailyReservations";
+import BlockedEnvironments from "@/components/list/BlockedEnvironments";
 
 const OwnerBlockedCalendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Moment | null>(null);
@@ -42,9 +43,14 @@ const OwnerBlockedCalendar: React.FC = () => {
         </LocalizationProvider>
       </Box>
       {selectedDate && (
-        <Box mt={4}>
-          <OwnerDailyReservations date={selectedDate} />
-        </Box>
+        <>
+          <Box mt={4}>
+            <OwnerDailyReservations date={selectedDate} />
+          </Box>
+          <Box mt={4}>
+            <BlockedEnvironments date={selectedDate} />
+          </Box>
+        </>
       )}
     </>
   );
