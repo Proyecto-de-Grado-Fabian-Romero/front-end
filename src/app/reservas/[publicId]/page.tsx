@@ -3,7 +3,16 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { ReservationResponse } from "@/types/Reservations";
-import { CircularProgress, Box, Typography, Chip, Button } from "@mui/material";
+import {
+  CircularProgress,
+  Box,
+  Typography,
+  Chip,
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+} from "@mui/material";
 import moment from "moment";
 import { getReservationById } from "@/services/reservationService";
 import { PageRoutes } from "@/utils/constants/page-routes";
@@ -58,7 +67,24 @@ const ReservationDetailPage = () => {
         Detalle de Reserva
       </Typography>
 
-      <Typography variant="h6">{reservation.environmentTitle}</Typography>
+      <Card
+        sx={{
+          display: "flex",
+          mb: 2,
+          boxShadow: 3,
+          borderRadius: 2,
+        }}
+      >
+        <CardMedia
+          component="img"
+          sx={{ width: 120 }}
+          image={reservation.environmentPhotoUrl}
+          alt={reservation.environmentTitle}
+        />
+        <CardContent sx={{ flex: "1 0 auto" }}>
+          <Typography variant="h6">{reservation.environmentTitle}</Typography>
+        </CardContent>
+      </Card>
 
       <Typography>
         {reservation.timeRanges.map((r) => {
