@@ -14,6 +14,7 @@ export interface PricingPolicy {
 
 export interface Environment {
   publicId: string;
+  ownerId: string;
   title: string;
   description: string;
   location: string;
