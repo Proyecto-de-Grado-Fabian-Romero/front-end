@@ -109,8 +109,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
           loadedRange.end,
         );
         setUnavailableRanges(data);
-      } catch (err) {
-        console.error("Error loading unavailable ranges", err);
+      } catch {
+        alert("No se pudo cargar las fechas inhabilitadas.");
       } finally {
         setLoadingUnavailable(false);
       }

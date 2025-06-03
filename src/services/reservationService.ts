@@ -46,3 +46,69 @@ export const getMyReservations = async (
   const data: PagedResult<ReservationResponse> = await res.json();
   return data;
 };
+
+export const getReservationById = async (
+  publicId: string,
+): Promise<ReservationResponse> => {
+  const res = await fetch(
+    `http://localhost:5150/api/Reservations/${publicId}`,
+    {
+      credentials: "include",
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Error al obtener la reserva");
+  }
+
+  return res.json();
+};
+
+export const updateReservationStatus = async (
+  publicId: string,
+  newStatus: string,
+): Promise<void> => {
+  const res = await fetch(
+    `http://localhost:5150/api/Reservations/${publicId}/status`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: newStatus }),
+    },
+  );
+
+  if (!res.ok) {
+    const { mensaje } = await res.json();
+    throw new Error(mensaje || "Error al actualizar el estado de la reserva");
+  }
+};
+
+export const checkReservationConflicts = async (
+  environmentId: string,
+  start: number,
+  end: number,
+): Promise<boolean> => {
+  const params = new URLSearchParams({
+    environmentId,
+    start: start.toString(),
+    end: end.toString(),
+  });
+
+  const res = await fetch(
+    `http://localhost:5150/api/Reservations/conflicts?${params}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Error al verificar conflictos de reservas");
+  }
+
+  const { hasConflict } = await res.json();
+  return hasConflict;
+};

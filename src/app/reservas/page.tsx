@@ -30,7 +30,7 @@ const MyReservationsPage = () => {
   const status = searchParams.get("status") || "confirmed";
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
-  const type = searchParams.get("type") || "mine"; // "mine" or "others" (for owner)
+  const type = searchParams.get("type") || "mine";
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -56,8 +56,8 @@ const MyReservationsPage = () => {
         );
         setReservations(items);
         setTotalPages(totalPages);
-      } catch (error) {
-        console.error("Error fetching reservations:", error);
+      } catch {
+        alert("No se pudo obtener tus reservas, intenta de nuevo");
       } finally {
         setLoading(false);
       }
@@ -68,7 +68,7 @@ const MyReservationsPage = () => {
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", mt: 6, px: 2 }}>
-      <Typography variant="h5" mb={2}>
+      <Typography variant="h5" mb={2} mt={12}>
         Mis Reservas
       </Typography>
 
@@ -95,7 +95,7 @@ const MyReservationsPage = () => {
         </>
       ) : reservations.length === 0 ? (
         <Typography color="text.secondary" textAlign="center" mt={4}>
-          No hay reservas registradas con este filtro.
+          No hay reservas registradas.
         </Typography>
       ) : (
         <>
