@@ -53,7 +53,7 @@ const CreateEnvironmentForm = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -197,7 +197,13 @@ const CreateEnvironmentForm = () => {
 
         {/* Botón Submit */}
         <Grid size={{ xs: 12 }}>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            loading={loading}
+          >
             CREAR AMBIENTE
           </Button>
         </Grid>
@@ -209,7 +215,13 @@ const CreateEnvironmentForm = () => {
           </Alert>
         )}
         {loading && (
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <CircularProgress />
           </Box>
         )}

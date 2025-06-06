@@ -32,3 +32,16 @@ export async function loginRequest(email: string, password: string) {
 
   return await response.json();
 }
+
+export async function logoutRequest(dispatch: Dispatch) {
+  const res = await fetch("http://localhost:5123/api/Users/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (res.ok) {
+    dispatch(setUser(null));
+  } else {
+    throw new Error("Logout failed");
+  }
+}

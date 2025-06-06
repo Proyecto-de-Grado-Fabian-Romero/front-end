@@ -12,6 +12,7 @@ import moment from "moment";
 import { type ReservationResponse } from "@/types/Reservations";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import ReservationStatusChip from "../chip/ReservationStatusChip";
 
 type Props = {
   reservations: ReservationResponse[];
@@ -19,7 +20,7 @@ type Props = {
 
 const getStatusChip = (
   status: ReservationResponse["status"],
-  isExpired: boolean,
+  isExpired: boolean
 ) => {
   const labelMap: Record<ReservationResponse["status"], string> = {
     pending: isExpired ? "Vencida" : "Pendiente a confirmar",
@@ -67,7 +68,7 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
   if (!reservations.length) {
     return (
       <Box textAlign="center" mt={4}>
-        <Typography>No tienes reservas en esta sección.</Typography>
+        <Typography>No tienes reservas en este día.</Typography>
       </Box>
     );
   }
@@ -87,7 +88,7 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
           {Object.entries(grouped[date]).map(([envTitle, res]) => (
             <Box key={envTitle} mb={2} pl={2}>
               <Typography variant="subtitle1" fontWeight="bold">
-                🏠 {envTitle}
+                {envTitle}
               </Typography>
               <List dense>
                 {res.timeRanges.map((range, index) => {
@@ -117,9 +118,7 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
                               {res.currency} {res.totalPrice.toFixed(2)}
                             </b>
                           </Typography>
-                          <Box mt={0.5}>
-                            {getStatusChip(res.status, isExpired)}
-                          </Box>
+                          <ReservationStatusChip reservation={res} />
                         </Box>
                       </ListItemButton>
                     </ListItem>

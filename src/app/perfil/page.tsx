@@ -16,6 +16,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { UserRole } from "@/types/Users";
+import LogoutButton from "@/components/buttons/LogOutButton";
 
 export default function ProfilePage() {
   const user = useSelector((state: RootState) => state.user);
@@ -88,6 +89,9 @@ export default function ProfilePage() {
           </Grid>
         </Grid>
       </Paper>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <LogoutButton />
+      </Box>
     </Container>
   );
 }

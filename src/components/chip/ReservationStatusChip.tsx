@@ -30,7 +30,7 @@ const ReservationStatusChip: React.FC<Props> = ({ reservation }) => {
     "default" | "info" | "success" | "warning" | "error"
   > = {
     confirmed: "info",
-    paid: "success",
+    paid: "info",
     pending: "warning",
     rejected: "error",
     cancelled: "error",
@@ -40,7 +40,7 @@ const ReservationStatusChip: React.FC<Props> = ({ reservation }) => {
     ? "default"
     : statusColorMap[reservation.status] || "default";
 
-  return <Chip label={statusLabel} color={color} sx={{ mt: 2 }} />;
+  return <Chip label={statusLabel} color={"warning"} sx={{ mt: 2 }} />;
 };
 
 export default ReservationStatusChip;

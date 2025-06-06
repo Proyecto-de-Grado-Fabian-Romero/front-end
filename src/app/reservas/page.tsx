@@ -101,13 +101,13 @@ const MyReservationsPage = () => {
         <>
           <ReservationList reservations={reservations} />
 
-          <Box display="flex" justifyContent="center" my={4}>
+          {/* <Box display="flex" justifyContent="center" my={4}>
             <Pagination
               count={totalPages}
               page={page}
               onChange={handlePageChange}
             />
-          </Box>
+          </Box> */}
         </>
       )}
     </Box>
