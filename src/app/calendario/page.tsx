@@ -14,7 +14,7 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import OwnerDailyReservations from "@/components/list/OwnerDailyReservations";
 // import BlockedEnvironments from "@/components/list/BlockedEnvironments";
 import BlockTimeDialog from "@/components/modal/BlockTimeDialog";
-import { BlockedDate } from "@/types/Availability";
+// import { BlockedDate } from "@/types/Availability";
 import moment from "moment";
 
 const StyledCalendar = styled(DateCalendar)(({ theme }) => ({
@@ -46,7 +46,7 @@ const StyledCalendar = styled(DateCalendar)(({ theme }) => ({
 const OwnerBlockedCalendar: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Moment | null>(moment());
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [blockedItems, setBlockedItems] = useState<BlockedDate[]>([]);
+  // const [blockedItems, setBlockedItems] = useState<BlockedDate[]>([]);
 
   const role = useSelector((state: RootState) => state.user.role);
   const router = useRouter();
@@ -114,7 +114,8 @@ const OwnerBlockedCalendar: React.FC = () => {
           open={dialogOpen}
           onClose={() => setDialogOpen(false)}
           selectedDate={selectedDate}
-          existingBlocks={blockedItems}
+          existingBlocks={[]}
+          // existingBlocks={blockedItems}
         />
       )}
     </>

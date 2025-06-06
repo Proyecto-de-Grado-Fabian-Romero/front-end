@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Typography,
-  Chip,
   List,
   ListItem,
   Divider,
@@ -16,32 +15,6 @@ import ReservationStatusChip from "../chip/ReservationStatusChip";
 
 type Props = {
   reservations: ReservationResponse[];
-};
-
-const getStatusChip = (
-  status: ReservationResponse["status"],
-  isExpired: boolean
-) => {
-  const labelMap: Record<ReservationResponse["status"], string> = {
-    pending: isExpired ? "Vencida" : "Pendiente a confirmar",
-    confirmed: "Por pagar",
-    paid: "Confirmado",
-    rejected: "Rechazado",
-    cancelled: "Cancelado",
-  };
-
-  const colorMap: Record<
-    ReservationResponse["status"],
-    "default" | "info" | "success" | "warning" | "error"
-  > = {
-    pending: isExpired ? "default" : "warning",
-    confirmed: "info",
-    paid: "success",
-    rejected: "error",
-    cancelled: "error",
-  };
-
-  return <Chip label={labelMap[status]} color={colorMap[status]} />;
 };
 
 const groupReservations = (reservations: ReservationResponse[]) => {
@@ -75,7 +48,6 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
 
   const grouped = groupReservations(reservations);
   const sortedDates = Object.keys(grouped).sort();
-  const now = Date.now();
 
   return (
     <Box>
@@ -98,8 +70,6 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
                   const rangeText = isHospedaje
                     ? `${start.format("DD MMM")} → ${end.format("DD MMM")}`
                     : `${start.format("HH:mm")} → ${end.format("HH:mm")}`;
-
-                  const isExpired = end.valueOf() < now;
 
                   return (
                     <ListItem
