@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Typography,
-  Chip,
   List,
   ListItem,
   Divider,
@@ -12,35 +11,10 @@ import moment from "moment";
 import { type ReservationResponse } from "@/types/Reservations";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import ReservationStatusChip from "../chip/ReservationStatusChip";
 
 type Props = {
   reservations: ReservationResponse[];
-};
-
-const getStatusChip = (
-  status: ReservationResponse["status"],
-  isExpired: boolean,
-) => {
-  const labelMap: Record<ReservationResponse["status"], string> = {
-    pending: isExpired ? "Vencida" : "Pendiente a confirmar",
-    confirmed: "Por pagar",
-    paid: "Confirmado",
-    rejected: "Rechazado",
-    cancelled: "Cancelado",
-  };
-
-  const colorMap: Record<
-    ReservationResponse["status"],
-    "default" | "info" | "success" | "warning" | "error"
-  > = {
-    pending: isExpired ? "default" : "warning",
-    confirmed: "info",
-    paid: "success",
-    rejected: "error",
-    cancelled: "error",
-  };
-
-  return <Chip label={labelMap[status]} color={colorMap[status]} />;
 };
 
 const groupReservations = (reservations: ReservationResponse[]) => {
@@ -67,14 +41,13 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
   if (!reservations.length) {
     return (
       <Box textAlign="center" mt={4}>
-        <Typography>No tienes reservas en esta sección.</Typography>
+        <Typography>No tienes reservas en este día.</Typography>
       </Box>
     );
   }
 
   const grouped = groupReservations(reservations);
   const sortedDates = Object.keys(grouped).sort();
-  const now = Date.now();
 
   return (
     <Box>
@@ -87,7 +60,7 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
           {Object.entries(grouped[date]).map(([envTitle, res]) => (
             <Box key={envTitle} mb={2} pl={2}>
               <Typography variant="subtitle1" fontWeight="bold">
-                🏠 {envTitle}
+                {envTitle}
               </Typography>
               <List dense>
                 {res.timeRanges.map((range, index) => {
@@ -97,8 +70,6 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
                   const rangeText = isHospedaje
                     ? `${start.format("DD MMM")} → ${end.format("DD MMM")}`
                     : `${start.format("HH:mm")} → ${end.format("HH:mm")}`;
-
-                  const isExpired = end.valueOf() < now;
 
                   return (
                     <ListItem
@@ -117,9 +88,7 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
                               {res.currency} {res.totalPrice.toFixed(2)}
                             </b>
                           </Typography>
-                          <Box mt={0.5}>
-                            {getStatusChip(res.status, isExpired)}
-                          </Box>
+                          <ReservationStatusChip reservation={res} />
                         </Box>
                       </ListItemButton>
                     </ListItem>

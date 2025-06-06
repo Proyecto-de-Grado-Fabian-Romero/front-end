@@ -7,7 +7,7 @@ import {
 export const createReservation = async (
   payload: CreateReservationPayload,
 ): Promise<void> => {
-  const res = await fetch("http://localhost:5150/api/reservations", {
+  const res = await fetch("http://localhost:5150/api/Reservations", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

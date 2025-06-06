@@ -25,22 +25,7 @@ const ReservationStatusChip: React.FC<Props> = ({ reservation }) => {
         cancelled: "Cancelado",
       }[reservation.status] || "Desconocido";
 
-  const statusColorMap: Record<
-    string,
-    "default" | "info" | "success" | "warning" | "error"
-  > = {
-    confirmed: "info",
-    paid: "success",
-    pending: "warning",
-    rejected: "error",
-    cancelled: "error",
-  };
-
-  const color: "default" | "info" | "success" | "warning" | "error" = isExpired
-    ? "default"
-    : statusColorMap[reservation.status] || "default";
-
-  return <Chip label={statusLabel} color={color} sx={{ mt: 2 }} />;
+  return <Chip label={statusLabel} color={"warning"} sx={{ mt: 2 }} />;
 };
 
 export default ReservationStatusChip;

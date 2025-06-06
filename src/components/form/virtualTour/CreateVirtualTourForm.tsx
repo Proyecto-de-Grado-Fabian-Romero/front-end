@@ -131,7 +131,6 @@ const CreateVirtualTourForm = ({
   const handleUpload = async () => {
     try {
       setUploading(true);
-      console.log(environmentPublicId, scenes);
       await uploadVirtualTour(environmentPublicId, scenes);
 
       setConfirmDialogOpen(false);
