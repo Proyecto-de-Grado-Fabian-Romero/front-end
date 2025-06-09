@@ -25,8 +25,10 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ColorPalette } from "@/utils/constants/ui-constants";
+import { fetchAvailableEquipment } from "@/services/environmentService";
+import { CLASS_ID_TO_NAME } from "@/utils/constants/class-names";
 
 interface FiltersModalProps {
   open: boolean;
@@ -64,6 +66,18 @@ export default function FiltersModal({
 
   const [expandedServices, setExpandedServices] = useState(false);
   const [expandedAreas, setExpandedAreas] = useState(false);
+  const [availableEquipment, setAvailableEquipment] = useState<
+    { name: string; count: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (open) {
+      const params = new URLSearchParams(window.location.search);
+      fetchAvailableEquipment(params)
+        .then(setAvailableEquipment)
+        .catch((e) => console.error("Error loading equipment", e));
+    }
+  }, [open]);
 
   const handleCountChange = (
     key: string,
@@ -229,6 +243,42 @@ export default function FiltersModal({
         >
           {expandedAreas ? "Mostrar menos" : "Mostrar más"}
         </Button>
+
+        <Divider sx={{ my: 2 }} />
+
+        <Typography variant="subtitle1" fontWeight={600} gutterBottom>
+          Equipamiento
+        </Typography>
+        {availableEquipment.map((item) => (
+          <Box
+            key={item.name}
+            display="flex"
+            justifyContent="space-between"
+            my={1}
+          >
+            <Typography>{CLASS_ID_TO_NAME[item.name]}</Typography>
+            <Box display="flex" alignItems="center">
+              <IconButton
+                onClick={() =>
+                  handleCountChange(item.name, -1, areaCounts, setAreaCounts)
+                }
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Typography>
+                {areaCounts[item.name] >= 4 ? "4+" : areaCounts[item.name] || 0}
+              </Typography>
+              <IconButton
+                onClick={() =>
+                  handleCountChange(item.name, 1, areaCounts, setAreaCounts, 4)
+                }
+                disabled={areaCounts[item.name] >= 4}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        ))}
 
         <Divider sx={{ my: 2 }} />
 

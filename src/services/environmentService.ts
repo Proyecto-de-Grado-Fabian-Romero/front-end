@@ -79,12 +79,19 @@ export const fetchEnvironments = async (
 ) => {
   try {
     const areas: Area[] = [];
+    const equipmentRequired: Record<string, number> = {};
+
     searchParams.forEach((value, key) => {
       if (key.startsWith("area_")) {
         areas.push({
           AreaPublicKey: key.replace("area_", ""),
           MinQuantity: parseInt(value),
         });
+      }
+
+      if (key.startsWith("equipment_")) {
+        const objectId = key.replace("equipment_", "");
+        equipmentRequired[objectId] = parseInt(value);
       }
     });
 
@@ -112,6 +119,10 @@ export const fetchEnvironments = async (
       minCapacity: searchParams.get("minCapacity")
         ? parseFloat(searchParams.get("minCapacity")!)
         : 0,
+      equipmentRequired:
+        Object.keys(equipmentRequired).length > 0
+          ? equipmentRequired
+          : undefined,
     };
 
     const res = await fetch(
@@ -134,6 +145,63 @@ export const fetchEnvironments = async (
   } catch (error) {
     throw error;
   }
+};
+
+export const fetchAvailableEquipment = async (
+  searchParams: URLSearchParams,
+): Promise<{ name: string; count: number }[]> => {
+  const areas: Area[] = [];
+  searchParams.forEach((value, key) => {
+    if (key.startsWith("area_")) {
+      areas.push({
+        AreaPublicKey: key.replace("area_", ""),
+        MinQuantity: parseInt(value),
+      });
+    }
+  });
+
+  const services = searchParams.get("services")?.split(",") || [];
+
+  const requestBody = {
+    location: searchParams.get("city") || undefined,
+    environmentTypePublicKey: searchParams.get("type") || undefined,
+    startDate: searchParams.get("startDate")
+      ? Math.floor(new Date(searchParams.get("startDate")!).getTime() / 1000)
+      : undefined,
+    endDate: searchParams.get("endDate")
+      ? Math.floor(new Date(searchParams.get("endDate")!).getTime() / 1000)
+      : undefined,
+    servicePublicKeys: services,
+    areas,
+    instantBookingRequired:
+      searchParams.get("instantBooking") === "true" ? true : false,
+    minPrice: searchParams.get("minPrice")
+      ? parseFloat(searchParams.get("minPrice")!)
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? parseFloat(searchParams.get("maxPrice")!)
+      : 2000,
+    minCapacity: searchParams.get("minCapacity")
+      ? parseFloat(searchParams.get("minCapacity")!)
+      : 0,
+  };
+
+  const res = await fetch(
+    "http://localhost:5150/api/environments/available-equipment",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch available equipment");
+  }
+
+  return await res.json();
 };
 
 export const getOwnerEnvironments = async (page = 1, limit = 10) => {
