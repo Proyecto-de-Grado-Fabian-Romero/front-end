@@ -79,12 +79,19 @@ export const fetchEnvironments = async (
 ) => {
   try {
     const areas: Area[] = [];
+    const equipmentRequired: Record<string, number> = {};
+
     searchParams.forEach((value, key) => {
       if (key.startsWith("area_")) {
         areas.push({
           AreaPublicKey: key.replace("area_", ""),
           MinQuantity: parseInt(value),
         });
+      }
+
+      if (key.startsWith("equipment_")) {
+        const objectId = key.replace("equipment_", "");
+        equipmentRequired[objectId] = parseInt(value);
       }
     });
 
@@ -112,6 +119,10 @@ export const fetchEnvironments = async (
       minCapacity: searchParams.get("minCapacity")
         ? parseFloat(searchParams.get("minCapacity")!)
         : 0,
+      equipmentRequired:
+        Object.keys(equipmentRequired).length > 0
+          ? equipmentRequired
+          : undefined,
     };
 
     const res = await fetch(
@@ -191,7 +202,7 @@ export const fetchAvailableEquipment = async (
   }
 
   return await res.json();
-}
+};
 
 export const getOwnerEnvironments = async (page = 1, limit = 10) => {
   try {
