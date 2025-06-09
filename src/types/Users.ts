@@ -1,3 +1,5 @@
+import { BankPaymentData } from "./BankPaymentData";
+
 export interface UserState {
   publicId?: string;
   name?: string;
@@ -12,6 +14,7 @@ export interface UserState {
   verified?: boolean;
   accessToken?: string;
   refreshToken?: string;
+  bankPaymentData?: BankPaymentData;
 }
 
 export enum UserRole {

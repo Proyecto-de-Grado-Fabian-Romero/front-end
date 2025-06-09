@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { Paper, Box } from "@mui/material";
+import { Paper } from "@mui/material";
 import LoggedOutProfile from "../profile/LoggedOutProfile";
 import ProfileDetails from "../profile/ProfileDetails";
 

@@ -87,6 +87,8 @@ export default function ProfileDetails({ user }: Props) {
         <BankPaymentModal
           open={openModal}
           onClose={() => setOpenModal(false)}
+          mode={user.bankPaymentData ? "update" : "create"}
+          defaultValues={user.bankPaymentData}
         />
       )}
     </>
