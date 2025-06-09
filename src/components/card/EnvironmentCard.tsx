@@ -71,7 +71,7 @@ const EnvironmentCard = ({ environment }: Props) => {
     }
 
     return Object.entries(equipmentDict)
-      .filter(([_, qty]) => qty > 0)
+      .filter(([, qty]) => qty > 0)
       .sort((a, b) => {
         const [aId, aQty] = a;
         const [bId, bQty] = b;
