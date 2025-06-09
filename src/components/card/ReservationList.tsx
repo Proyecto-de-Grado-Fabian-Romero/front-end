@@ -12,6 +12,7 @@ import { type ReservationResponse } from "@/types/Reservations";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import ReservationStatusChip from "../chip/ReservationStatusChip";
+import { ClockIcon } from "@mui/x-date-pickers";
 
 type Props = {
   reservations: ReservationResponse[];
@@ -82,9 +83,14 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
                         }
                       >
                         <Box width="100%" px={1}>
-                          <Typography variant="body2">
-                            ⏰ {rangeText} —{" "}
-                            <b>
+                          <Typography
+                            variant="body1"
+                            display={"flex"}
+                            alignItems={"center"}
+                          >
+                            <ClockIcon style={{ marginRight: 4 }} /> {rangeText}{" "}
+                            —{" "}
+                            <b style={{ marginLeft: 4 }}>
                               {res.currency} {res.totalPrice.toFixed(2)}
                             </b>
                           </Typography>
