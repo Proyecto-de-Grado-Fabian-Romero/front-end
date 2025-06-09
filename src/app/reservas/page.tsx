@@ -17,6 +17,7 @@ import { getMyReservations } from "@/services/reservationService";
 import { ReservationResponse } from "@/types/Reservations";
 import { UserRole } from "@/types/Users";
 import ReservationList from "@/components/card/ReservationList";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const MyReservationsPage = () => {
   const userRole = useSelector((state: RootState) => state.user.role);
@@ -36,13 +37,13 @@ const MyReservationsPage = () => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("type", newValue);
     newParams.set("page", "1");
-    router.push(`/my-reservations?${newParams.toString()}`);
+    router.push(`${PageRoutes.Booking}?${newParams.toString()}`);
   };
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     const newParams = new URLSearchParams(searchParams.toString());
     newParams.set("page", page.toString());
-    router.push(`/my-reservations?${newParams.toString()}`);
+    router.push(`${PageRoutes.Booking}?${newParams.toString()}`);
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const MyReservationsPage = () => {
         const { items, totalPages } = await getMyReservations(
           status,
           page,
-          limit,
+          limit
         );
         setReservations(items);
         setTotalPages(totalPages);
