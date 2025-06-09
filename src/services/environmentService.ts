@@ -46,11 +46,11 @@ export const createEnvironment = async (formData: FormDataCreateEnv) => {
   data.append("weeklySchedulesJson", JSON.stringify(formData.weeklySchedules));
   data.append(
     "discountPoliciesJson",
-    JSON.stringify(formData.discountPolicies),
+    JSON.stringify(formData.discountPolicies)
   );
   data.append(
     "servicePublicKeysJson",
-    JSON.stringify(formData.servicePublicKeys),
+    JSON.stringify(formData.servicePublicKeys)
   );
 
   try {
@@ -75,7 +75,7 @@ export const createEnvironment = async (formData: FormDataCreateEnv) => {
 export const fetchEnvironments = async (
   searchParams: URLSearchParams,
   page: number,
-  limit: number,
+  limit: number
 ) => {
   try {
     const areas: Area[] = [];
@@ -122,7 +122,7 @@ export const fetchEnvironments = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
-      },
+      }
     );
 
     if (!res.ok) {
@@ -136,6 +136,63 @@ export const fetchEnvironments = async (
   }
 };
 
+export const fetchAvailableEquipment = async (
+  searchParams: URLSearchParams
+): Promise<{ name: string; count: number }[]> => {
+  const areas: Area[] = [];
+  searchParams.forEach((value, key) => {
+    if (key.startsWith("area_")) {
+      areas.push({
+        AreaPublicKey: key.replace("area_", ""),
+        MinQuantity: parseInt(value),
+      });
+    }
+  });
+
+  const services = searchParams.get("services")?.split(",") || [];
+
+  const requestBody = {
+    location: searchParams.get("city") || undefined,
+    environmentTypePublicKey: searchParams.get("type") || undefined,
+    startDate: searchParams.get("startDate")
+      ? Math.floor(new Date(searchParams.get("startDate")!).getTime() / 1000)
+      : undefined,
+    endDate: searchParams.get("endDate")
+      ? Math.floor(new Date(searchParams.get("endDate")!).getTime() / 1000)
+      : undefined,
+    servicePublicKeys: services,
+    areas,
+    instantBookingRequired:
+      searchParams.get("instantBooking") === "true" ? true : false,
+    minPrice: searchParams.get("minPrice")
+      ? parseFloat(searchParams.get("minPrice")!)
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? parseFloat(searchParams.get("maxPrice")!)
+      : 2000,
+    minCapacity: searchParams.get("minCapacity")
+      ? parseFloat(searchParams.get("minCapacity")!)
+      : 0,
+  };
+
+  const res = await fetch(
+    "http://localhost:5150/api/environments/available-equipment",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch available equipment");
+  }
+
+  return await res.json();
+}
+
 export const getOwnerEnvironments = async (page = 1, limit = 10) => {
   try {
     const res = await authFetch(
@@ -143,7 +200,7 @@ export const getOwnerEnvironments = async (page = 1, limit = 10) => {
       {
         method: "GET",
         credentials: "include",
-      },
+      }
     );
 
     if (!res.ok) {
@@ -161,7 +218,7 @@ export const getOwnerEnvironments = async (page = 1, limit = 10) => {
 export const getEnvironmentByPublicId = async (publicId: string) => {
   try {
     const res = await fetch(
-      `http://localhost:5150/api/environments/single?publicId=${publicId}`,
+      `http://localhost:5150/api/environments/single?publicId=${publicId}`
     );
 
     if (!res.ok) {
