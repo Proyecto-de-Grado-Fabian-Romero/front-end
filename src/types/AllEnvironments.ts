@@ -29,4 +29,5 @@ export interface Environment {
   rentalUnit: string;
   photoUrls: string[];
   pricingPolicies: PricingPolicy[];
+  equipment: string;
 }
