@@ -23,7 +23,8 @@ const LogoutButton = () => {
       variant="outlined"
       color="error"
       onClick={handleLogout}
-      sx={{ mt: 3 }}
+      sx={{ mt: 3, borderColor: "red" }}
+      style={{ borderColor: "red", color: "red" }}
     >
       Cerrar sesión
     </Button>

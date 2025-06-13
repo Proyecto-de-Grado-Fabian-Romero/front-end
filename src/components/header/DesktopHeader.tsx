@@ -37,10 +37,13 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         {userType === UserType.UNLOGGED ? (
           <>
-            <Button color="inherit" href={PageRoutes.LogIn}>
-              Iniciar Sesión
-            </Button>
-            <Button variant="contained">Regístrate</Button>
+            <Link href={PageRoutes.LogIn} passHref>
+              <Button color="inherit">Iniciar Sesión</Button>
+            </Link>
+
+            <Link href={PageRoutes.SignUp} passHref>
+              <Button variant="contained">Regístrate</Button>
+            </Link>
           </>
         ) : (
           <>
@@ -57,19 +60,28 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                   >
                     {item.label}
                   </Button>
-                ),
+                )
             )}
-            <IconButton color="inherit" href={PageRoutes.Notifications}>
-              <Badge color="error" variant="dot" invisible={!hasNotifications}>
-                {
-                  headerItems.find((item) => item.label === "Notificaciones")
-                    ?.icon
-                }
-              </Badge>
-            </IconButton>
-            <IconButton color="inherit" href={PageRoutes.Profile}>
-              {headerItems.find((item) => item.label === "Perfil")?.icon}
-            </IconButton>
+            <Link href={PageRoutes.Notifications} passHref>
+              <IconButton color="secondary">
+                <Badge
+                  color="error"
+                  variant="dot"
+                  invisible={!hasNotifications}
+                >
+                  {
+                    headerItems.find((item) => item.label === "Notificaciones")
+                      ?.icon
+                  }
+                </Badge>
+              </IconButton>
+            </Link>
+
+            <Link href={PageRoutes.Profile} passHref>
+              <IconButton color="secondary">
+                {headerItems.find((item) => item.label === "Perfil")?.icon}
+              </IconButton>
+            </Link>
           </>
         )}
       </Box>

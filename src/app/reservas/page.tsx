@@ -24,6 +24,10 @@ const MyReservationsPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  useEffect(() => {
+    if (!userRole) router.replace(`/`);
+  }, [router, userRole]);
+
   const [reservations, setReservations] = useState<ReservationResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -53,7 +57,7 @@ const MyReservationsPage = () => {
         const { items, totalPages } = await getMyReservations(
           status,
           page,
-          limit,
+          limit
         );
         setReservations(items);
         setTotalPages(totalPages);

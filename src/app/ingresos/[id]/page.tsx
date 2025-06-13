@@ -1,7 +1,8 @@
-import LoginContent from "@/components/client/LoginContent";
+import React from "react";
+import OwnerIncomeDetail from "../../../components/detail/OwnerIncomeDetail";
 import { Container } from "@mui/material";
 
-export default function LoginPage() {
+const IncomeDetailPage = () => {
   return (
     <Container
       maxWidth={false}
@@ -12,7 +13,9 @@ export default function LoginPage() {
         justifyContent: "center",
       }}
     >
-      <LoginContent />
+      <OwnerIncomeDetail />
     </Container>
   );
-}
+};
+
+export default IncomeDetailPage;

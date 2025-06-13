@@ -15,4 +15,6 @@ export enum PageRoutes {
   LogIn = "/ingresar",
   SignUp = "/registro",
   New_Environment = "/nuevo-ambiente",
+  Incomes = "/ingresos",
+  Received_Payments = "/pagos-recibidos"
 }
