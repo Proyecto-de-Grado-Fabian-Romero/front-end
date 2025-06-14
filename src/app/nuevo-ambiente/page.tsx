@@ -11,7 +11,7 @@ const CreateEnvironmentForm = dynamic(
         <CircularProgress />
       </Box>
     ),
-  }
+  },
 );
 
 const Page = () => {

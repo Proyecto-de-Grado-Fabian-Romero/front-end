@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 const ClientEnvironmentsPage = dynamic(
   () => import("@/components/client/ClientEnvironmentsPage"),
-  { ssr: true }
+  { ssr: true },
 );
 
 export default function EnvironmentsPage() {

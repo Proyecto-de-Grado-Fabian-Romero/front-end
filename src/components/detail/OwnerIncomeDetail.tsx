@@ -25,7 +25,7 @@ const OwnerIncomeDetail = () => {
           setIncome(data);
         } catch {
           alert(
-            "No se pudo obtener la información del ingreso, intenta de nuevo"
+            "No se pudo obtener la información del ingreso, intenta de nuevo",
           );
         } finally {
           setLoading(false);
@@ -79,7 +79,7 @@ const OwnerIncomeDetail = () => {
             <Typography variant="body1">
               Check-in:{" "}
               {new Date(
-                reservation.timeRanges[0].startDate
+                reservation.timeRanges[0].startDate,
               ).toLocaleTimeString()}
             </Typography>
             <Typography variant="body1">

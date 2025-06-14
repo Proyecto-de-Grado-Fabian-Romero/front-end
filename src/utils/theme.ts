@@ -318,7 +318,7 @@ const theme = createTheme({
         },
         body: {
           color: ColorPalette.NEUTRAL_BLACK,
-          fontSize: 18
+          fontSize: 18,
         },
       },
     },

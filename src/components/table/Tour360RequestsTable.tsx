@@ -55,10 +55,10 @@ const Tour360RequestsTable = ({
       // Update local state
       setLocalRequests((prev) =>
         prev.map((req) =>
-          req.publicId === publicId ? { ...req, status: newStatus } : req
-        )
+          req.publicId === publicId ? { ...req, status: newStatus } : req,
+        ),
       );
-    } catch (err) {
+    } catch {
       alert("Hubo un error al actualizar el estado.");
     } finally {
       setStatusLoadingId(null);
@@ -129,7 +129,7 @@ const Tour360RequestsTable = ({
                       variant="outlined"
                       onClick={() =>
                         router.push(
-                          `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`
+                          `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`,
                         )
                       }
                     >

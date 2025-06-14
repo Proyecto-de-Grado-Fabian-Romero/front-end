@@ -25,7 +25,7 @@ const AdminPayments = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
-    null
+    null,
   );
   const [openModal, setOpenModal] = useState<boolean>(false);
 

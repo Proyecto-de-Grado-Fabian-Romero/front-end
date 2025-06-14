@@ -60,7 +60,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                   >
                     {item.label}
                   </Button>
-                )
+                ),
             )}
             <Link href={PageRoutes.Notifications} passHref>
               <IconButton color="secondary">

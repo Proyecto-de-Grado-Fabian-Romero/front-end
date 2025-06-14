@@ -23,7 +23,7 @@ const PaymentDetailsModal = ({
           setPayment(data);
         } catch {
           alert(
-            "Hubo un error obteniendo los detalles del pago, recarga la página"
+            "Hubo un error obteniendo los detalles del pago, recarga la página",
           );
         } finally {
           setLoading(false);

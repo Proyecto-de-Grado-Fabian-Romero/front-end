@@ -4,7 +4,7 @@ const ClientPayments = dynamic(
   () => import("@/components/client/AdminPaymentsClient"),
   {
     ssr: true,
-  }
+  },
 );
 
 export default function AdminPaymentsPage() {

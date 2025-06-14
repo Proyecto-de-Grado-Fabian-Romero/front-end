@@ -4,7 +4,7 @@ const ClientDebts = dynamic(
   () => import("@/components/client/AdminDebtsClient"),
   {
     ssr: true,
-  }
+  },
 );
 
 export default function AdminDebtsPage() {

@@ -12,7 +12,7 @@ const OwnerReceivedPayments = dynamic(
         <CircularProgress />
       </Box>
     ),
-  }
+  },
 );
 
 const ReceivedPaymentsPage = () => {
