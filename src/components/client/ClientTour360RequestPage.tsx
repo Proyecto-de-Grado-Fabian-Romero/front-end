@@ -1,33 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Container, Typography } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import Tour360Filter from "@/components/inputs/select/Tour360Filter";
-import Tour360RequestsGrid from "@/components/grid/Tour360RequestGrid";
-import { getTour360Requests } from "@/services/adminService";
-import { PageRoutes } from "@/utils/constants/page-routes";
-import { Tour360Request } from "@/types/Tour360Request";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
+import { getTour360Requests } from "@/services/adminService";
+import Tour360RequestsTable from "@/components/table/Tour360RequestsTable";
+import Tour360Filter from "@/components/inputs/select/Tour360Filter";
+import { PageRoutes } from "@/utils/constants/page-routes";
+import { Tour360Request } from "@/types/Tour360Request";
+import { Container, Typography, Box } from "@mui/material";
 
-const Tour360RequestsPage = () => {
+const ClientTour360RequestsPage = () => {
   const [requests, setRequests] = useState<Tour360Request[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
 
-  const router = useRouter();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    if (user.role !== UserRole.Admin) router.replace(`/`);
-  }, [router, user.role]);
 
   const page = parseInt(searchParams.get("page") || "1", 10);
   const limit = 8;
-  const statusFilter = parseInt(searchParams.get("status") || "0");
+  const statusFilter = parseInt(searchParams.get("status") || "0", 10);
+
+  useEffect(() => {
+    if (user.role !== UserRole.Admin) router.replace("/");
+  }, [user.role, router]);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -76,7 +76,7 @@ const Tour360RequestsPage = () => {
         />
       </Box>
 
-      <Tour360RequestsGrid
+      <Tour360RequestsTable
         requests={requests}
         loading={loading}
         page={page}
@@ -87,4 +87,4 @@ const Tour360RequestsPage = () => {
   );
 };
 
-export default Tour360RequestsPage;
+export default ClientTour360RequestsPage;

@@ -18,6 +18,23 @@ export type OwnerPaymentDetail = {
   amountPaid: number;
   currency: string;
   reference: string;
-  paymentMethod: string;  
-  createdAt: number;  
+  paymentMethod: string;
+  createdAt: number;
+};
+
+export type AdminPayment = {
+  id: string;
+  ownerName: string;
+  amountPaid: number;
+  currency: string;
+  reference: string;
+  createdAt: number;
+};
+
+export type AdminDebt = {
+  id: string;
+  ownerName: string;
+  totalAmount: number;
+  currency: string;
+  updatedAt: number; // timestamp
 };

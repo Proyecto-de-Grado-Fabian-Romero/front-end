@@ -1,20 +1,25 @@
 import React from "react";
-import { Container } from "@mui/material";
-import OwnerReceivedPayments from "../../components/list/OwnerReceivedPayments";
+import dynamic from "next/dynamic";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
+import { CircularProgress, Box } from "@mui/material";
+
+const OwnerReceivedPayments = dynamic(
+  () => import("../../components/list/OwnerReceivedPayments"),
+  {
+    ssr: true,
+    loading: () => (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    ),
+  }
+);
 
 const ReceivedPaymentsPage = () => {
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <CenteredLayout>
       <OwnerReceivedPayments />
-    </Container>
+    </CenteredLayout>
   );
 };
 

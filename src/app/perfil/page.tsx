@@ -1,18 +1,15 @@
-import ProfileClient from "@/components/client/ProfileClient";
-import { Container } from "@mui/material";
+import dynamic from "next/dynamic";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
 
-export default function ProfilePage() {
+const ProfileClient = dynamic(
+  () => import("@/components/client/ProfileClient"),
+  { ssr: true }
+);
+
+export default function OwnerEnvironmentsPage() {
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <CenteredLayout>
       <ProfileClient />
-    </Container>
+    </CenteredLayout>
   );
 }

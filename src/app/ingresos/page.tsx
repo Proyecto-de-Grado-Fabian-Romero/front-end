@@ -1,20 +1,12 @@
 import React from "react";
-import { Container } from "@mui/material";
 import OwnerIncomeList from "../../components/list/OwnerIncomeList";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
 
 const IncomePage = () => {
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <CenteredLayout>
       <OwnerIncomeList />
-    </Container>
+    </CenteredLayout>
   );
 };
 

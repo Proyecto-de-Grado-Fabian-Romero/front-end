@@ -1,5 +1,15 @@
-import ClientOwnerEnvironments from "@/components/client/ClientOwnerEnvironments";
+import dynamic from "next/dynamic";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
+
+const ClientOwnerEnvironments = dynamic(
+  () => import("@/components/client/ClientOwnerEnvironments"),
+  { ssr: true }
+);
 
 export default function OwnerEnvironmentsPage() {
-  return <ClientOwnerEnvironments />;
+  return (
+    <CenteredLayout>
+      <ClientOwnerEnvironments />
+    </CenteredLayout>
+  );
 }

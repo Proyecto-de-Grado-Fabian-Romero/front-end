@@ -1,6 +1,10 @@
-// No "use client" here
 import { getEnvironmentByPublicId } from "@/services/environmentService";
-import EnvironmentDetailsClient from "@/components/client/EnvironmentDetailsClient";
+import dynamic from "next/dynamic";
+
+const EnvironmentDetailsClient = dynamic(
+  () => import("@/components/client/EnvironmentDetailsClient"),
+  { ssr: true }
+);
 
 export default async function EnvironmentDetailsPage({
   params,

@@ -1,18 +1,14 @@
-import LoginContent from "@/components/client/LoginContent";
-import { Container } from "@mui/material";
+import dynamic from "next/dynamic";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
+
+const LoginContent = dynamic(() => import("@/components/client/LoginContent"), {
+  ssr: true,
+});
 
 export default function LoginPage() {
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
+    <CenteredLayout>
       <LoginContent />
-    </Container>
+    </CenteredLayout>
   );
 }

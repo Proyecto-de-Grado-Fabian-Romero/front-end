@@ -314,10 +314,11 @@ const theme = createTheme({
         head: {
           fontWeight: 600,
           backgroundColor: ColorPalette.BACKGROUND,
-          color: ColorPalette.BACKGROUND,
+          color: ColorPalette.NEUTRAL_BLACK,
         },
         body: {
-          color: ColorPalette.BACKGROUND,
+          color: ColorPalette.NEUTRAL_BLACK,
+          fontSize: 18
         },
       },
     },
