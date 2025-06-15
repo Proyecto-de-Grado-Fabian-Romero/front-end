@@ -99,3 +99,43 @@ export const updateTour360Status = async (
     return false;
   }
 };
+
+export const getDebts = async (page = 1, limit = 20) => {
+  const response = await authFetch(
+    `http://localhost:5101/api/admin/debts?page=${page}&limit=${limit}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch debts");
+  }
+  return await response.json();
+};
+
+export const getPayments = async (page = 1, limit = 20) => {
+  const response = await authFetch(
+    `http://localhost:5101/api/admin/payments?page=${page}&limit=${limit}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch payments");
+  }
+  return await response.json();
+};
+
+export const getDebtDetails = async (debtId: string) => {
+  const response = await authFetch(
+    `http://localhost:5101/api/admin/debts/${debtId}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch debt details");
+  }
+  return await response.json();
+};
+
+export const getPaymentDetails = async (paymentId: string) => {
+  const response = await authFetch(
+    `http://localhost:5101/api/admin/payments/${paymentId}`,
+  );
+  if (!response.ok) {
+    throw new Error("Failed to fetch payment details");
+  }
+  return await response.json();
+};

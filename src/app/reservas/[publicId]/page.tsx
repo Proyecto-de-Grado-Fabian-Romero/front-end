@@ -34,6 +34,12 @@ const ReservationDetailPage = () => {
   const router = useRouter();
   const { publicId } = router.query;
 
+  const userRole = useSelector((state: RootState) => state.user.role);
+
+  useEffect(() => {
+    if (!userRole) router.replace(`/`);
+  }, [router, userRole]);
+
   const [reservation, setReservation] = useState<ReservationResponse | null>(
     null,
   );

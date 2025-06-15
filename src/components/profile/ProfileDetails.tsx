@@ -14,6 +14,8 @@ import { UserRole, UserState as User } from "@/types/Users";
 import LogoutButton from "../buttons/LogOutButton";
 import { useState } from "react";
 import BankPaymentModal from "../modal/BankPaymentModal";
+import { PageRoutes } from "@/utils/constants/page-routes";
+import Link from "next/link";
 
 type Props = {
   user: User;
@@ -78,6 +80,19 @@ export default function ProfileDetails({ user }: Props) {
           </Grid>
         )}
       </Grid>
+
+      <Box sx={{ mt: 2 }}>
+        <Link href={PageRoutes.Incomes}>
+          <Button variant="contained" color="primary" sx={{ mr: 2 }}>
+            Ver Ingresos
+          </Button>
+        </Link>
+        <Link href={PageRoutes.Received_Payments}>
+          <Button variant="outlined" color="primary">
+            Ver Pagos Recibidos
+          </Button>
+        </Link>
+      </Box>
 
       <Box display="flex" justifyContent="center" mt={4}>
         <LogoutButton />
