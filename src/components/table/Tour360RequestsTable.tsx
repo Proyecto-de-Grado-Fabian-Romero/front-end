@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Box,
   CircularProgress,
@@ -47,6 +47,8 @@ const Tour360RequestsTable = ({
     useState<Tour360Request[]>(requests);
   const [statusLoadingId, setStatusLoadingId] = useState<string | null>(null);
 
+  useCallback(() => setLocalRequests(requests), [requests]);
+
   const handleStatusChange = async (publicId: string, newStatus: number) => {
     setStatusLoadingId(publicId);
     try {
@@ -85,7 +87,7 @@ const Tour360RequestsTable = ({
   return (
     <>
       <TableContainer component={Paper}>
-        <Table>
+        <Table style={{ tableLayout: "fixed", whiteSpace: "nowrap" }}>
           <TableHead>
             <TableRow>
               <TableCell>Ambiente</TableCell>

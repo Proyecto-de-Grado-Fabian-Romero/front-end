@@ -34,6 +34,7 @@ const ClientTour360RequestsPage = () => {
       setLoading(true);
       try {
         const data = await getTour360Requests(page, limit, statusFilter);
+        console.log(data);
         setRequests(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
