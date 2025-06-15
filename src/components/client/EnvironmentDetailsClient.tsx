@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Chip, Grid, Typography } from "@mui/material";
+import { Box, Chip, CircularProgress, Grid, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -15,13 +15,50 @@ import UsersEnvironmentButtons from "@/components/buttons/UsersEnvironmentButton
 import { Environment } from "@/types/GetEnvironment";
 import { CLASS_ID_TO_NAME, OBJECT_ICONS } from "@/utils/constants/class-names";
 import { HelpOutline } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getEnvironmentByPublicId } from "@/services/environmentService";
 
-export default function EnvironmentDetailsClient({
-  data,
-}: {
-  data: Environment;
-}) {
+export default function EnvironmentDetailsClient() {
   const user = useSelector((state: RootState) => state.user);
+
+  const { publicId } = useParams();
+  const [data, setData] = useState<Environment | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEnvironment = async () => {
+      try {
+        if (typeof publicId === "string") {
+          const res = await getEnvironmentByPublicId(publicId);
+          setData(res);
+        }
+      } catch (err) {
+        console.error("Error al cargar ambiente:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEnvironment();
+  }, [publicId]);
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="60vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!data) {
+    return <div>Ambiente no encontrado.</div>;
+  }
 
   const renderPhotos = () =>
     data.photos?.length > 0 && (
