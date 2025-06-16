@@ -1,9 +1,10 @@
 import { Scene360 } from "@/types/Tour360";
 import { authFetch } from "./authFetch";
+import { AdminPayment } from "@/types/Payments";
 
 export const requestTour360 = async (
   environmentId: string,
-  ownerId: string
+  ownerId: string,
 ) => {
   const response = await authFetch(
     "http://localhost:5101/api/tour360requests",
@@ -17,7 +18,7 @@ export const requestTour360 = async (
         ownerId,
       }),
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {
@@ -30,7 +31,7 @@ export const requestTour360 = async (
 export const getTour360Requests = async (
   page = 1,
   limit = 10,
-  status?: number
+  status?: number,
 ) => {
   try {
     const url = new URL("http://localhost:5101/api/tour360requests");
@@ -57,7 +58,7 @@ export const getTour360Requests = async (
 
 export const uploadVirtualTour = async (
   environmentPublicId: string,
-  scenes: Scene360[]
+  scenes: Scene360[],
 ): Promise<void> => {
   const res = await authFetch(
     `http://localhost:5150/api/tours?environmentPublicId=${environmentPublicId}`,
@@ -68,7 +69,7 @@ export const uploadVirtualTour = async (
       },
       body: JSON.stringify({ scenes }),
       credentials: "include",
-    }
+    },
   );
 
   if (!res.ok) {
@@ -79,7 +80,7 @@ export const uploadVirtualTour = async (
 
 export const updateTour360Status = async (
   publicId: string,
-  newStatus: number
+  newStatus: number,
 ): Promise<boolean> => {
   try {
     const res = await authFetch(
@@ -91,7 +92,7 @@ export const updateTour360Status = async (
         },
         body: JSON.stringify({ status: newStatus }),
         credentials: "include",
-      }
+      },
     );
 
     return res.ok;
@@ -102,7 +103,7 @@ export const updateTour360Status = async (
 
 export const getDebts = async (page = 1, limit = 20) => {
   const response = await authFetch(
-    `http://localhost:5101/api/admin/debts?page=${page}&limit=${limit}`
+    `http://localhost:5101/api/admin/debts?page=${page}&limit=${limit}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch debts");
@@ -112,7 +113,7 @@ export const getDebts = async (page = 1, limit = 20) => {
 
 export const getPayments = async (page = 1, limit = 20) => {
   const response = await authFetch(
-    `http://localhost:5101/api/admin/payments?page=${page}&limit=${limit}`
+    `http://localhost:5101/api/admin/payments?page=${page}&limit=${limit}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch payments");
@@ -122,7 +123,7 @@ export const getPayments = async (page = 1, limit = 20) => {
 
 export const getDebtDetails = async (debtId: string) => {
   const response = await authFetch(
-    `http://localhost:5101/api/admin/debts/${debtId}`
+    `http://localhost:5101/api/admin/debts/${debtId}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch debt details");
@@ -132,7 +133,7 @@ export const getDebtDetails = async (debtId: string) => {
 
 export const getPaymentDetails = async (paymentId: string) => {
   const response = await authFetch(
-    `http://localhost:5101/api/admin/payments/${paymentId}`
+    `http://localhost:5101/api/admin/payments/${paymentId}`,
   );
   if (!response.ok) {
     throw new Error("Failed to fetch payment details");
@@ -142,8 +143,8 @@ export const getPaymentDetails = async (paymentId: string) => {
 
 export const markDebtAsPaid = async (
   debtId: string,
-  reference: string
-): Promise<any> => {
+  reference: string,
+): Promise<AdminPayment> => {
   const requestBody: { reference: string } = { reference };
 
   const response = await fetch(
@@ -155,7 +156,7 @@ export const markDebtAsPaid = async (
       headers: {
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (!response.ok) {

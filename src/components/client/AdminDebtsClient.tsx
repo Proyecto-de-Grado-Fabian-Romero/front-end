@@ -133,7 +133,7 @@ const AdminDebtsClient = () => {
                     variant="contained"
                     color="secondary"
                     sx={{ ml: 2 }}
-                    onClick={() => handleOpenMarkAsPaidModal(debt.id)} 
+                    onClick={() => handleOpenMarkAsPaidModal(debt.id)}
                   >
                     Marcar como Pagado
                   </Button>
