@@ -60,7 +60,9 @@ const ClientOwnerEnvironments = () => {
     <>
       <Box sx={{ p: 3 }}></Box>
 
-      <Typography variant="h4" mt={24}>MIS AMBIENTES</Typography>
+      <Typography variant="h4" mt={24}>
+        MIS AMBIENTES
+      </Typography>
 
       <EnvironmentGrid
         environments={environments}
