@@ -22,7 +22,7 @@ const ClientTour360RequestsPage = () => {
   const user = useSelector((state: RootState) => state.user);
 
   const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = 8;
+  const limit = 16;
   const statusFilter = parseInt(searchParams.get("status") || "0", 10);
 
   useEffect(() => {

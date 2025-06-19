@@ -22,7 +22,7 @@ export interface Environment {
   longitude: number;
   capacity: number;
   type: EnvironmentType;
-  tour360Id: string;
+  tour360Id?: string;
   instantBooking: boolean;
   minRentalTime: number;
   maxRentalTime: number;

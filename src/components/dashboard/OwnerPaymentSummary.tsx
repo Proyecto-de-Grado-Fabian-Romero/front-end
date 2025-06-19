@@ -42,7 +42,7 @@ const OwnerPaymentSummary = ({
               sx={{ padding: 2, backgroundColor: "#FFECB3", borderRadius: 1 }}
             >
               <Typography variant="body1" color="textSecondary">
-                Pagos Realizados
+                Pagos Recibidos
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 {summary.totalPaid} Bs

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 import { Environment } from "@/types/AllEnvironments";
@@ -59,6 +59,8 @@ const ClientOwnerEnvironments = () => {
   return (
     <>
       <Box sx={{ p: 3 }}></Box>
+
+      <Typography variant="h4" mt={24}>MIS AMBIENTES</Typography>
 
       <EnvironmentGrid
         environments={environments}

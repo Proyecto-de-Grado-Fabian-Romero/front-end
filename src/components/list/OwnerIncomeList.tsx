@@ -12,9 +12,13 @@ import {
   Typography,
   Pagination,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import { getIncomeList } from "../../services/ownerPaymentService";
 import { IncomeDetail } from "@/types/Payments";
+import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
+import Link from "next/link";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const OwnerIncomeList = () => {
   const [incomes, setIncomes] = useState<IncomeDetail[]>([]);
@@ -48,7 +52,8 @@ const OwnerIncomeList = () => {
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom mb={8}>
+      <OwnerPaymentDashboard />
+      <Typography variant="h5" gutterBottom mb={4} mt={6}>
         Lista de Ingresos
       </Typography>
       <Card>
@@ -61,17 +66,22 @@ const OwnerIncomeList = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Monto</TableCell>
-                    <TableCell>Moneda</TableCell>
                     <TableCell>Fecha Generada</TableCell>
+                    <TableCell>Acciones</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {incomes.map((income) => (
                     <TableRow key={income.reservationId}>
-                      <TableCell>{income.amount}</TableCell>
+                      <TableCell>Bs. {income.amount}</TableCell>
                       <TableCell>{income.currency}</TableCell>
                       <TableCell>
                         {new Date(income.generatedAt).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <Link href={`${PageRoutes.Incomes}/${income.id}`}>
+                          <Button>Ver Detalles</Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}

@@ -49,11 +49,11 @@ const OwnerReceivedPayments = () => {
 
   return (
     <Box>
-      <Typography textAlign={"center"} variant="h5" gutterBottom mb={8}>
+      <OwnerPaymentDashboard />
+
+      <Typography textAlign={"center"} variant="h5" gutterBottom mt={4} mb={4}>
         Pagos Recibidos
       </Typography>
-
-      <OwnerPaymentDashboard />
       <Card>
         <Box p={2}>
           {payments.length === 0 ? (
@@ -66,7 +66,6 @@ const OwnerReceivedPayments = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>Monto Pagado</TableCell>
-                    <TableCell>Moneda</TableCell>
                     <TableCell>Referencia</TableCell>
                     <TableCell>Método de Pago</TableCell>
                     <TableCell>Fecha de Creación</TableCell>
@@ -75,8 +74,7 @@ const OwnerReceivedPayments = () => {
                 <TableBody>
                   {payments.map((payment) => (
                     <TableRow key={payment.id}>
-                      <TableCell>{payment.amountPaid}</TableCell>
-                      <TableCell>{payment.currency}</TableCell>
+                      <TableCell>Bs. {payment.amountPaid}</TableCell>
                       <TableCell>{payment.reference}</TableCell>
                       <TableCell>{payment.paymentMethod}</TableCell>
                       <TableCell>

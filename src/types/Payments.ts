@@ -7,6 +7,7 @@ export type PaymentSummary = {
 };
 
 export type IncomeDetail = {
+  id: string;
   reservationId: string;
   amount: number;
   currency: string;

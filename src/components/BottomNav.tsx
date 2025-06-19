@@ -31,7 +31,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
 
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, pb: 2 }}
       elevation={3}
     >
       <BottomNavigation

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter, useParams } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { ReservationResponse } from "@/types/Reservations";
@@ -32,7 +32,7 @@ const getLatestEndDate = (reservation: ReservationResponse | null): number => {
 
 const ReservationDetailPage = () => {
   const router = useRouter();
-  const { publicId } = router.query;
+  const { publicId } = useParams();
 
   const userRole = useSelector((state: RootState) => state.user.role);
 

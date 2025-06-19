@@ -107,7 +107,6 @@ const AdminDebtsClient = () => {
             <TableRow>
               <TableCell>Propietario</TableCell>
               <TableCell>Monto a Pagar</TableCell>
-              <TableCell>Moneda</TableCell>
               <TableCell>Fecha de Actualización</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -116,14 +115,13 @@ const AdminDebtsClient = () => {
             {debts.map((debt) => (
               <TableRow key={debt.id}>
                 <TableCell>{debt.ownerName}</TableCell>
-                <TableCell>{debt.totalAmount}</TableCell>
-                <TableCell>{debt.currency}</TableCell>
+                <TableCell>Bs. {debt.totalAmount}</TableCell>
                 <TableCell>
                   {new Date(debt.updatedAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     color="primary"
                     onClick={() => handleOpenDetailsModal(debt.id)}
                   >
