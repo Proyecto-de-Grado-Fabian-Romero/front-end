@@ -1,4 +1,3 @@
-import ChairIcon from "@mui/icons-material/Chair";
 import WeekendIcon from "@mui/icons-material/Weekend";
 import BedIcon from "@mui/icons-material/Bed";
 import DiningIcon from "@mui/icons-material/Restaurant";
@@ -9,10 +8,10 @@ import SinkIcon from "@mui/icons-material/Wash";
 import FridgeIcon from "@mui/icons-material/Kitchen";
 import BreakfastDiningIcon from "@mui/icons-material/BreakfastDining";
 import { JSX } from "react";
-import { Cookie } from "@mui/icons-material";
+import { Cookie, EventSeat } from "@mui/icons-material";
 
 export const OBJECT_ICONS: Record<string, JSX.Element> = {
-  "56": <ChairIcon />,
+  "56": <EventSeat />,
   "57": <WeekendIcon />,
   "59": <BedIcon />,
   "60": <DiningIcon />,

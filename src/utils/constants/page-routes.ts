@@ -10,7 +10,7 @@ export enum PageRoutes {
   Create_Virtual_Tour = "/admin/capturas360/crear",
   Calendar = "/calendario",
   Debts = "/admin/deudas",
-  Admin_Payments = "admin/pagos",
+  Admin_Payments = "/admin/pagos",
   Search = "/buscar",
   Environment_Details = "/detalles",
   LogIn = "/ingresar",

@@ -1,5 +1,6 @@
 import { Scene360 } from "@/types/Tour360";
 import { authFetch } from "./authFetch";
+import { AdminPayment } from "@/types/Payments";
 
 export const requestTour360 = async (
   environmentId: string,
@@ -137,5 +138,30 @@ export const getPaymentDetails = async (paymentId: string) => {
   if (!response.ok) {
     throw new Error("Failed to fetch payment details");
   }
+  return await response.json();
+};
+
+export const markDebtAsPaid = async (
+  debtId: string,
+  reference: string,
+): Promise<AdminPayment> => {
+  const requestBody: { reference: string } = { reference };
+
+  const response = await fetch(
+    `http://localhost:5101/api/admin/debts/${debtId}/mark-as-paid`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to mark debt as paid");
+  }
+
   return await response.json();
 };

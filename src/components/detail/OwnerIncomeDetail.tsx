@@ -8,7 +8,7 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { getIncomeDetails } from "../../services/ownerPaymentService";
 import Link from "next/link";
 import { IncomeDetail } from "@/types/Payments";
@@ -16,8 +16,7 @@ import { IncomeDetail } from "@/types/Payments";
 const OwnerIncomeDetail = () => {
   const [income, setIncome] = useState<IncomeDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
-  const { id } = router.query;
+  const { id } = useParams();
 
   useEffect(() => {
     if (id) {
@@ -50,11 +49,7 @@ const OwnerIncomeDetail = () => {
   return (
     <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
       <Typography variant="h5">Detalles del Ingreso</Typography>
-      <Typography variant="body1">
-        ID de Reserva: {income.reservationId}
-      </Typography>
-      <Typography variant="body1">Monto: {income.amount}</Typography>
-      <Typography variant="body1">Moneda: {income.currency}</Typography>
+      <Typography variant="body1">Monto: Bs. {income.amount}</Typography>
       <Typography variant="body1">
         Generado el: {new Date(income.generatedAt).toLocaleDateString()}
       </Typography>

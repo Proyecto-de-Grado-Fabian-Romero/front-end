@@ -7,6 +7,7 @@ export type PaymentSummary = {
 };
 
 export type IncomeDetail = {
+  id: string;
   reservationId: string;
   amount: number;
   currency: string;
@@ -34,6 +35,7 @@ export type AdminPayment = {
 export type AdminDebt = {
   id: string;
   ownerName: string;
+  reference: string;
   totalAmount: number;
   currency: string;
   updatedAt: number; // timestamp

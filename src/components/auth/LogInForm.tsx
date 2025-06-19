@@ -50,7 +50,13 @@ export default function LogInForm() {
   };
 
   return (
-    <Box display="flex" flexDirection="column" gap={2}>
+    <Box
+      display="flex"
+      component={"form"}
+      onSubmit={handleLogin}
+      flexDirection="column"
+      gap={2}
+    >
       <ArrowBack sx={{ cursor: "pointer" }} />
       <Typography variant="h5" fontWeight="bold">
         Bienvenid@ a
@@ -111,7 +117,7 @@ export default function LogInForm() {
         fullWidth
         sx={{ mt: 1, backgroundColor: "black", color: "white", py: 1.5 }}
         endIcon={<ArrowForward />}
-        onClick={handleLogin}
+        type="submit"
         disabled={loading}
       >
         {loading ? (

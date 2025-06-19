@@ -17,9 +17,11 @@ import {
 } from "@mui/material";
 import { getDebts } from "@/services/adminService";
 import DebtDetailsModal from "@/components/modal/DebtDetailsModal";
+import MarkDebtModal from "@/components/modal/MakDebtModal";
 import { AdminDebt } from "@/types/Payments";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import { markDebtAsPaid } from "@/services/adminService";
 
 const AdminDebtsClient = () => {
   const [debts, setDebts] = useState<AdminDebt[]>([]);
@@ -27,7 +29,10 @@ const AdminDebtsClient = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [selectedDebtId, setSelectedDebtId] = useState<string | null>(null);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
+  const [openMarkAsPaidModal, setOpenMarkAsPaidModal] =
+    useState<boolean>(false); // Modal state for marking as paid
+  const [paymentReference, setPaymentReference] = useState<string>("");
 
   const router = useRouter();
 
@@ -46,14 +51,36 @@ const AdminDebtsClient = () => {
     fetchDebts();
   }, [page]);
 
-  const handleOpenModal = (debtId: string) => {
+  const handleOpenDetailsModal = (debtId: string) => {
     setSelectedDebtId(debtId);
-    setOpenModal(true);
+    setOpenDetailsModal(true);
   };
 
-  const handleCloseModal = () => {
-    setOpenModal(false);
+  const handleCloseDetailsModal = () => {
+    setOpenDetailsModal(false);
     setSelectedDebtId(null);
+  };
+
+  const handleOpenMarkAsPaidModal = (debtId: string) => {
+    setSelectedDebtId(debtId);
+    setOpenMarkAsPaidModal(true);
+  };
+
+  const handleCloseMarkAsPaidModal = () => {
+    setOpenMarkAsPaidModal(false);
+    setSelectedDebtId(null);
+    setPaymentReference("");
+  };
+
+  const handleMarkAsPaid = async () => {
+    try {
+      await markDebtAsPaid(selectedDebtId as string, paymentReference);
+      alert("Deuda marcada como pagada y el pago registrado.");
+      handleCloseMarkAsPaidModal();
+    } catch (error) {
+      console.error("Error marking debt as paid:", error);
+      alert("Error al marcar la deuda como pagada.");
+    }
   };
 
   const handleNavigateToPayments = () => {
@@ -80,7 +107,6 @@ const AdminDebtsClient = () => {
             <TableRow>
               <TableCell>Propietario</TableCell>
               <TableCell>Monto a Pagar</TableCell>
-              <TableCell>Moneda</TableCell>
               <TableCell>Fecha de Actualización</TableCell>
               <TableCell>Acciones</TableCell>
             </TableRow>
@@ -89,18 +115,25 @@ const AdminDebtsClient = () => {
             {debts.map((debt) => (
               <TableRow key={debt.id}>
                 <TableCell>{debt.ownerName}</TableCell>
-                <TableCell>{debt.totalAmount}</TableCell>
-                <TableCell>{debt.currency}</TableCell>
+                <TableCell>Bs. {debt.totalAmount}</TableCell>
                 <TableCell>
                   {new Date(debt.updatedAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     color="primary"
-                    onClick={() => handleOpenModal(debt.id)}
+                    onClick={() => handleOpenDetailsModal(debt.id)}
                   >
                     Ver Detalles
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ ml: 2 }}
+                    onClick={() => handleOpenMarkAsPaidModal(debt.id)}
+                  >
+                    Marcar como Pagado
                   </Button>
                 </TableCell>
               </TableRow>
@@ -115,9 +148,15 @@ const AdminDebtsClient = () => {
       />
 
       <DebtDetailsModal
-        open={openModal}
-        onClose={handleCloseModal}
+        open={openDetailsModal}
+        onClose={handleCloseDetailsModal}
         debtId={selectedDebtId}
+      />
+
+      <MarkDebtModal
+        open={openMarkAsPaidModal}
+        onClose={handleCloseMarkAsPaidModal}
+        onSubmit={handleMarkAsPaid}
       />
     </Paper>
   );

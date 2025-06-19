@@ -9,6 +9,10 @@ const ClientEnvironmentsPage = dynamic(
 export default function EnvironmentsPage() {
   return (
     <CenteredLayout>
+      <br />
+      <br />
+      <br />
+      <br />
       <ClientEnvironmentsPage />
     </CenteredLayout>
   );

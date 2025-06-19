@@ -35,7 +35,13 @@ const EnvironmentGrid = ({
   return (
     <Container maxWidth={false} sx={{ py: 4, width: "100%" }}>
       {loading ? (
-        <Grid container spacing={2} sx={{ width: "100%" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ width: "100%", height: "100%" }}
+          alignItems="flex-start"
+          mt={2}
+        >
           {Array.from(new Array(16)).map((_, index) => (
             <Grid key={index} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <Skeleton variant="rectangular" height={300} />
@@ -53,7 +59,13 @@ const EnvironmentGrid = ({
         </Box>
       ) : (
         <>
-          <Grid container spacing={2} sx={{ width: "100%" }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ width: "100%", height: "100%" }}
+            alignItems="flex-start"
+            mt={2}
+          >
             {environments.map((env) => (
               <Grid key={env.publicId} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                 <EnvironmentCard environment={env} />
