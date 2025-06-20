@@ -9,6 +9,7 @@ import {
   Button,
   Box,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 import {
@@ -31,10 +32,10 @@ export default function BankPaymentModal({
   defaultValues,
 }: Props) {
   const [accountNumber, setAccountNumber] = useState(
-    defaultValues?.bankAccountNumber || "",
+    defaultValues?.bankAccountNumber || ""
   );
   const [accountHolder, setAccountHolder] = useState(
-    defaultValues?.bankAccountHolder || "",
+    defaultValues?.bankAccountHolder || ""
   );
   const [bankName, setBankName] = useState(defaultValues?.bankName || "");
   const [loading, setLoading] = useState(false);
@@ -91,13 +92,14 @@ export default function BankPaymentModal({
           : "Agregar Datos Bancarios"}
       </DialogTitle>
       <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, pt: 4 }}
       >
         <TextField
           label="Número de cuenta"
           value={accountNumber}
           onChange={(e) => setAccountNumber(e.target.value)}
           fullWidth
+          style={{ marginTop: 4 }}
         />
         <TextField
           label="Titular de la cuenta"
@@ -126,7 +128,13 @@ export default function BankPaymentModal({
           variant="contained"
           disabled={loading || !accountNumber || !accountHolder || !bankName}
         >
-          {mode === "update" ? "Actualizar" : "Guardar"}
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : mode === "update" ? (
+            "Actualizar"
+          ) : (
+            "Guardar"
+          )}
         </Button>
       </DialogActions>
     </Dialog>
