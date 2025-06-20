@@ -1,16 +1,13 @@
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import { Box, Button, Typography } from "@mui/material";
 
-const RentPromptSection = () => {
+type RentPromptProps = {
+  onClick?: () => void;
+};
+
+const RentPromptSection = ({ onClick }: RentPromptProps) => {
   return (
-    <Box
-      sx={{
-        backgroundColor: "#000",
-        py: 4,
-        px: 4,
-        textAlign: "center",
-      }}
-    >
+    <Box sx={{ backgroundColor: "#000", py: 4, px: 4, textAlign: "center" }}>
       <Typography
         variant="h6"
         gutterBottom
@@ -27,6 +24,7 @@ const RentPromptSection = () => {
         alquilarla.
       </Typography>
       <Button
+        onClick={onClick}
         variant="contained"
         sx={{
           mt: 2,
