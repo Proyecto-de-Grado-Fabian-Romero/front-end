@@ -5,7 +5,7 @@ type RentPromptProps = {
   onClick?: () => void;
 };
 
-const RentPromptSection = ({ onClick = () => {} }: RentPromptProps) => {
+const RentPromptSection = ({ onClick }: RentPromptProps) => {
   return (
     <Box sx={{ backgroundColor: "#000", py: 4, px: 4, textAlign: "center" }}>
       <Typography

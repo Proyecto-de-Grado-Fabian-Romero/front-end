@@ -110,7 +110,7 @@ export default function ProfileDetails({ user }: Props) {
       {user.role === UserRole.User && (
         <>
           <Box my={4}>
-            <RentPromptSection />
+            <RentPromptSection onClick={() => setOpenModal(true)} />
           </Box>
           <BankPaymentModal
             open={openModal}
