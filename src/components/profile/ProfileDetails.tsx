@@ -16,6 +16,7 @@ import { useState } from "react";
 import BankPaymentModal from "../modal/BankPaymentModal";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import Link from "next/link";
+import RentPromptSection from "@/sections/home/RentPromptSection";
 
 type Props = {
   user: User;
@@ -105,6 +106,18 @@ export default function ProfileDetails({ user }: Props) {
           mode={user.bankPaymentData ? "update" : "create"}
           defaultValues={user.bankPaymentData}
         />
+      )}
+      {user.role === UserRole.User && (
+        <>
+          <Box my={4}>
+            <RentPromptSection />
+          </Box>
+          <BankPaymentModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            mode="create"
+          />
+        </>
       )}
     </>
   );

@@ -7,6 +7,8 @@ import {
   DialogActions,
   TextField,
   Button,
+  Box,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import {
@@ -29,10 +31,10 @@ export default function BankPaymentModal({
   defaultValues,
 }: Props) {
   const [accountNumber, setAccountNumber] = useState(
-    defaultValues?.bankAccountNumber || "",
+    defaultValues?.bankAccountNumber || ""
   );
   const [accountHolder, setAccountHolder] = useState(
-    defaultValues?.bankAccountHolder || "",
+    defaultValues?.bankAccountHolder || ""
   );
   const [bankName, setBankName] = useState(defaultValues?.bankName || "");
   const [loading, setLoading] = useState(false);
@@ -64,6 +66,25 @@ export default function BankPaymentModal({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+      {mode === "create" && (
+        <Box
+          sx={{
+            backgroundColor: "#f1f1f1",
+            borderRadius: 2,
+            padding: 2,
+            fontSize: "0.9rem",
+            color: "#444",
+          }}
+        >
+          <Typography fontWeight={500}>
+            Para convertirte en propietario y comenzar a publicar tus ambientes
+            en Spacio, por favor completa tus datos bancarios. Esta información
+            será utilizada para transferirte tus ingresos generados por las
+            reservas que recibas.
+          </Typography>
+        </Box>
+      )}
+
       <DialogTitle>
         {mode === "update"
           ? "Actualizar Datos Bancarios"
