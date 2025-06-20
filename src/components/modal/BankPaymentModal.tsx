@@ -17,6 +17,7 @@ import {
   updateBankPayment,
 } from "@/services/bankPaymentService";
 import { BankPaymentData } from "@/types/BankPaymentData";
+import BankPaymentForm from "../form/BankPaymentForm";
 
 type Props = {
   open: boolean;
@@ -91,52 +92,13 @@ export default function BankPaymentModal({
           ? "Actualizar Datos Bancarios"
           : "Agregar Datos Bancarios"}
       </DialogTitle>
-      <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1, pt: 4 }}
-      >
-        <TextField
-          label="Número de cuenta"
-          value={accountNumber}
-          onChange={(e) => setAccountNumber(e.target.value)}
-          fullWidth
-          style={{ marginTop: 4 }}
-        />
-        <TextField
-          label="Titular de la cuenta"
-          value={accountHolder}
-          onChange={(e) => setAccountHolder(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Banco"
-          value={bankName}
-          onChange={(e) => setBankName(e.target.value)}
-          fullWidth
-        />
-        {error && (
-          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "4px" }}>
-            {error}
-          </p>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={loading}>
-          Cancelar
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={loading || !accountNumber || !accountHolder || !bankName}
-        >
-          {loading ? (
-            <CircularProgress size={24} sx={{ color: "white" }} />
-          ) : mode === "update" ? (
-            "Actualizar"
-          ) : (
-            "Guardar"
-          )}
-        </Button>
-      </DialogActions>
+      <BankPaymentForm
+        initialValues={defaultValues}
+        loading={loading}
+        error={error}
+        onCancel={onClose}
+        onSubmit={handleSubmit}
+      />
     </Dialog>
   );
 }

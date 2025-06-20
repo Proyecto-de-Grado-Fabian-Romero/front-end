@@ -1,60 +1,103 @@
 "use client";
-import { Box, Button, Stack, useMediaQuery } from "@mui/material";
-import { useRouter } from "next/navigation";
+
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { UserRole, UserState as User } from "@/types/Users";
 import RentPromptSection from "@/sections/home/RentPromptSection";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import SecurityIcon from "@mui/icons-material/Security";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
-interface Props {
-  user: User;
-  onEditBankData: () => void;
-}
+export default function ProfileSidebarActions() {
+  const user = useSelector((state: RootState) => state.user);
 
-export default function ProfileSidebarActions({ user, onEditBankData }: Props) {
   const router = useRouter();
-  const isDesktop = useMediaQuery("(min-width:900px)");
+  const pathname = usePathname();
 
-  if (!isDesktop) return null;
+  const isCurrent = (path: string) => pathname === path;
 
-  return (
-    <Box sx={{ minWidth: 240, pl: 4 }}>
-      <Stack spacing={2}>
+  const content = (
+    <Paper elevation={2} sx={{ p: 3, borderRadius: 3 }}>
+      <Typography variant="h6" fontWeight="bold" mb={2}>
+        Opciones
+      </Typography>
+      <Stack spacing={2} alignItems="stretch">
+        <Button
+          variant={isCurrent(PageRoutes.Profile) ? "contained" : "outlined"}
+          fullWidth
+          startIcon={<AccountCircleIcon />}
+          onClick={() => router.push(PageRoutes.Profile)}
+          sx={{ justifyContent: "flex-start" }}
+        >
+          Perfil
+        </Button>
+
         {user.role === UserRole.Owner && (
           <>
             <Button
-              variant="outlined"
+              variant={isCurrent(PageRoutes.Incomes) ? "contained" : "outlined"}
               fullWidth
+              startIcon={<PaymentsIcon />}
               onClick={() => router.push(PageRoutes.Incomes)}
+              sx={{ justifyContent: "flex-start" }}
             >
-              Ver Ingresos
+              Ingresos
+            </Button>
+            <Button
+              variant={
+                isCurrent(PageRoutes.Received_Payments)
+                  ? "contained"
+                  : "outlined"
+              }
+              fullWidth
+              startIcon={<CreditScoreIcon />}
+              onClick={() => router.push(PageRoutes.Received_Payments)}
+              sx={{ justifyContent: "flex-start" }}
+            >
+              Pagos Recibidos
             </Button>
             <Button
               variant="outlined"
               fullWidth
-              onClick={() => router.push(PageRoutes.Received_Payments)}
+              startIcon={<AccountBalanceIcon />}
+              onClick={() => router.push(PageRoutes.Update_Bank_Data)}
+              sx={{ justifyContent: "flex-start" }}
             >
-              Ver Pagos Recibidos
-            </Button>
-            <Button variant="outlined" fullWidth onClick={onEditBankData}>
-              Editar datos bancarios
+              Datos bancarios
             </Button>
           </>
         )}
 
-        {user.role === UserRole.User && (
-          <Box>
-            <RentPromptSection onClick={onEditBankData} />
-          </Box>
-        )}
-
         <Button
-          variant="outlined"
+          variant={isCurrent("/profile/security") ? "contained" : "outlined"}
           fullWidth
+          startIcon={<SecurityIcon />}
           onClick={() => router.push("/profile/security")}
+          sx={{ justifyContent: "flex-start" }}
         >
           Seguridad
         </Button>
       </Stack>
+    </Paper>
+  );
+
+  return (
+    <Box sx={{ minWidth: { md: 280 }, mt: { xs: 4, md: 0 }, pr: { md: 4 } }}>
+      {content}
     </Box>
   );
 }

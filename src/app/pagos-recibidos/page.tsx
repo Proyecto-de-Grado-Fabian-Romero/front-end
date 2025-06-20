@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
 import { CircularProgress, Box } from "@mui/material";
 
-const OwnerReceivedPayments = dynamic(
-  () => import("../../components/list/OwnerReceivedPayments"),
+const OwnerPaymentsClient = dynamic(
+  () => import("../../components/client/OwnerPaymentsClient"),
   {
     ssr: true,
     loading: () => (
@@ -18,7 +18,7 @@ const OwnerReceivedPayments = dynamic(
 const ReceivedPaymentsPage = () => {
   return (
     <CenteredLayout>
-      <OwnerReceivedPayments />
+      <OwnerPaymentsClient />
     </CenteredLayout>
   );
 };

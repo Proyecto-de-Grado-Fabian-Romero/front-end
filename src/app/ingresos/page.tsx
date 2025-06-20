@@ -1,11 +1,11 @@
 import React from "react";
-import OwnerIncomeList from "../../components/list/OwnerIncomeList";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
+import OwnerIncomesClient from "@/components/client/OwnerIncomesClient";
 
 const IncomePage = () => {
   return (
     <CenteredLayout>
-      <OwnerIncomeList />
+      <OwnerIncomesClient />
     </CenteredLayout>
   );
 };
