@@ -203,8 +203,13 @@ const CreateEnvironmentForm = () => {
             color="primary"
             fullWidth
             loading={loading}
+            disabled={loading}
           >
-            CREAR AMBIENTE
+            {loading ? (
+              <CircularProgress size={24} sx={{ color: "white" }} />
+            ) : (
+              "CREAR AMBIENTE"
+            )}
           </Button>
         </Grid>
 
@@ -213,17 +218,6 @@ const CreateEnvironmentForm = () => {
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
           </Alert>
-        )}
-        {loading && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
         )}
       </Grid>
     </Box>

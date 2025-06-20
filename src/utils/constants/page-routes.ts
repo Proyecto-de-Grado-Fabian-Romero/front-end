@@ -18,4 +18,6 @@ export enum PageRoutes {
   New_Environment = "/nuevo-ambiente",
   Incomes = "/ingresos",
   Received_Payments = "/pagos-recibidos",
+  Update_Bank_Data = "/datos-bancarios",
+  Seguridad = "/seguridad",
 }

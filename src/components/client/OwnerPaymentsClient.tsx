@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { Grid, Paper } from "@mui/material";
 import LoggedOutProfile from "../profile/LoggedOutProfile";
-import ProfileDetails from "../profile/ProfileDetails";
 import ProfileSidebarActions from "../profile/ProfileSidebarActions";
+import OwnerReceivedPayments from "../list/OwnerReceivedPayments";
 
-export default function ProfileClient() {
+export default function OwnerPaymentsClient() {
   const user = useSelector((state: RootState) => state.user);
   const isLoggedIn = !!user?.publicId;
 
@@ -28,7 +28,7 @@ export default function ProfileClient() {
 
       <Grid size={{ sm: 12, md: 9 }}>
         <Paper elevation={3} sx={{ p: 4, borderRadius: 4 }}>
-          <ProfileDetails user={user} />
+          <OwnerReceivedPayments />
         </Paper>
       </Grid>
     </Grid>

@@ -45,3 +45,23 @@ export async function logoutRequest(dispatch: Dispatch) {
     throw new Error("Logout failed");
   }
 }
+
+export const updateUserProfile = async (data: {
+  name?: string;
+  phone?: string;
+  photoFileUrl?: string;
+}) => {
+  const response = await fetch("http://localhost:5123/api/Users/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error updating profile");
+  }
+
+  return await response.json();
+};

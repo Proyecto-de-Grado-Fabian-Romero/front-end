@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import {
   Box,
@@ -27,7 +25,8 @@ export default function LogInForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setError("");
     setLoading(true);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

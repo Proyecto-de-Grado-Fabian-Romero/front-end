@@ -1,21 +1,13 @@
 "use client";
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Button,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Dialog, DialogTitle, Box, Typography } from "@mui/material";
 import { useState } from "react";
 import {
   createBankPayment,
   updateBankPayment,
 } from "@/services/bankPaymentService";
 import { BankPaymentData } from "@/types/BankPaymentData";
+import BankPaymentForm from "../form/BankPaymentForm";
 
 type Props = {
   open: boolean;
@@ -30,24 +22,12 @@ export default function BankPaymentModal({
   mode,
   defaultValues,
 }: Props) {
-  const [accountNumber, setAccountNumber] = useState(
-    defaultValues?.bankAccountNumber || "",
-  );
-  const [accountHolder, setAccountHolder] = useState(
-    defaultValues?.bankAccountHolder || "",
-  );
-  const [bankName, setBankName] = useState(defaultValues?.bankName || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (payload: BankPaymentData) => {
     setLoading(true);
     setError(null);
-    const payload: BankPaymentData = {
-      bankAccountNumber: accountNumber,
-      bankAccountHolder: accountHolder,
-      bankName,
-    };
 
     try {
       if (mode === "update") {
@@ -90,45 +70,13 @@ export default function BankPaymentModal({
           ? "Actualizar Datos Bancarios"
           : "Agregar Datos Bancarios"}
       </DialogTitle>
-      <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
-      >
-        <TextField
-          label="Número de cuenta"
-          value={accountNumber}
-          onChange={(e) => setAccountNumber(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Titular de la cuenta"
-          value={accountHolder}
-          onChange={(e) => setAccountHolder(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          label="Banco"
-          value={bankName}
-          onChange={(e) => setBankName(e.target.value)}
-          fullWidth
-        />
-        {error && (
-          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "4px" }}>
-            {error}
-          </p>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={loading}>
-          Cancelar
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={loading || !accountNumber || !accountHolder || !bankName}
-        >
-          {mode === "update" ? "Actualizar" : "Guardar"}
-        </Button>
-      </DialogActions>
+      <BankPaymentForm
+        initialValues={defaultValues}
+        loading={loading}
+        error={error}
+        onCancel={onClose}
+        onSubmit={handleSubmit}
+      />
     </Dialog>
   );
 }
