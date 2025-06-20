@@ -24,13 +24,16 @@ export default function EditProfileModal({
 }: Props) {
   const [name, setName] = useState(defaultValues.name || "");
   const [phone, setPhone] = useState(defaultValues.phone || "");
-  const [photoUrl, setPhotoUrl] = useState(defaultValues.photoFileUrl || "");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await updateUserProfile({ name, phone, photoFileUrl: photoUrl });
+      await updateUserProfile({
+        name,
+        phone,
+        photoFileUrl: defaultValues.photoFileUrl,
+      });
       window.location.reload();
     } catch (error) {
       console.error("Error updating profile", error);
@@ -55,12 +58,6 @@ export default function EditProfileModal({
             fullWidth
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-          />
-          <TextField
-            label="Foto (URL)"
-            fullWidth
-            value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
           />
         </Stack>
       </DialogContent>

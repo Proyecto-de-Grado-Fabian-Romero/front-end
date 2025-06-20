@@ -1,6 +1,4 @@
-// components/forms/BankPaymentForm.tsx
 import {
-  Box,
   Button,
   CircularProgress,
   DialogActions,
@@ -27,10 +25,10 @@ export default function BankPaymentForm({
   onCancel,
 }: Props) {
   const [accountNumber, setAccountNumber] = useState(
-    initialValues.bankAccountNumber || ""
+    initialValues.bankAccountNumber || "",
   );
   const [accountHolder, setAccountHolder] = useState(
-    initialValues.bankAccountHolder || ""
+    initialValues.bankAccountHolder || "",
   );
   const [bankName, setBankName] = useState(initialValues.bankName || "");
 

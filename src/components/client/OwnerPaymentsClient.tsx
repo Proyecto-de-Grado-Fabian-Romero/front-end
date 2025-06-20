@@ -5,7 +5,6 @@ import { RootState } from "@/store";
 import { Grid, Paper } from "@mui/material";
 import LoggedOutProfile from "../profile/LoggedOutProfile";
 import ProfileSidebarActions from "../profile/ProfileSidebarActions";
-import OwnerIncomeList from "../list/OwnerIncomeList";
 import OwnerReceivedPayments from "../list/OwnerReceivedPayments";
 
 export default function OwnerPaymentsClient() {

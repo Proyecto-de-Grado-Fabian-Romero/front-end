@@ -1,23 +1,13 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Paper,
-  Stack,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import { UserRole, UserState as User } from "@/types/Users";
-import RentPromptSection from "@/sections/home/RentPromptSection";
+import { UserRole } from "@/types/Users";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import SecurityIcon from "@mui/icons-material/Security";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -83,10 +73,10 @@ export default function ProfileSidebarActions() {
         )}
 
         <Button
-          variant={isCurrent("/profile/security") ? "contained" : "outlined"}
+          variant={isCurrent(PageRoutes.Seguridad) ? "contained" : "outlined"}
           fullWidth
           startIcon={<SecurityIcon />}
-          onClick={() => router.push("/profile/security")}
+          onClick={() => router.push(PageRoutes.Seguridad)}
           sx={{ justifyContent: "flex-start" }}
         >
           Seguridad

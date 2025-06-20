@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Button,
-  Box,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Dialog, DialogTitle, Box, Typography } from "@mui/material";
 import { useState } from "react";
 import {
   createBankPayment,
@@ -32,24 +22,12 @@ export default function BankPaymentModal({
   mode,
   defaultValues,
 }: Props) {
-  const [accountNumber, setAccountNumber] = useState(
-    defaultValues?.bankAccountNumber || ""
-  );
-  const [accountHolder, setAccountHolder] = useState(
-    defaultValues?.bankAccountHolder || ""
-  );
-  const [bankName, setBankName] = useState(defaultValues?.bankName || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (payload: BankPaymentData) => {
     setLoading(true);
     setError(null);
-    const payload: BankPaymentData = {
-      bankAccountNumber: accountNumber,
-      bankAccountHolder: accountHolder,
-      bankName,
-    };
 
     try {
       if (mode === "update") {

@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Paper,
-  Typography,
-  Box,
-  Snackbar,
-  Alert,
-  CircularProgress,
-} from "@mui/material";
+import { Paper, Typography, Box, Snackbar, Alert } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
@@ -46,6 +39,7 @@ export default function BankInfoClient() {
       }
       setSuccess(true);
       setTimeout(() => router.push("/profile"), 1500);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || "Ocurrió un error inesperado.");
     } finally {
