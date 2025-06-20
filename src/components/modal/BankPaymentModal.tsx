@@ -31,10 +31,10 @@ export default function BankPaymentModal({
   defaultValues,
 }: Props) {
   const [accountNumber, setAccountNumber] = useState(
-    defaultValues?.bankAccountNumber || ""
+    defaultValues?.bankAccountNumber || "",
   );
   const [accountHolder, setAccountHolder] = useState(
-    defaultValues?.bankAccountHolder || ""
+    defaultValues?.bankAccountHolder || "",
   );
   const [bankName, setBankName] = useState(defaultValues?.bankName || "");
   const [loading, setLoading] = useState(false);
