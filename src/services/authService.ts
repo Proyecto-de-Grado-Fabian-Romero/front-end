@@ -70,7 +70,7 @@ export const signUpUser = async (
   email: string,
   password: string,
   name: string,
-  phone: string
+  phone: string,
 ) => {
   try {
     const response = await fetch("http://localhost:5150/api/Users/signup", {
@@ -93,7 +93,7 @@ export const signUpUser = async (
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     throw new Error("Error occurred during sign-up");
   }
 };
