@@ -65,3 +65,35 @@ export const updateUserProfile = async (data: {
 
   return await response.json();
 };
+
+export const signUpUser = async (
+  email: string,
+  password: string,
+  name: string,
+  phone: string,
+) => {
+  try {
+    const response = await fetch("http://localhost:5150/api/Users/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        name,
+        phone,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || "Sign up failed");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch {
+    throw new Error("Error occurred during sign-up");
+  }
+};
