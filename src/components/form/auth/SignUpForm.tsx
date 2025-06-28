@@ -4,7 +4,6 @@ import {
   TextField,
   Grid,
   Typography,
-  Container,
   Box,
   InputAdornment,
 } from "@mui/material";
@@ -83,7 +82,7 @@ const SignUpForm = () => {
     try {
       await signUpUser(email, password, name, phone);
       setSuccess(
-        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar."
+        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar.",
       );
       localStorage.setItem("pendingEmail", email);
       router.push(PageRoutes.ConfirmEmail);

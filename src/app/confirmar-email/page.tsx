@@ -5,7 +5,7 @@ const ConfirmEmailClient = dynamic(
   () => import("@/components/client/ConfirmEmailClient"),
   {
     ssr: true,
-  }
+  },
 );
 
 export default function ConfirmEmailPage() {

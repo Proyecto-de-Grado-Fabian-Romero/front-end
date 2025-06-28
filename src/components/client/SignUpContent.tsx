@@ -3,7 +3,7 @@
 import SignUpForm from "@/components/form/auth/SignUpForm";
 import { RootState } from "@/store";
 import { UserType } from "@/utils/constants/user-constants";
-import { Box, Container, Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Grid, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

@@ -39,7 +39,7 @@ const ConfirmEmailClient: React.FC = () => {
     const storedEmail = localStorage.getItem("pendingEmail");
     if (storedEmail) setEmail(storedEmail);
     else router.replace(PageRoutes.LogIn);
-  }, []);
+  }, [router]);
 
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,11 +50,11 @@ const ConfirmEmailClient: React.FC = () => {
     try {
       await confirmSignUp(email, code);
       setSuccess(
-        "Correo confirmado exitosamente. Ahora puedes iniciar sesión."
+        "Correo confirmado exitosamente. Ahora puedes iniciar sesión.",
       );
       localStorage.removeItem("pendingEmail");
       setTimeout(() => router.push(PageRoutes.LogIn), 2000);
-    } catch (err) {
+    } catch {
       setError("Código incorrecto. Por favor, intenta de nuevo");
     } finally {
       setLoading(false);
@@ -75,7 +75,7 @@ const ConfirmEmailClient: React.FC = () => {
   };
 
   return (
-    <Box sx={{ marginTop: 1, marginBottom: 12 }}>
+    <Box sx={{ marginTop: 1, marginBottom: 12, px: 2 }}>
       <Box
         display="flex"
         component="form"

@@ -70,7 +70,7 @@ export const signUpUser = async (
   email: string,
   password: string,
   name: string,
-  phone: string
+  phone: string,
 ) => {
   try {
     const response = await fetch("http://localhost:5123/api/Users/signup", {
@@ -100,7 +100,7 @@ export const signUpUser = async (
 
 export const confirmSignUp = async (
   email: string,
-  confirmationCode: string
+  confirmationCode: string,
 ) => {
   const response = await fetch(
     "http://localhost:5123/api/Users/confirm-signup",
@@ -111,7 +111,7 @@ export const confirmSignUp = async (
         email: email.trim(),
         code: confirmationCode.trim(),
       }),
-    }
+    },
   );
 
   if (!response.ok) {

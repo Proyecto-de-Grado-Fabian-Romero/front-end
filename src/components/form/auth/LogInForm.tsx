@@ -43,7 +43,7 @@ export default function LogInForm() {
 
       if (!userData.verifiedEmail) {
         setError(
-          "Por favor, confirma tu correo electrónico para completar el registro."
+          "Por favor, confirma tu correo electrónico para completar el registro.",
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
         return;
@@ -54,7 +54,7 @@ export default function LogInForm() {
     } catch (err: any) {
       if (err.message === "UserNotConfirmed") {
         setError(
-          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico."
+          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico.",
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
       } else {
