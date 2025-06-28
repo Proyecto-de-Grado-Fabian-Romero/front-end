@@ -70,10 +70,10 @@ export const signUpUser = async (
   email: string,
   password: string,
   name: string,
-  phone: string,
+  phone: string
 ) => {
   try {
-    const response = await fetch("http://localhost:5150/api/Users/signup", {
+    const response = await fetch("http://localhost:5123/api/Users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -96,4 +96,23 @@ export const signUpUser = async (
   } catch {
     throw new Error("Error occurred during sign-up");
   }
+};
+
+export const confirmSignUp = async (confirmationCode: string) => {
+  const response = await fetch(
+    "http://localhost:5123/api/Users/confirm-signup",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code: confirmationCode }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Error en la confirmación. Verifique el código.");
+  }
+
+  return await response.json();
 };

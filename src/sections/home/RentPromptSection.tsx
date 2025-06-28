@@ -1,11 +1,21 @@
+"use client";
+
+import { RootState } from "@/store";
+import { UserRole } from "@/types/Users";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import { Box, Button, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
 type RentPromptProps = {
   onClick?: () => void;
 };
 
 const RentPromptSection = ({ onClick }: RentPromptProps) => {
+  const user = useSelector((state: RootState) => state.user);
+
+  if (user.role === UserRole.Owner || user.role === UserRole.Admin)
+    return <></>;
+
   return (
     <Box sx={{ backgroundColor: "#000", py: 4, px: 4, textAlign: "center" }}>
       <Typography
