@@ -48,8 +48,8 @@ export default function LoginContent() {
             <Image
               src="/images/illustrations/login.svg"
               alt="Illustration"
-              width={400}
-              height={400}
+              width={520}
+              height={520}
             />
           </Grid>
         )}

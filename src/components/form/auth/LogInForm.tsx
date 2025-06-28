@@ -146,7 +146,7 @@ export default function LogInForm() {
       <Typography variant="body1">
         ¿No tienes una cuenta?{" "}
         <Link
-          href="#"
+          href={PageRoutes.SignUp}
           color="error"
           style={{
             color: ColorPalette.PRIMARY_DEFAULT,

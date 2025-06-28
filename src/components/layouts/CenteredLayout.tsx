@@ -11,9 +11,6 @@ const CenteredLayout = ({ children }: CenteredLayoutProps) => {
       maxWidth={false}
       sx={{
         height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
       }}
     >
       {children}

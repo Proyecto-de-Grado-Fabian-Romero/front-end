@@ -75,9 +75,7 @@ const ConfirmEmailClient: React.FC = () => {
   };
 
   return (
-    <Box sx={{ marginTop: 8 }}>
-      <ArrowBack sx={{ cursor: "pointer" }} onClick={() => router.back()} />
-
+    <Box sx={{ marginTop: 1, marginBottom: 12 }}>
       <Box
         display="flex"
         component="form"
@@ -86,9 +84,16 @@ const ConfirmEmailClient: React.FC = () => {
         gap={2}
         alignItems="center"
       >
-        <Typography variant="h5" fontWeight="bold">
-          Confirmar Correo Electrónico
-        </Typography>
+        <Box display={"flex"} alignItems={"center"}>
+          <ArrowBack
+            sx={{ cursor: "pointer", marginRight: 2 }}
+            onClick={() => router.back()}
+          />
+
+          <Typography variant="h5" fontWeight="bold" textAlign={"center"}>
+            Confirmar Correo Electrónico
+          </Typography>
+        </Box>
 
         <Typography
           variant="body1"
@@ -100,15 +105,15 @@ const ConfirmEmailClient: React.FC = () => {
           }}
         >
           Te hemos enviado un código de confirmación a tu correo electrónico.
-          Por favor, ingresa el código aquí para verificar tu cuenta. Si no
-          recibiste el código, puedes solicitar que te lo reenviemos.
+          Por favor, ingresa el código para verificar tu cuenta. Si no lo
+          recibiste, puedes solicitar que te lo reenviemos.
         </Typography>
 
         <Image
           src="/images/illustrations/confirm.svg"
           alt="Illustration"
-          width={300}
-          height={300}
+          width={200}
+          height={200}
         />
 
         <TextField
@@ -118,7 +123,7 @@ const ConfirmEmailClient: React.FC = () => {
           value={code}
           onChange={(e) => setCode(e.target.value)}
           required
-          inputProps={{ maxLength: 6, marginTop: 24 }}
+          inputProps={{ maxLength: 6 }}
         />
 
         {error && <Alert severity="error">{error}</Alert>}
@@ -127,7 +132,6 @@ const ConfirmEmailClient: React.FC = () => {
         <Button
           variant="contained"
           fullWidth
-          sx={{ mt: 3 }}
           endIcon={<ArrowForward />}
           type="submit"
           disabled={loading}

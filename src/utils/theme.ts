@@ -104,23 +104,22 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           margin: 0,
-          padding: "24px 10%",
-          paddingTop: "32px",
+          padding: "16px 4%",
+          paddingTop: "24px",
           [theme.breakpoints.down("sm")]: {
-            marginTop: 48,
-            // padding: "24px 2%",
+            padding: "16px 2%",
           },
           [theme.breakpoints.up("md")]: {
             marginTop: 0,
-            padding: "24px 5%",
+            padding: "16px 5%",
           },
           [theme.breakpoints.up("lg")]: {
             marginTop: 0,
+            padding: "24px 5%",
           },
           width: "100%",
           maxWidth: "100vw",
           overflowX: "hidden",
-          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -128,6 +127,7 @@ const theme = createTheme({
         }),
       },
     },
+
     MuiCard: {
       styleOverrides: {
         root: {
@@ -140,6 +140,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
+          maxWidth: "800px",
           paddingLeft: "60px",
           paddingRight: "60px",
           borderRadius: "8px",
@@ -196,6 +197,7 @@ const theme = createTheme({
       },
       styleOverrides: {
         root: {
+          maxWidth: "800px",
           backgroundColor: ColorPalette.NEUTRAL_WHITE,
           "& .MuiInputLabel-root": {
             backgroundColor: ColorPalette.NEUTRAL_WHITE,

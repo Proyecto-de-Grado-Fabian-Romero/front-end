@@ -3,7 +3,7 @@
 import SignUpForm from "@/components/form/auth/SignUpForm";
 import { RootState } from "@/store";
 import { UserType } from "@/utils/constants/user-constants";
-import { Container, Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Container, Grid, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -11,7 +11,10 @@ import { useSelector } from "react-redux";
 
 export default function SignUpContent() {
   const theme = useTheme();
-  const isMdOrSm = useMediaQuery(theme.breakpoints.down("md"));
+  const isLg = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMd = useMediaQuery(theme.breakpoints.down("md"));
+  const isSm = useMediaQuery(theme.breakpoints.down("sm"));
+
   const router = useRouter();
   const role = useSelector((state: RootState) => state.user.role);
 
@@ -23,37 +26,31 @@ export default function SignUpContent() {
   }, [userType, router]);
 
   return (
-    <Container
-      maxWidth={false}
+    <Box
       sx={{
         height: "100vh",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
       }}
     >
-      <Grid
-        container
-        spacing={4}
-        alignItems="center"
-        width={"100%"}
-        sx={{ px: isMdOrSm ? 0 : 8 }}
-      >
-        <Grid size={{ xs: 12, sm: 12, md: 6 }} sx={{ px: isMdOrSm ? 2 : 8 }}>
+      <Grid container spacing={4} alignItems="center" width={"100%"}>
+        <Grid
+          size={{ xs: 12, sm: 12, md: 6 }}
+          sx={{ px: isLg ? 12 : isMd ? 8 : isSm ? 4 : 20 }}
+        >
           <SignUpForm />
         </Grid>
 
-        {!isMdOrSm && (
+        {!isMd && (
           <Grid size={{ xs: 12, sm: 12, md: 6 }}>
             <Image
               src="/images/illustrations/signup.svg"
               alt="Illustration"
-              width={400}
-              height={400}
+              width={520}
+              height={520}
             />
           </Grid>
         )}
       </Grid>
-    </Container>
+    </Box>
   );
 }
