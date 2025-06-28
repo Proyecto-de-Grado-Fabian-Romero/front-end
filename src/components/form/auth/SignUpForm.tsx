@@ -14,6 +14,8 @@ import {
   validatePassword,
   validatePhone,
 } from "@/utils/methods/validations";
+import { useRouter } from "next/navigation";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -22,6 +24,7 @@ const SignUpForm = () => {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleBlur = (field: string) => {
     setError((prev) => ({
@@ -75,8 +78,10 @@ const SignUpForm = () => {
     try {
       await signUpUser(email, password, name, phone);
       setSuccess(
-        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar.",
+        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar."
       );
+      localStorage.setItem("pendingEmail", email);
+      router.push(PageRoutes.ConfirmEmail);
     } catch {
       setError({ general: "No se pudo crear tu cuenta, intenta de nuevo" });
     }

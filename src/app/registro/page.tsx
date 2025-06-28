@@ -8,7 +8,7 @@ const SignUpContent = dynamic(
   },
 );
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <CenteredLayout>
       <SignUpContent />

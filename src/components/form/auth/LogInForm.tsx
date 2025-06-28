@@ -16,6 +16,7 @@ import { setUser } from "@/store/slices/userSlice";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import { useRouter } from "next/navigation";
 import { loginRequest } from "@/services/authService";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 export default function LogInForm() {
   const dispatch = useDispatch();
@@ -39,10 +40,26 @@ export default function LogInForm() {
     try {
       const userData = await loginRequest(email, password);
       dispatch(setUser(userData));
+
+      if (!userData.verifiedEmail) {
+        setError(
+          "Por favor, confirma tu correo electrónico para completar el registro."
+        );
+        router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
+        return;
+      }
+
       router.back();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err.message);
+      if (err.message === "UserNotConfirmed") {
+        setError(
+          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico."
+        );
+        router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
+      } else {
+        setError(err.message || "Credenciales inválidas.");
+      }
     } finally {
       setLoading(false);
     }
