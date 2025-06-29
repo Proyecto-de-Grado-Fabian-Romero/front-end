@@ -73,13 +73,13 @@ export const signUpUser = async (
   phone: string,
 ) => {
   try {
-    const response = await fetch("http://localhost:5150/api/Users/signup", {
+    const response = await fetch("http://localhost:5123/api/Users/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
+        email: email.toLowerCase(),
         password,
         name,
         phone,
@@ -95,5 +95,40 @@ export const signUpUser = async (
     return data;
   } catch {
     throw new Error("Error occurred during sign-up");
+  }
+};
+
+export const confirmSignUp = async (
+  email: string,
+  confirmationCode: string,
+) => {
+  const response = await fetch(
+    "http://localhost:5123/api/Users/confirm-signup",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email.trim(),
+        code: confirmationCode.trim(),
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Error en la confirmación. Verifique el código.");
+  }
+
+  return await response.json();
+};
+
+export const resendConfirmationCode = async (email: string): Promise<void> => {
+  const response = await fetch("http://localhost:5123/api/Users/resend-code", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.trim() }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error al reenviar el código.");
   }
 };

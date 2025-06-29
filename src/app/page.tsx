@@ -1,19 +1,9 @@
-import Banner from "@/sections/home/Banner";
-import ExperienceSection from "@/sections/home/ExperienceSection";
-import OccasionsSection from "@/sections/home/OcassionsSection";
-import RentPromptSection from "@/sections/home/RentPromptSection";
-import { Box } from "@mui/material";
-import React from "react";
+import dynamic from "next/dynamic";
 
-const Home = () => {
-  return (
-    <Box sx={{ overflowX: "hidden" }}>
-      <Banner />
-      <OccasionsSection />
-      <RentPromptSection />
-      <ExperienceSection />
-    </Box>
-  );
-};
+const HomeClient = dynamic(() => import("@/components/client/HomeClient"), {
+  ssr: true,
+});
 
-export default Home;
+export default function EnvironmentsPage() {
+  return <HomeClient />;
+}

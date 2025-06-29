@@ -20,4 +20,5 @@ export enum PageRoutes {
   Received_Payments = "/pagos-recibidos",
   Update_Bank_Data = "/datos-bancarios",
   Seguridad = "/seguridad",
+  ConfirmEmail = "/confirmar-email",
 }
