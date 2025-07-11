@@ -17,6 +17,7 @@ import { ColorPalette } from "@/utils/constants/ui-constants";
 import { useRouter } from "next/navigation";
 import { loginRequest } from "@/services/authService";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import PasswordField from "@/components/inputs/field/PasswordField";
 
 export default function LogInForm() {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export default function LogInForm() {
 
       if (!userData.verifiedEmail) {
         setError(
-          "Por favor, confirma tu correo electrónico para completar el registro.",
+          "Por favor, confirma tu correo electrónico para completar el registro."
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
         return;
@@ -54,7 +55,7 @@ export default function LogInForm() {
     } catch (err: any) {
       if (err.message === "UserNotConfirmed") {
         setError(
-          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico.",
+          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico."
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
       } else {
@@ -106,20 +107,12 @@ export default function LogInForm() {
           ),
         }}
       />
-      <TextField
+      <PasswordField
         label="Contraseña"
-        variant="outlined"
-        type="password"
-        fullWidth
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Lock />
-            </InputAdornment>
-          ),
-        }}
+        onChange={(val) => setPassword(val)}
+        required
+        name="password"
       />
 
       {error && <Alert severity="error">{error}</Alert>}
