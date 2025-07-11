@@ -117,7 +117,7 @@ export default function LogInForm() {
 
       {error && <Alert severity="error">{error}</Alert>}
 
-      <Link href="#" style={{ color: ColorPalette.SECONDARY_DEFAULT }}>
+      <Link href={PageRoutes.RestorePassword} style={{ color: ColorPalette.SECONDARY_DEFAULT }}>
         ¿Olvidaste tu contraseña?
       </Link>
 
