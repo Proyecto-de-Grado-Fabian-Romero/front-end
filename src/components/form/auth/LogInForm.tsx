@@ -8,7 +8,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { Email, Lock, ArrowBack, ArrowForward } from "@mui/icons-material";
+import { Email, ArrowBack, ArrowForward } from "@mui/icons-material";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
@@ -44,7 +44,7 @@ export default function LogInForm() {
 
       if (!userData.verifiedEmail) {
         setError(
-          "Por favor, confirma tu correo electrónico para completar el registro."
+          "Por favor, confirma tu correo electrónico para completar el registro.",
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
         return;
@@ -55,7 +55,7 @@ export default function LogInForm() {
     } catch (err: any) {
       if (err.message === "UserNotConfirmed") {
         setError(
-          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico."
+          "Tu cuenta no está confirmada. Por favor, revisa tu correo electrónico.",
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
       } else {
@@ -117,7 +117,10 @@ export default function LogInForm() {
 
       {error && <Alert severity="error">{error}</Alert>}
 
-      <Link href={PageRoutes.RestorePassword} style={{ color: ColorPalette.SECONDARY_DEFAULT }}>
+      <Link
+        href={PageRoutes.RestorePassword}
+        style={{ color: ColorPalette.SECONDARY_DEFAULT }}
+      >
         ¿Olvidaste tu contraseña?
       </Link>
 

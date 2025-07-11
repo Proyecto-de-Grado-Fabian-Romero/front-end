@@ -19,7 +19,7 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import Link from "next/link";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import Image from "next/image";
-import { Email, Lock, Person, Phone } from "@mui/icons-material";
+import { Email, Person, Phone } from "@mui/icons-material";
 import PasswordField from "@/components/inputs/field/PasswordField";
 
 const SignUpForm = () => {

@@ -21,5 +21,5 @@ export enum PageRoutes {
   Update_Bank_Data = "/datos-bancarios",
   Seguridad = "/seguridad",
   ConfirmEmail = "/confirmar-email",
-  RestorePassword = "/restablecer-contrasena"
+  RestorePassword = "/restablecer-contrasena",
 }

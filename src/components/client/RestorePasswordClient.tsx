@@ -93,7 +93,11 @@ const RestorePasswordClient = () => {
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
-        step === 1 ? handleEnviarCodigo() : handleConfirmarRestablecimiento();
+        if (step === 1) {
+          handleEnviarCodigo();
+        } else {
+          handleConfirmarRestablecimiento();
+        }
       }}
       sx={{ mt: 8, maxWidth: 400, mx: "auto", width: "100%" }}
       gap={2}

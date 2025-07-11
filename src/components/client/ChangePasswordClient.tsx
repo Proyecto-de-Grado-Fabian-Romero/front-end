@@ -34,7 +34,7 @@ const ChangePasswordClient = () => {
 
     if (!validatePassword(newPassword)) {
       setError(
-        "La contraseña debe tener al menos 6 caracteres, con un número, mayúscula, minúscula y un carácter especial."
+        "La contraseña debe tener al menos 6 caracteres, con un número, mayúscula, minúscula y un carácter especial.",
       );
       return;
     }

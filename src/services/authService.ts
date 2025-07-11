@@ -70,7 +70,7 @@ export const signUpUser = async (
   email: string,
   password: string,
   name: string,
-  phone: string
+  phone: string,
 ) => {
   try {
     const response = await fetch("http://localhost:5123/api/Users/signup", {
@@ -100,7 +100,7 @@ export const signUpUser = async (
 
 export const confirmSignUp = async (
   email: string,
-  confirmationCode: string
+  confirmationCode: string,
 ) => {
   const response = await fetch(
     "http://localhost:5123/api/Users/confirm-signup",
@@ -111,7 +111,7 @@ export const confirmSignUp = async (
         email: email.trim(),
         code: confirmationCode.trim(),
       }),
-    }
+    },
   );
 
   if (!response.ok) {
@@ -135,7 +135,7 @@ export const resendConfirmationCode = async (email: string): Promise<void> => {
 
 export const changePassword = async (
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
 ) => {
   const response = await fetch(
     "http://localhost:5123/api/users/change-password",
@@ -144,7 +144,7 @@ export const changePassword = async (
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({ currentPassword, newPassword }),
-    }
+    },
   );
 
   if (!response.ok) {
@@ -155,11 +155,14 @@ export const changePassword = async (
 };
 
 export const sendRestoreCode = async (email: string) => {
-  const response = await fetch("http://localhost:5123/api/users/forgot-password", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
-  });
+  const response = await fetch(
+    "http://localhost:5123/api/users/forgot-password",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    },
+  );
 
   if (!response.ok) throw new Error("No se pudo enviar el código");
 
@@ -169,13 +172,16 @@ export const sendRestoreCode = async (email: string) => {
 export const confirmRestorePassword = async (
   email: string,
   code: string,
-  newPassword: string
+  newPassword: string,
 ) => {
-  const response = await fetch("http://localhost:5123/api/users/confirm-forgot-password", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, code, newPassword }),
-  });
+  const response = await fetch(
+    "http://localhost:5123/api/users/confirm-forgot-password",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code, newPassword }),
+    },
+  );
 
   if (!response.ok) throw new Error("No se pudo confirmar el código");
 
