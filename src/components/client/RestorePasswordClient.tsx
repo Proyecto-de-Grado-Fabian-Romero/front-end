@@ -53,7 +53,7 @@ const RestorePasswordClient = () => {
 
     if (!validatePassword(newPassword)) {
       setError(
-        "La contraseña debe tener al menos 6 caracteres, con una mayúscula, minúscula, número y carácter especial."
+        "La contraseña debe tener al menos 6 caracteres, con una mayúscula, minúscula, número y carácter especial.",
       );
       setLoading(false);
       return;
@@ -65,7 +65,7 @@ const RestorePasswordClient = () => {
       setTimeout(() => router.push("/login"), 2000);
     } catch {
       setError(
-        "El código es inválido o la contraseña no cumple los requisitos."
+        "El código es inválido o la contraseña no cumple los requisitos.",
       );
     } finally {
       setLoading(false);
