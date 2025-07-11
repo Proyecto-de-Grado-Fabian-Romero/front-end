@@ -19,7 +19,8 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import Link from "next/link";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import Image from "next/image";
-import { Email, Lock, Person, Phone } from "@mui/icons-material";
+import { Email, Person, Phone } from "@mui/icons-material";
+import PasswordField from "@/components/inputs/field/PasswordField";
 
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -188,26 +189,12 @@ const SignUpForm = () => {
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <TextField
+            <PasswordField
               label="Contraseña"
-              type="password"
-              variant="outlined"
-              placeholder="Introduce una contraseña"
-              fullWidth
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(val) => setPassword(val)}
               required
-              error={!!error.password}
-              helperText={error.password || ""}
-              onBlur={() => handleBlur("password")}
-              onFocus={() => handleFocus("password")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock />
-                  </InputAdornment>
-                ),
-              }}
+              name="password"
             />
           </Grid>
           <Grid size={{ xs: 12 }}>

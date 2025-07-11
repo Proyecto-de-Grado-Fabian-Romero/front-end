@@ -8,7 +8,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
-import { Email, Lock, ArrowBack, ArrowForward } from "@mui/icons-material";
+import { Email, ArrowBack, ArrowForward } from "@mui/icons-material";
 import Image from "next/image";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,7 @@ import { ColorPalette } from "@/utils/constants/ui-constants";
 import { useRouter } from "next/navigation";
 import { loginRequest } from "@/services/authService";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import PasswordField from "@/components/inputs/field/PasswordField";
 
 export default function LogInForm() {
   const dispatch = useDispatch();
@@ -106,25 +107,20 @@ export default function LogInForm() {
           ),
         }}
       />
-      <TextField
+      <PasswordField
         label="Contraseña"
-        variant="outlined"
-        type="password"
-        fullWidth
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Lock />
-            </InputAdornment>
-          ),
-        }}
+        onChange={(val) => setPassword(val)}
+        required
+        name="password"
       />
 
       {error && <Alert severity="error">{error}</Alert>}
 
-      <Link href="#" style={{ color: ColorPalette.SECONDARY_DEFAULT }}>
+      <Link
+        href={PageRoutes.RestorePassword}
+        style={{ color: ColorPalette.SECONDARY_DEFAULT }}
+      >
         ¿Olvidaste tu contraseña?
       </Link>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper, Typography, Box, Snackbar, Alert } from "@mui/material";
+import { Paper, Typography, Box, Snackbar, Alert, Grid } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
@@ -12,6 +12,7 @@ import {
 } from "@/services/bankPaymentService";
 import { BankPaymentData } from "@/types/BankPaymentData";
 import BankPaymentForm from "../form/BankPaymentForm";
+import ProfileSidebarActions from "../profile/ProfileSidebarActions";
 
 export default function BankInfoClient() {
   const user = useSelector((state: RootState) => state.user);
@@ -48,31 +49,39 @@ export default function BankInfoClient() {
   };
 
   return (
-    <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-      <Paper sx={{ p: 4, width: "100%", maxWidth: 500, borderRadius: 4 }}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          {user?.bankPaymentData
-            ? "Actualizar Datos Bancarios"
-            : "Agregar Datos Bancarios"}
-        </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
-          Esta información se utilizará para transferirte tus ingresos por
-          reservas. Asegúrate de que sea correcta.
-        </Typography>
+    <Grid container spacing={4} sx={{ mt: 4, width: "100%" }}>
+      <Grid size={{ sm: 12, md: 3 }}>
+        <ProfileSidebarActions />
+      </Grid>
 
-        <BankPaymentForm
-          initialValues={user?.bankPaymentData}
-          loading={loading}
-          error={error}
-          onSubmit={handleSubmit}
-        />
+      <Grid size={{ sm: 12, md: 9 }}>
+        <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+          <Paper sx={{ p: 4, width: "100%", maxWidth: 500, borderRadius: 4 }}>
+            <Typography variant="h5" fontWeight="bold" gutterBottom>
+              {user?.bankPaymentData
+                ? "Actualizar Datos Bancarios"
+                : "Agregar Datos Bancarios"}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mb={3}>
+              Esta información se utilizará para transferirte tus ingresos por
+              reservas. Asegúrate de que sea correcta.
+            </Typography>
 
-        <Snackbar open={success} autoHideDuration={2000}>
-          <Alert severity="success" variant="filled">
-            Datos guardados correctamente
-          </Alert>
-        </Snackbar>
-      </Paper>
-    </Box>
+            <BankPaymentForm
+              initialValues={user?.bankPaymentData}
+              loading={loading}
+              error={error}
+              onSubmit={handleSubmit}
+            />
+
+            <Snackbar open={success} autoHideDuration={2000}>
+              <Alert severity="success" variant="filled">
+                Datos guardados correctamente
+              </Alert>
+            </Snackbar>
+          </Paper>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }

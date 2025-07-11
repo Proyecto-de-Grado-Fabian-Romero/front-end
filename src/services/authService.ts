@@ -132,3 +132,58 @@ export const resendConfirmationCode = async (email: string): Promise<void> => {
     throw new Error("Error al reenviar el código.");
   }
 };
+
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string,
+) => {
+  const response = await fetch(
+    "http://localhost:5123/api/users/change-password",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ currentPassword, newPassword }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to change password.");
+  }
+
+  return await response.json();
+};
+
+export const sendRestoreCode = async (email: string) => {
+  const response = await fetch(
+    "http://localhost:5123/api/users/forgot-password",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    },
+  );
+
+  if (!response.ok) throw new Error("No se pudo enviar el código");
+
+  return await response.json();
+};
+
+export const confirmRestorePassword = async (
+  email: string,
+  code: string,
+  newPassword: string,
+) => {
+  const response = await fetch(
+    "http://localhost:5123/api/users/confirm-forgot-password",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code, newPassword }),
+    },
+  );
+
+  if (!response.ok) throw new Error("No se pudo confirmar el código");
+
+  return await response.json();
+};
