@@ -219,7 +219,6 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
         columns={columns}
         options={{
           selectableRows: "none",
-          responsive: "scroll",
           rowsPerPage: 10,
           rowsPerPageOptions: [],
           search: false,
