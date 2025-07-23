@@ -4,24 +4,17 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Pagination,
   Paper,
   Typography,
   Button,
-  TableContainer,
 } from "@mui/material";
-import { getDebts } from "@/services/adminService";
+import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import { getDebts, markDebtAsPaid } from "@/services/adminService";
 import DebtDetailsModal from "@/components/modal/DebtDetailsModal";
 import MarkDebtModal from "@/components/modal/MakDebtModal";
 import { AdminDebt } from "@/types/Payments";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import { markDebtAsPaid } from "@/services/adminService";
 
 const AdminDebtsClient = () => {
   const [debts, setDebts] = useState<AdminDebt[]>([]);
@@ -31,7 +24,7 @@ const AdminDebtsClient = () => {
   const [selectedDebtId, setSelectedDebtId] = useState<string | null>(null);
   const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
   const [openMarkAsPaidModal, setOpenMarkAsPaidModal] =
-    useState<boolean>(false); // Modal state for marking as paid
+    useState<boolean>(false);
   const [paymentReference, setPaymentReference] = useState<string>("");
 
   const router = useRouter();
@@ -89,6 +82,56 @@ const AdminDebtsClient = () => {
 
   if (loading) return <CircularProgress />;
 
+  const columns: MUIDataTableColumnDef[] = [
+    {
+      name: "ownerName",
+      label: "Propietario",
+    },
+    {
+      name: "totalAmount",
+      label: "Monto a Pagar",
+      options: {
+        customBodyRender: (value: number) => `Bs. ${value}`,
+      },
+    },
+    {
+      name: "updatedAt",
+      label: "Fecha de Actualización",
+      options: {
+        customBodyRender: (value: string) =>
+          new Date(value).toLocaleDateString(),
+      },
+    },
+    {
+      name: "actions",
+      label: "Acciones",
+      options: {
+        customBodyRenderLite: (dataIndex: number) => {
+          const debt = debts[dataIndex];
+          return (
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleOpenDetailsModal(debt.id)}
+              >
+                Ver Detalles
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                sx={{ ml: 2 }}
+                onClick={() => handleOpenMarkAsPaidModal(debt.id)}
+              >
+                Marcar como Pagado
+              </Button>
+            </>
+          );
+        },
+      },
+    },
+  ];
+
   return (
     <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
       <Box sx={{ mb: 2 }}>
@@ -100,51 +143,41 @@ const AdminDebtsClient = () => {
           Ver Pagos Realizados
         </Button>
       </Box>
-      <Typography variant="h5">Deudas Pendientes</Typography>
-      <TableContainer sx={{ maxHeight: 400, overflow: "auto" }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Propietario</TableCell>
-              <TableCell>Monto a Pagar</TableCell>
-              <TableCell>Fecha de Actualización</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {debts.map((debt) => (
-              <TableRow key={debt.id}>
-                <TableCell>{debt.ownerName}</TableCell>
-                <TableCell>Bs. {debt.totalAmount}</TableCell>
-                <TableCell>
-                  {new Date(debt.updatedAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleOpenDetailsModal(debt.id)}
-                  >
-                    Ver Detalles
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ ml: 2 }}
-                    onClick={() => handleOpenMarkAsPaidModal(debt.id)}
-                  >
-                    Marcar como Pagado
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Pagination
-        count={Math.ceil(totalItems / 20)}
-        page={page}
-        onChange={(_, value) => setPage(value)}
+
+      <Typography variant="h5" mb={2}>
+        Deudas Pendientes
+      </Typography>
+
+      <MUIDataTable
+        title=""
+        data={debts}
+        columns={columns}
+        options={{
+          selectableRows: "none",
+          rowsPerPage: 20,
+          count: totalItems,
+          page: page - 1,
+          onChangePage: (currentPage) => setPage(currentPage + 1),
+          pagination: true,
+          rowsPerPageOptions: [],
+          search: false,
+          download: false,
+          print: false,
+          viewColumns: false,
+          filter: false,
+          responsive: "standard",
+          textLabels: {
+            body: {
+              noMatch: "No hay deudas pendientes.",
+            },
+            pagination: {
+              next: "Siguiente",
+              previous: "Anterior",
+              rowsPerPage: "Filas por página:",
+              displayRows: "de",
+            },
+          },
+        }}
       />
 
       <DebtDetailsModal

@@ -6,6 +6,7 @@ import {
   Typography,
   Box,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { signUpUser } from "@/services/authService";
 import {
@@ -28,6 +29,7 @@ const SignUpForm = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
 
@@ -81,13 +83,16 @@ const SignUpForm = () => {
     }
 
     try {
+      setLoading(true);
       await signUpUser(email, password, name, phone);
+      setLoading(false);
       setSuccess(
-        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar.",
+        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar."
       );
       localStorage.setItem("pendingEmail", email);
       router.push(PageRoutes.ConfirmEmail);
     } catch {
+      setLoading(false);
       setError({ general: "No se pudo crear tu cuenta, intenta de nuevo" });
     }
   };
@@ -196,6 +201,11 @@ const SignUpForm = () => {
               required
               name="password"
             />
+            {error.password && (
+              <Typography color="error" sx={{ marginTop: 2 }}>
+                {error.password}
+              </Typography>
+            )}
           </Grid>
           <Grid size={{ xs: 12 }}>
             <Button
@@ -204,9 +214,12 @@ const SignUpForm = () => {
               variant="contained"
               color="primary"
               sx={{ mt: 3 }}
-              disabled={!isFormValid}
             >
-              Registrarse
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "white" }} />
+              ) : (
+                "Registrarse"
+              )}
             </Button>
           </Grid>
         </Grid>

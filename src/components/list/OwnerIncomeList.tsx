@@ -2,22 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Card,
   Box,
   Typography,
-  Pagination,
+  Paper,
   CircularProgress,
   Button,
 } from "@mui/material";
-import { getIncomeList } from "../../services/ownerPaymentService";
+import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import { getIncomeList } from "@/services/ownerPaymentService";
 import { IncomeDetail } from "@/types/Payments";
 import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 
 const OwnerIncomeList = () => {
@@ -25,6 +20,8 @@ const OwnerIncomeList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchIncomes = async () => {
@@ -50,55 +47,89 @@ const OwnerIncomeList = () => {
     );
   }
 
+  const columns: MUIDataTableColumnDef[] = [
+    {
+      name: "amount",
+      label: "Monto",
+      options: {
+        customBodyRender: (value: number) => `Bs. ${value}`,
+      },
+    },
+    {
+      name: "currency",
+      label: "Moneda",
+    },
+    {
+      name: "generatedAt",
+      label: "Fecha Generada",
+      options: {
+        customBodyRender: (value: string) =>
+          new Date(value).toLocaleDateString(),
+      },
+    },
+    {
+      name: "actions",
+      label: "Acciones",
+      options: {
+        customBodyRenderLite: (dataIndex: number) => {
+          const income = incomes[dataIndex];
+          return (
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() =>
+                router.push(`${PageRoutes.Incomes}/${income.id}`)
+              }
+            >
+              Ver Detalles
+            </Button>
+          );
+        },
+      },
+    },
+  ];
+
   return (
     <Box>
       <OwnerPaymentDashboard />
+
       <Typography variant="h5" gutterBottom mb={4} mt={6}>
         Lista de Ingresos
       </Typography>
-      <Card>
-        <Box p={2}>
-          {incomes.length === 0 ? (
-            <Typography variant="subtitle1">Aún no tienes ingresos.</Typography>
-          ) : (
-            <>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Monto</TableCell>
-                    <TableCell>Fecha Generada</TableCell>
-                    <TableCell>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {incomes.map((income) => (
-                    <TableRow key={income.reservationId}>
-                      <TableCell>Bs. {income.amount}</TableCell>
-                      <TableCell>{income.currency}</TableCell>
-                      <TableCell>
-                        {new Date(income.generatedAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <Link href={`${PageRoutes.Incomes}/${income.id}`}>
-                          <Button>Ver Detalles</Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
 
-              <Box display="flex" justifyContent="center" mt={2}>
-                <Pagination
-                  count={Math.ceil(totalItems / 20)}
-                  page={page}
-                  onChange={(_, value) => setPage(value)}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      </Card>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <MUIDataTable
+          title=""
+          data={incomes}
+          columns={columns}
+          options={{
+            selectableRows: "none",
+            responsive: "standard",
+            rowsPerPage: 20,
+            count: totalItems,
+            page: page - 1,
+            onChangePage: (currentPage) => setPage(currentPage + 1),
+            pagination: true,
+            rowsPerPageOptions: [],
+            search: false,
+            download: false,
+            print: false,
+            viewColumns: false,
+            filter: false,
+            textLabels: {
+              body: {
+                noMatch: "Aún no tienes ingresos.",
+              },
+              pagination: {
+                next: "Siguiente",
+                previous: "Anterior",
+                rowsPerPage: "Filas por página:",
+                displayRows: "de",
+              },
+            },
+          }}
+        />
+      </Paper>
     </Box>
   );
 };

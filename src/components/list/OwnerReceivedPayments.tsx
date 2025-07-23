@@ -2,18 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Card,
   Box,
   Typography,
-  Pagination,
+  Paper,
   CircularProgress,
 } from "@mui/material";
-import { getReceivedPayments } from "../../services/ownerPaymentService";
+import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import { getReceivedPayments } from "@/services/ownerPaymentService";
 import { OwnerPaymentDetail } from "@/types/Payments";
 import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
 
@@ -47,55 +42,73 @@ const OwnerReceivedPayments = () => {
     );
   }
 
+  const columns: MUIDataTableColumnDef[] = [
+    {
+      name: "amountPaid",
+      label: "Monto Pagado",
+      options: {
+        customBodyRender: (value: number) => `Bs. ${value}`,
+      },
+    },
+    {
+      name: "reference",
+      label: "Referencia",
+    },
+    {
+      name: "paymentMethod",
+      label: "Método de Pago",
+    },
+    {
+      name: "createdAt",
+      label: "Fecha de Creación",
+      options: {
+        customBodyRender: (value: string) =>
+          new Date(value).toLocaleDateString(),
+      },
+    },
+  ];
+
   return (
     <Box>
       <OwnerPaymentDashboard />
 
-      <Typography textAlign={"center"} variant="h5" gutterBottom mt={4} mb={4}>
+      <Typography textAlign="center" variant="h5" gutterBottom mt={4} mb={4}>
         Pagos Recibidos
       </Typography>
-      <Card>
-        <Box p={2}>
-          {payments.length === 0 ? (
-            <Typography variant="subtitle1">
-              Aún no se recibieron pagos.
-            </Typography>
-          ) : (
-            <>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Monto Pagado</TableCell>
-                    <TableCell>Referencia</TableCell>
-                    <TableCell>Método de Pago</TableCell>
-                    <TableCell>Fecha de Creación</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {payments.map((payment) => (
-                    <TableRow key={payment.id}>
-                      <TableCell>Bs. {payment.amountPaid}</TableCell>
-                      <TableCell>{payment.reference}</TableCell>
-                      <TableCell>{payment.paymentMethod}</TableCell>
-                      <TableCell>
-                        {new Date(payment.createdAt).toLocaleDateString()}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
 
-              <Box display="flex" justifyContent="center" mt={2}>
-                <Pagination
-                  count={Math.ceil(totalItems / 20)}
-                  page={page}
-                  onChange={(_, value) => setPage(value)}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      </Card>
+      <Paper elevation={3} sx={{ p: 3 }}>
+        <MUIDataTable
+          title=""
+          data={payments}
+          columns={columns}
+          options={{
+            selectableRows: "none",
+            responsive: "standard",
+            rowsPerPage: 20,
+            count: totalItems,
+            page: page - 1,
+            onChangePage: (currentPage) => setPage(currentPage + 1),
+            pagination: true,
+            rowsPerPageOptions: [],
+            search: false,
+            download: false,
+            print: false,
+            viewColumns: false,
+            filter: false,
+            textLabels: {
+              body: {
+                noMatch: "Aún no se recibieron pagos.",
+              },
+              pagination: {
+                next: "Siguiente",
+                previous: "Anterior",
+                rowsPerPage: "Filas por página:",
+                displayRows: "de",
+              },
+            },
+          }}
+        />
+      </Paper>
     </Box>
   );
 };

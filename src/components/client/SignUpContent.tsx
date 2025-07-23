@@ -34,14 +34,14 @@ export default function SignUpContent() {
     >
       <Grid container spacing={4} alignItems="center" width={"100%"}>
         <Grid
-          size={{ xs: 12, sm: 12, md: 6 }}
+          size={{ xs: 12, sm: 12, md: 8, lg: 6 }}
           sx={{ px: isLg ? 12 : isMd ? 8 : isSm ? 4 : 20 }}
         >
           <SignUpForm />
         </Grid>
 
         {!isMd && (
-          <Grid size={{ xs: 12, sm: 12, md: 6 }}>
+          <Grid size={{ xs: 12, sm: 12, md: 4, lg: 6 }}>
             <Image
               src="/images/illustrations/signup.svg"
               alt="Illustration"

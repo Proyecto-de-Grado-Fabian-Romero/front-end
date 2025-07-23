@@ -37,10 +37,11 @@ const PasswordField = ({
         name={name}
         onChange={(e) => onChange(e.target.value)}
         startAdornment={
-          <InputAdornment position="start">
+          <InputAdornment position="start" style={{ marginLeft: 12, marginRight: 16}}>
             <LockIcon />
           </InputAdornment>
         }
+        
         endAdornment={
           <InputAdornment position="end">
             <IconButton

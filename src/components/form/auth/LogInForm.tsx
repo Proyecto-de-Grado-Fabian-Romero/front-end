@@ -59,7 +59,7 @@ export default function LogInForm() {
         );
         router.push(`${PageRoutes.ConfirmEmail}?error=account-not-verified`);
       } else {
-        setError(err.message || "Credenciales inválidas.");
+        setError(err.message || "Credenciales inválidas o Cuenta Inexistente.");
       }
     } finally {
       setLoading(false);
