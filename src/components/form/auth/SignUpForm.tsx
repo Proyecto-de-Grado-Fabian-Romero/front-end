@@ -87,7 +87,7 @@ const SignUpForm = () => {
       await signUpUser(email, password, name, phone);
       setLoading(false);
       setSuccess(
-        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar."
+        "¡Cuenta creada correctamente! Por favor, revise su correo electrónico para confirmar.",
       );
       localStorage.setItem("pendingEmail", email);
       router.push(PageRoutes.ConfirmEmail);
@@ -96,12 +96,6 @@ const SignUpForm = () => {
       setError({ general: "No se pudo crear tu cuenta, intenta de nuevo" });
     }
   };
-
-  const isFormValid =
-    validateEmail(email) &&
-    validatePhone(phone) &&
-    validatePassword(password) &&
-    validateName(name);
 
   return (
     <Box

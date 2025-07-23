@@ -77,9 +77,7 @@ const OwnerIncomeList = () => {
             <Button
               variant="outlined"
               size="small"
-              onClick={() =>
-                router.push(`${PageRoutes.Incomes}/${income.id}`)
-              }
+              onClick={() => router.push(`${PageRoutes.Incomes}/${income.id}`)}
             >
               Ver Detalles
             </Button>

@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
 import { getReceivedPayments } from "@/services/ownerPaymentService";
 import { OwnerPaymentDetail } from "@/types/Payments";

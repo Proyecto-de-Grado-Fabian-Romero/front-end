@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { logoutRequest } from "@/services/authService";
 import { setUser } from "@/store/slices/userSlice";
@@ -13,7 +13,7 @@ const LogoutButton = () => {
   const handleLogout = async () => {
     try {
       await logoutRequest(dispatch);
-      dispatch(setUser(null))
+      dispatch(setUser(null));
       router.push("/");
     } catch {
       alert("No se pudo cerrar sesión, intenta de nuevo.");

@@ -6,7 +6,5 @@ const ClientTour360RequestsPage = dynamic(
 );
 
 export default function Tour360RequestsPage() {
-  return (
-      <ClientTour360RequestsPage />
-  );
+  return <ClientTour360RequestsPage />;
 }

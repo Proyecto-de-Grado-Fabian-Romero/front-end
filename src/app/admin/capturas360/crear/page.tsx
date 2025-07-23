@@ -1,6 +1,6 @@
 "use client";
 
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Upload360ImagesForm from "@/components/form/Upload360ImagesForm";
@@ -40,7 +40,9 @@ const CreateVirtualTourPage = () => {
 
   return (
     <CenteredLayout>
-      <Typography mb={4} mt={4} variant="h1">Subir Recorrido 360</Typography>
+      <Typography mb={4} mt={4} variant="h1">
+        Subir Recorrido 360
+      </Typography>
       {publicId && uploadResults.length === 0 && (
         <Upload360ImagesForm
           onUploadComplete={(results) => setUploadResults(results)}

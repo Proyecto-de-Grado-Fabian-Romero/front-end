@@ -34,8 +34,11 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
-  const [statusLoadingId, setStatusLoadingId] = React.useState<string | null>(null);
-  const [localRequests, setLocalRequests] = React.useState<Tour360Request[]>(requests);
+  const [statusLoadingId, setStatusLoadingId] = React.useState<string | null>(
+    null,
+  );
+  const [localRequests, setLocalRequests] =
+    React.useState<Tour360Request[]>(requests);
 
   React.useEffect(() => {
     setLocalRequests(requests);
@@ -48,7 +51,7 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
       setLocalRequests((prev) =>
         prev.map((req) =>
           req.publicId === publicId ? { ...req, status: newStatus } : req,
-        )
+        ),
       );
     } catch {
       alert("Hubo un error al actualizar el estado.");
@@ -72,7 +75,9 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
         {localRequests.map((req) => (
           <Paper key={req.publicId} sx={{ p: 2 }}>
             <Typography variant="subtitle2">Ambiente</Typography>
-            <Typography variant="body1" mb={1}>{req.environmentName}</Typography>
+            <Typography variant="body1" mb={1}>
+              {req.environmentName}
+            </Typography>
 
             <Typography variant="subtitle2">Estado</Typography>
             {statusLoadingId === req.publicId ? (
@@ -94,10 +99,16 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
               </Select>
             )}
 
-            <Typography variant="subtitle2" mt={2}>Fecha de Solicitud</Typography>
-            <Typography variant="body1">{formatDate(req.requestDate)}</Typography>
+            <Typography variant="subtitle2" mt={2}>
+              Fecha de Solicitud
+            </Typography>
+            <Typography variant="body1">
+              {formatDate(req.requestDate)}
+            </Typography>
 
-            <Typography variant="subtitle2" mt={2}>Fecha Programada</Typography>
+            <Typography variant="subtitle2" mt={2}>
+              Fecha Programada
+            </Typography>
             <Typography variant="body1">
               {req.scheduledDate ? formatDate(req.scheduledDate) : "-"}
             </Typography>
@@ -109,7 +120,7 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
                 sx={{ mt: 2 }}
                 onClick={() =>
                   router.push(
-                    `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`
+                    `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`,
                   )
                 }
               >
@@ -180,7 +191,7 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
               size="small"
               onClick={() =>
                 router.push(
-                  `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`
+                  `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`,
                 )
               }
             >
@@ -193,7 +204,15 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
   ];
 
   return (
-    <Box sx={{ overflowX: "auto", width: "100%", marginBottom: "100px", maxWidth: "100%", overflowY: "visible"}}>
+    <Box
+      sx={{
+        overflowX: "auto",
+        width: "100%",
+        marginBottom: "100px",
+        maxWidth: "100%",
+        overflowY: "visible",
+      }}
+    >
       <MUIDataTable
         title={"Solicitudes de Recorridos 360°"}
         data={localRequests}
@@ -223,7 +242,6 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
       />
     </Box>
   );
-  
 };
 
 export default Tour360RequestsTable;

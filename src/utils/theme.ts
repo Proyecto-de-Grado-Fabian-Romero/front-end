@@ -306,7 +306,7 @@ const theme = createTheme({
           backgroundColor: ColorPalette.BACKGROUND,
           color: ColorPalette.NEUTRAL_BLACK,
           tableLayout: "auto", // or "fixed"
-          minWidth: 600, 
+          minWidth: 600,
         },
       },
     },
