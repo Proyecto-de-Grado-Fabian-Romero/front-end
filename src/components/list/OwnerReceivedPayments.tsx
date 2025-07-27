@@ -1,108 +1,100 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, Typography, Paper, CircularProgress } from "@mui/material";
-import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import React, { useCallback, useEffect, useState } from "react";
+import { Box, CircularProgress, Typography, Paper } from "@mui/material";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { getReceivedPayments } from "@/services/ownerPaymentService";
 import { OwnerPaymentDetail } from "@/types/Payments";
 import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
 
 const OwnerReceivedPayments = () => {
   const [payments, setPayments] = useState<OwnerPaymentDetail[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(0); // 0-based index
 
-  useEffect(() => {
-    const fetchPayments = async () => {
-      try {
-        const data = await getReceivedPayments(page, 20);
-        setPayments(data.items);
-        setTotalItems(data.totalItems);
-      } catch {
-        alert("Hubo un error, intenta de nuevo.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPayments();
+  const fetchPayments = useCallback(async () => {
+    try {
+      const data = await getReceivedPayments(page + 1, 20);
+      setPayments(data.items);
+      setTotalItems(data.totalItems);
+    } catch {
+      alert("Hubo un error al obtener los pagos.");
+    } finally {
+      setLoading(false);
+    }
   }, [page]);
 
-  if (loading) {
-    return (
-      <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
-        <CircularProgress />
-        <Typography mt={2}>Cargando pagos...</Typography>
-      </Box>
-    );
-  }
+  useEffect(() => {
+    fetchPayments();
+  }, [page, fetchPayments]);
 
-  const columns: MUIDataTableColumnDef[] = [
+  const columns: MRT_ColumnDef<OwnerPaymentDetail>[] = [
     {
-      name: "amountPaid",
-      label: "Monto Pagado",
-      options: {
-        customBodyRender: (value: number) => `Bs. ${value}`,
-      },
+      header: "Monto Pagado",
+      accessorKey: "amountPaid",
+      Cell: ({ cell }) => `Bs. ${cell.getValue<number>()}`,
     },
     {
-      name: "reference",
-      label: "Referencia",
+      header: "Referencia",
+      accessorKey: "reference",
     },
     {
-      name: "paymentMethod",
-      label: "Método de Pago",
+      header: "Método de Pago",
+      accessorKey: "paymentMethod",
     },
     {
-      name: "createdAt",
-      label: "Fecha de Creación",
-      options: {
-        customBodyRender: (value: string) =>
-          new Date(value).toLocaleDateString(),
-      },
+      header: "Fecha de Creación",
+      accessorKey: "createdAt",
+      Cell: ({ cell }) =>
+        new Date(cell.getValue<string>()).toLocaleDateString(),
     },
   ];
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <OwnerPaymentDashboard />
 
-      <Typography textAlign="center" variant="h5" gutterBottom mt={4} mb={4}>
+      <Typography textAlign="center" variant="h5" mt={4} mb={4}>
         Pagos Recibidos
       </Typography>
 
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <MUIDataTable
-          title=""
-          data={payments}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            responsive: "standard",
-            rowsPerPage: 20,
-            count: totalItems,
-            page: page - 1,
-            onChangePage: (currentPage) => setPage(currentPage + 1),
-            pagination: true,
-            rowsPerPageOptions: [],
-            search: false,
-            download: false,
-            print: false,
-            viewColumns: false,
-            filter: false,
-            textLabels: {
-              body: {
-                noMatch: "Aún no se recibieron pagos.",
-              },
+      <Paper sx={{ p: 2 }}>
+        {loading ? (
+          <Box textAlign="center" mt={4}>
+            <CircularProgress />
+            <Typography mt={2}>Cargando pagos...</Typography>
+          </Box>
+        ) : (
+          <MaterialReactTable
+            columns={columns}
+            data={payments}
+            enablePagination
+            manualPagination
+            rowCount={totalItems}
+            pageCount={Math.ceil(totalItems / 20)}
+            onPaginationChange={(updater) => {
+              const newPage =
+                typeof updater === "function"
+                  ? updater({ pageIndex: page, pageSize: 20 }).pageIndex
+                  : updater.pageIndex;
+
+              setPage(newPage);
+            }}
+            state={{
               pagination: {
-                next: "Siguiente",
-                previous: "Anterior",
-                rowsPerPage: "Filas por página:",
-                displayRows: "de",
+                pageIndex: page,
+                pageSize: 20,
               },
-            },
-          }}
-        />
+            }}
+            muiPaginationProps={{
+              rowsPerPageOptions: [20],
+            }}
+            localization={{
+              noRecordsToDisplay: "No hay pagos para mostrar",
+            }}
+          />
+        )}
       </Paper>
     </Box>
   );

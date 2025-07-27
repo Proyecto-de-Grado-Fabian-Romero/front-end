@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Paper,
@@ -10,12 +12,18 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import MUIDataTable from "mui-datatables";
-import { SyncOutlined } from "@mui/icons-material";
+import {
+  CalendarToday,
+  Cancel,
+  CheckCircle,
+  HourglassEmpty,
+} from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { Tour360Request } from "@/types/Tour360Request";
 import { updateTour360Status } from "@/services/adminService";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import Link from "next/link";
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -30,17 +38,42 @@ type Props = {
   onPageChange: (value: number) => void;
 };
 
+const statusOptions = [
+  {
+    value: 0,
+    label: "Pendiente",
+    icon: <HourglassEmpty fontSize="small" sx={{ color: "#f57c00" }} />,
+    color: "#f57c00", // naranja
+  },
+  {
+    value: 1,
+    label: "Programado",
+    icon: <CalendarToday fontSize="small" sx={{ color: "#0288d1" }} />,
+    color: "#0288d1", // azul
+  },
+  {
+    value: 2,
+    label: "Completado",
+    icon: <CheckCircle fontSize="small" sx={{ color: "#2e7d32" }} />,
+    color: "#2e7d32", // verde
+  },
+  {
+    value: 3,
+    label: "Cancelado",
+    icon: <Cancel fontSize="small" sx={{ color: "#d32f2f" }} />,
+    color: "#d32f2f", // rojo
+  },
+];
+
 const Tour360RequestsTable = ({ requests, loading }: Props) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const router = useRouter();
-  const [statusLoadingId, setStatusLoadingId] = React.useState<string | null>(
-    null,
-  );
+  const [statusLoadingId, setStatusLoadingId] = useState<string | null>(null);
   const [localRequests, setLocalRequests] =
-    React.useState<Tour360Request[]>(requests);
+    useState<Tour360Request[]>(requests);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalRequests(requests);
   }, [requests]);
 
@@ -69,7 +102,6 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
   }
 
   if (isMobile) {
-    // ✅ Vista tipo tarjeta para móviles
     return (
       <Box display="flex" flexDirection="column" gap={2} mt={2}>
         {localRequests.map((req) => (
@@ -87,15 +119,33 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
                 value={req.status}
                 size="small"
                 fullWidth
-                startAdornment={<SyncOutlined fontSize="small" />}
                 onChange={(e) =>
                   handleStatusChange(req.publicId, Number(e.target.value))
                 }
+                renderValue={(selected) => {
+                  const option = statusOptions.find(
+                    (opt) => opt.value === selected,
+                  );
+                  return (
+                    <Box display="flex" alignItems="center" gap={1}>
+                      {option?.icon}
+                      <Typography sx={{ color: option?.color }}>
+                        {option?.label}
+                      </Typography>
+                    </Box>
+                  );
+                }}
               >
-                <MenuItem value={0}>Pendiente</MenuItem>
-                <MenuItem value={1}>Programado</MenuItem>
-                <MenuItem value={2}>Completado</MenuItem>
-                <MenuItem value={3}>Cancelado</MenuItem>
+                {statusOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      {option.icon}
+                      <Typography sx={{ color: option.color }}>
+                        {option.label}
+                      </Typography>
+                    </Box>
+                  </MenuItem>
+                ))}
               </Select>
             )}
 
@@ -133,109 +183,118 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
     );
   }
 
-  const columns = [
+  const columns: MRT_ColumnDef<Tour360Request>[] = [
     {
-      name: "environmentName",
-      label: "Ambiente",
-    },
-    {
-      name: "status",
-      label: "Estado",
-      options: {
-        customBodyRenderLite: (dataIndex: number) => {
-          const req = localRequests[dataIndex];
-          return statusLoadingId === req.publicId ? (
-            <CircularProgress size={24} />
-          ) : (
-            <Select
-              value={req.status}
-              size="small"
-              startAdornment={<SyncOutlined fontSize="small" />}
-              onChange={(e) =>
-                handleStatusChange(req.publicId, Number(e.target.value))
-              }
-            >
-              <MenuItem value={0}>Pendiente</MenuItem>
-              <MenuItem value={1}>Programado</MenuItem>
-              <MenuItem value={2}>Completado</MenuItem>
-              <MenuItem value={3}>Cancelado</MenuItem>
-            </Select>
-          );
-        },
+      header: "Ambiente",
+      accessorKey: "environmentName",
+      Cell: ({ row }) => {
+        const name = row.original.environmentName;
+        const id = row.original.environmentId;
+
+        return (
+          <Link
+            href={`${PageRoutes.Environment_Details}/${id}`}
+            style={{ color: "#000", textDecoration: "underline" }}
+          >
+            {name}
+          </Link>
+        );
       },
     },
     {
-      name: "requestDate",
-      label: "Fecha de Solicitud",
-      options: {
-        customBodyRender: (value: number) => formatDate(value),
+      header: "Estado",
+      accessorKey: "status",
+      Cell: ({ row }) => {
+        const req = row.original;
+        return statusLoadingId === req.publicId ? (
+          <CircularProgress size={24} />
+        ) : (
+          <Select
+            value={req.status}
+            size="small"
+            fullWidth
+            onChange={(e) =>
+              handleStatusChange(req.publicId, Number(e.target.value))
+            }
+            renderValue={(selected) => {
+              const option = statusOptions.find(
+                (opt) => opt.value === selected,
+              );
+              return (
+                <Box display="flex" alignItems="center" gap={1}>
+                  {option?.icon}
+                  <Typography sx={{ color: option?.color }}>
+                    {option?.label}
+                  </Typography>
+                </Box>
+              );
+            }}
+          >
+            {statusOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                <Box display="flex" alignItems="center" gap={1}>
+                  {option.icon}
+                  <Typography sx={{ color: option.color }}>
+                    {option.label}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Select>
+        );
       },
     },
     {
-      name: "scheduledDate",
-      label: "Fecha Programada",
-      options: {
-        customBodyRender: (value: number) => (value ? formatDate(value) : "-"),
+      header: "Fecha de Solicitud",
+      accessorKey: "requestDate",
+      Cell: ({ cell }) => formatDate(cell.getValue<number>()),
+    },
+    {
+      header: "Fecha Programada",
+      accessorKey: "scheduledDate",
+      Cell: ({ cell }) => {
+        const value = cell.getValue<number>();
+        return value ? formatDate(value) : "-";
       },
     },
     {
-      name: "action",
-      label: "Acción",
-      options: {
-        customBodyRenderLite: (dataIndex: number) => {
-          const req = localRequests[dataIndex];
-          return req.status <= 1 ? (
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() =>
-                router.push(
-                  `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`,
-                )
-              }
-            >
-              Añadir Recorrido
-            </Button>
-          ) : null;
-        },
+      header: "Acción",
+      Cell: ({ row }) => {
+        const req = row.original;
+        return req.status <= 1 ? (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() =>
+              router.push(
+                `${PageRoutes.Create_Virtual_Tour}?id=${req.publicId}&environmentId=${req.environmentId}`,
+              )
+            }
+          >
+            Añadir Recorrido
+          </Button>
+        ) : null;
       },
     },
   ];
 
   return (
-    <Box
-      sx={{
-        overflowX: "auto",
-        width: "100%",
-        marginBottom: "100px",
-        maxWidth: "100%",
-        overflowY: "visible",
-      }}
-    >
-      <MUIDataTable
-        title={"Solicitudes de Recorridos 360°"}
-        data={localRequests}
+    <Box sx={{ mt: 4, width: "100%" }}>
+      <Typography variant="h5" mb={2}>
+        Solicitudes de Recorridos 360°
+      </Typography>
+      <MaterialReactTable
         columns={columns}
-        options={{
-          selectableRows: "none",
-          rowsPerPage: 10,
-          rowsPerPageOptions: [],
-          search: false,
-          download: false,
-          print: false,
-          viewColumns: false,
-          filter: false,
-          textLabels: {
-            body: {
-              noMatch: "No hay solicitudes encontradas.",
-            },
-            pagination: {
-              next: "Siguiente",
-              previous: "Anterior",
-              rowsPerPage: "Filas por página:",
-              displayRows: "de",
-            },
-          },
+        data={localRequests}
+        enablePagination
+        manualPagination
+        rowCount={localRequests.length}
+        pageCount={Math.ceil(localRequests.length / 10)}
+        muiPaginationProps={{
+          rowsPerPageOptions: [10],
+        }}
+        localization={{
+          noRecordsToDisplay: "No hay solicitudes encontradas.",
         }}
       />
     </Box>

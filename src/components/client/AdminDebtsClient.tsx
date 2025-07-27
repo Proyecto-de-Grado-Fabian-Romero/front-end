@@ -3,36 +3,32 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  CircularProgress,
-  Paper,
   Typography,
+  Paper,
+  CircularProgress,
   Button,
 } from "@mui/material";
-import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { getDebts, markDebtAsPaid } from "@/services/adminService";
+import { AdminDebt } from "@/types/Payments";
 import DebtDetailsModal from "@/components/modal/DebtDetailsModal";
 import MarkDebtModal from "@/components/modal/MakDebtModal";
-import { AdminDebt } from "@/types/Payments";
-import { useRouter } from "next/navigation";
-import { PageRoutes } from "@/utils/constants/page-routes";
 
 const AdminDebtsClient = () => {
   const [debts, setDebts] = useState<AdminDebt[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(0);
   const [selectedDebtId, setSelectedDebtId] = useState<string | null>(null);
-  const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
-  const [openMarkAsPaidModal, setOpenMarkAsPaidModal] =
-    useState<boolean>(false);
-  const [paymentReference, setPaymentReference] = useState<string>("");
-
-  const router = useRouter();
+  const [openDetailsModal, setOpenDetailsModal] = useState(false);
+  const [openMarkAsPaidModal, setOpenMarkAsPaidModal] = useState(false);
+  const [paymentReference, setPaymentReference] = useState("");
 
   useEffect(() => {
     const fetchDebts = async () => {
       try {
-        const data = await getDebts(page, 20);
+        const data = await getDebts(page + 1, 20);
         setDebts(data.items);
         setTotalItems(data.totalItems);
       } catch {
@@ -41,11 +37,12 @@ const AdminDebtsClient = () => {
         setLoading(false);
       }
     };
+
     fetchDebts();
   }, [page]);
 
-  const handleOpenDetailsModal = (debtId: string) => {
-    setSelectedDebtId(debtId);
+  const handleOpenDetailsModal = (id: string) => {
+    setSelectedDebtId(id);
     setOpenDetailsModal(true);
   };
 
@@ -54,8 +51,8 @@ const AdminDebtsClient = () => {
     setSelectedDebtId(null);
   };
 
-  const handleOpenMarkAsPaidModal = (debtId: string) => {
-    setSelectedDebtId(debtId);
+  const handleOpenMarkAsPaidModal = (id: string) => {
+    setSelectedDebtId(id);
     setOpenMarkAsPaidModal(true);
   };
 
@@ -70,115 +67,96 @@ const AdminDebtsClient = () => {
       await markDebtAsPaid(selectedDebtId as string, paymentReference);
       alert("Deuda marcada como pagada y el pago registrado.");
       handleCloseMarkAsPaidModal();
-    } catch (error) {
-      console.error("Error marking debt as paid:", error);
+    } catch {
       alert("Error al marcar la deuda como pagada.");
     }
   };
 
-  const handleNavigateToPayments = () => {
-    router.push(PageRoutes.Admin_Payments);
-  };
-
-  if (loading) return <CircularProgress />;
-
-  const columns: MUIDataTableColumnDef[] = [
+  const columns: MRT_ColumnDef<AdminDebt>[] = [
     {
-      name: "ownerName",
-      label: "Propietario",
+      header: "Propietario",
+      accessorKey: "ownerName",
     },
     {
-      name: "totalAmount",
-      label: "Monto a Pagar",
-      options: {
-        customBodyRender: (value: number) => `Bs. ${value}`,
-      },
+      header: "Monto a Pagar",
+      accessorKey: "totalAmount",
+      Cell: ({ cell }) => `Bs. ${cell.getValue<number>()}`,
     },
     {
-      name: "updatedAt",
-      label: "Fecha de Actualización",
-      options: {
-        customBodyRender: (value: string) =>
-          new Date(value).toLocaleDateString(),
-      },
+      header: "Fecha de Actualización",
+      accessorKey: "updatedAt",
+      Cell: ({ cell }) =>
+        new Date(cell.getValue<string>()).toLocaleDateString(),
     },
     {
-      name: "actions",
-      label: "Acciones",
-      options: {
-        customBodyRenderLite: (dataIndex: number) => {
-          const debt = debts[dataIndex];
-          return (
-            <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleOpenDetailsModal(debt.id)}
-              >
-                Ver Detalles
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ ml: 2 }}
-                onClick={() => handleOpenMarkAsPaidModal(debt.id)}
-              >
-                Marcar como Pagado
-              </Button>
-            </>
-          );
-        },
+      header: "Acciones",
+      accessorKey: "id",
+      Cell: ({ cell }) => {
+        const id = cell.getValue<string>();
+        return (
+          <Box display="flex" gap={1}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleOpenDetailsModal(id)}
+            >
+              Ver Detalles
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              color="secondary"
+              onClick={() => handleOpenMarkAsPaidModal(id)}
+            >
+              Marcar como Pagado
+            </Button>
+          </Box>
+        );
       },
     },
   ];
 
   return (
-    <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
-      <Box sx={{ mb: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNavigateToPayments}
-        >
-          Ver Pagos Realizados
-        </Button>
-      </Box>
-
+    <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4, width: "100%" }}>
       <Typography variant="h5" mb={2}>
         Deudas Pendientes
       </Typography>
 
-      <MUIDataTable
-        title=""
-        data={debts}
-        columns={columns}
-        options={{
-          selectableRows: "none",
-          rowsPerPage: 20,
-          count: totalItems,
-          page: page - 1,
-          onChangePage: (currentPage) => setPage(currentPage + 1),
-          pagination: true,
-          rowsPerPageOptions: [],
-          search: false,
-          download: false,
-          print: false,
-          viewColumns: false,
-          filter: false,
-          responsive: "standard",
-          textLabels: {
-            body: {
-              noMatch: "No hay deudas pendientes.",
-            },
+      {loading ? (
+        <Box textAlign="center" mt={4}>
+          <CircularProgress />
+          <Typography mt={2}>Cargando deudas...</Typography>
+        </Box>
+      ) : (
+        <MaterialReactTable
+          columns={columns}
+          data={debts}
+          enablePagination
+          manualPagination
+          rowCount={totalItems}
+          pageCount={Math.ceil(totalItems / 20)}
+          onPaginationChange={(updater) => {
+            const newPage =
+              typeof updater === "function"
+                ? updater({ pageIndex: page, pageSize: 20 }).pageIndex
+                : updater.pageIndex;
+            setPage(newPage);
+          }}
+          state={{
             pagination: {
-              next: "Siguiente",
-              previous: "Anterior",
-              rowsPerPage: "Filas por página:",
-              displayRows: "de",
+              pageIndex: page,
+              pageSize: 20,
             },
-          },
-        }}
-      />
+          }}
+          muiPaginationProps={{
+            rowsPerPageOptions: [20],
+          }}
+          localization={{
+            ...MRT_Localization_ES,
+            noRecordsToDisplay: "No hay deudas pendientes.",
+          }}
+        />
+      )}
 
       <DebtDetailsModal
         open={openDetailsModal}

@@ -1,30 +1,37 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Paper, Typography, Button } from "@mui/material";
-import MUIDataTable, { MUIDataTableColumnDef } from "mui-datatables";
+import {
+  Box,
+  Typography,
+  Paper,
+  CircularProgress,
+  Button,
+} from "@mui/material";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { getPayments } from "@/services/adminService";
 import PaymentDetailsModal from "@/components/modal/PaymentDetailsModal";
 import { AdminPayment } from "@/types/Payments";
 
 const AdminPayments = () => {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(0);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
     null,
   );
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const data = await getPayments(page, 20);
+        const data = await getPayments(page + 1, 20);
         setPayments(data.items);
         setTotalItems(data.totalItems);
       } catch {
-        alert("Hubo un error obteniendo los pagos, recarga la página.");
+        alert("Hubo un error obteniendo los pagos.");
       } finally {
         setLoading(false);
       }
@@ -32,100 +39,95 @@ const AdminPayments = () => {
     fetchPayments();
   }, [page]);
 
-  const handleOpenModal = (paymentId: string) => {
-    setSelectedPaymentId(paymentId);
+  const handleOpenModal = (id: string) => {
+    setSelectedPaymentId(id);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
     setSelectedPaymentId(null);
+    setOpenModal(false);
   };
 
-  if (loading) return <CircularProgress />;
-
-  const columns: MUIDataTableColumnDef[] = [
+  const columns: MRT_ColumnDef<AdminPayment>[] = [
     {
-      name: "ownerName",
-      label: "Propietario",
+      header: "Propietario",
+      accessorKey: "ownerName",
     },
     {
-      name: "amountPaid",
-      label: "Monto Pagado",
+      header: "Monto Pagado",
+      accessorKey: "amountPaid",
     },
     {
-      name: "currency",
-      label: "Moneda",
+      header: "Moneda",
+      accessorKey: "currency",
     },
     {
-      name: "reference",
-      label: "Referencia",
+      header: "Referencia",
+      accessorKey: "reference",
     },
     {
-      name: "createdAt",
-      label: "Fecha de Creación",
-      options: {
-        customBodyRender: (value: string) =>
-          new Date(value).toLocaleDateString(),
-      },
+      header: "Fecha de Creación",
+      accessorKey: "createdAt",
+      Cell: ({ cell }) =>
+        new Date(cell.getValue<string>()).toLocaleDateString(),
     },
     {
-      name: "actions",
-      label: "Acciones",
-      options: {
-        customBodyRenderLite: (dataIndex: number) => {
-          const payment = payments[dataIndex];
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleOpenModal(payment.id)}
-            >
-              Ver Detalles
-            </Button>
-          );
-        },
-      },
+      header: "Acciones",
+      accessorKey: "id",
+      Cell: ({ cell }) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleOpenModal(cell.getValue<string>())}
+        >
+          Ver Detalles
+        </Button>
+      ),
     },
   ];
 
   return (
-    <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
+    <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4, width: "100%" }}>
       <Typography variant="h5" mb={2}>
         Pagos Realizados
       </Typography>
 
-      <MUIDataTable
-        title=""
-        data={payments}
-        columns={columns}
-        options={{
-          selectableRows: "none",
-          responsive: "standard",
-          rowsPerPage: 20,
-          count: totalItems,
-          page: page - 1,
-          onChangePage: (currentPage) => setPage(currentPage + 1),
-          pagination: true,
-          rowsPerPageOptions: [],
-          search: false,
-          download: false,
-          print: false,
-          viewColumns: false,
-          filter: false,
-          textLabels: {
-            body: {
-              noMatch: "No hay pagos registrados.",
-            },
+      {loading ? (
+        <Box textAlign="center" mt={4}>
+          <CircularProgress />
+          <Typography mt={2}>Cargando pagos...</Typography>
+        </Box>
+      ) : (
+        <MaterialReactTable
+          columns={columns}
+          data={payments}
+          enablePagination
+          manualPagination
+          rowCount={totalItems}
+          pageCount={Math.ceil(totalItems / 20)}
+          onPaginationChange={(updater) => {
+            const newPage =
+              typeof updater === "function"
+                ? updater({ pageIndex: page, pageSize: 20 }).pageIndex
+                : updater.pageIndex;
+            setPage(newPage);
+          }}
+          state={{
             pagination: {
-              next: "Siguiente",
-              previous: "Anterior",
-              rowsPerPage: "Filas por página:",
-              displayRows: "de",
+              pageIndex: page,
+              pageSize: 20,
             },
-          },
-        }}
-      />
+          }}
+          muiPaginationProps={{
+            rowsPerPageOptions: [20],
+          }}
+          localization={{
+            ...MRT_Localization_ES,
+            noRecordsToDisplay: "No hay pagos registrados.",
+          }}
+        />
+      )}
 
       <PaymentDetailsModal
         open={openModal}
