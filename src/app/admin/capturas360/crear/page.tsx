@@ -1,6 +1,6 @@
 "use client";
 
-import { Container } from "@mui/material";
+import { Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Upload360ImagesForm from "@/components/form/Upload360ImagesForm";
@@ -9,6 +9,7 @@ import CreateVirtualTourForm from "@/components/form/virtualTour/CreateVirtualTo
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
 
 const CreateVirtualTourPage = () => {
   const searchParams = useSearchParams();
@@ -38,7 +39,10 @@ const CreateVirtualTourPage = () => {
   }, [searchParams, environmentId]);
 
   return (
-    <Container maxWidth={false} sx={{ py: 4 }}>
+    <CenteredLayout>
+      <Typography mb={4} mt={4} variant="h1">
+        Subir Recorrido 360
+      </Typography>
       {publicId && uploadResults.length === 0 && (
         <Upload360ImagesForm
           onUploadComplete={(results) => setUploadResults(results)}
@@ -51,7 +55,7 @@ const CreateVirtualTourPage = () => {
           environmentPublicId={environmentId ?? ""}
         />
       )}
-    </Container>
+    </CenteredLayout>
   );
 };
 

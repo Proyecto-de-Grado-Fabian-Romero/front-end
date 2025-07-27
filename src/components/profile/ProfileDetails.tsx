@@ -16,6 +16,7 @@ import { UserState as User, UserRole } from "@/types/Users";
 import EditProfileModal from "../modal/EditProfileModal";
 import RentPromptSection from "@/sections/home/RentPromptSection";
 import BankPaymentModal from "../modal/BankPaymentModal";
+import LogoutButton from "../buttons/LogOutButton";
 
 interface Props {
   user: User;
@@ -108,6 +109,8 @@ export default function ProfileDetails({ user }: Props) {
         onClose={() => setOpenEditModal(false)}
         defaultValues={user}
       />
+
+      <LogoutButton />
     </Box>
   );
 }

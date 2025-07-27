@@ -1,42 +1,37 @@
-// components/client/AdminPayments.tsx (client component)
 "use client";
 
 import React, { useEffect, useState } from "react";
 import {
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Pagination,
-  Paper,
+  Box,
   Typography,
+  Paper,
+  CircularProgress,
   Button,
-  TableContainer,
 } from "@mui/material";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { getPayments } from "@/services/adminService";
 import PaymentDetailsModal from "@/components/modal/PaymentDetailsModal";
 import { AdminPayment } from "@/types/Payments";
 
 const AdminPayments = () => {
   const [payments, setPayments] = useState<AdminPayment[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(0);
   const [selectedPaymentId, setSelectedPaymentId] = useState<string | null>(
     null,
   );
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const data = await getPayments(page, 20);
+        const data = await getPayments(page + 1, 20);
         setPayments(data.items);
         setTotalItems(data.totalItems);
       } catch {
-        alert("Hubo un error obteniendo los pagos, recarga la página.");
+        alert("Hubo un error obteniendo los pagos.");
       } finally {
         setLoading(false);
       }
@@ -44,74 +39,102 @@ const AdminPayments = () => {
     fetchPayments();
   }, [page]);
 
-  const handleOpenModal = (paymentId: string) => {
-    setSelectedPaymentId(paymentId);
+  const handleOpenModal = (id: string) => {
+    setSelectedPaymentId(id);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
     setSelectedPaymentId(null);
+    setOpenModal(false);
   };
 
-  if (loading) return <CircularProgress />;
+  const columns: MRT_ColumnDef<AdminPayment>[] = [
+    {
+      header: "Propietario",
+      accessorKey: "ownerName",
+    },
+    {
+      header: "Monto Pagado",
+      accessorKey: "amountPaid",
+    },
+    {
+      header: "Moneda",
+      accessorKey: "currency",
+    },
+    {
+      header: "Referencia",
+      accessorKey: "reference",
+    },
+    {
+      header: "Fecha de Creación",
+      accessorKey: "createdAt",
+      Cell: ({ cell }) =>
+        new Date(cell.getValue<string>()).toLocaleDateString(),
+    },
+    {
+      header: "Acciones",
+      accessorKey: "id",
+      Cell: ({ cell }) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => handleOpenModal(cell.getValue<string>())}
+        >
+          Ver Detalles
+        </Button>
+      ),
+    },
+  ];
 
   return (
-    <>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
-          <Typography variant="h5">Pagos Realizados</Typography>
-          <TableContainer></TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Propietario</TableCell>
-                <TableCell>Monto Pagado</TableCell>
-                <TableCell>Moneda</TableCell>
-                <TableCell>Referencia</TableCell>
-                <TableCell>Fecha de Creación</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {payments.map((payment) => (
-                <TableRow key={payment.id}>
-                  <TableCell>{payment.ownerName}</TableCell>
-                  <TableCell>{payment.amountPaid}</TableCell>
-                  <TableCell>{payment.currency}</TableCell>
-                  <TableCell>{payment.reference}</TableCell>
-                  <TableCell>
-                    {new Date(payment.createdAt).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleOpenModal(payment.id)}
-                    >
-                      Ver Detalles
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          <Pagination
-            count={Math.ceil(totalItems / 20)}
-            page={page}
-            onChange={(event, value) => setPage(value)}
-          />
+    <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4, width: "100%" }}>
+      <Typography variant="h5" mb={2}>
+        Pagos Realizados
+      </Typography>
 
-          <PaymentDetailsModal
-            open={openModal}
-            onClose={handleCloseModal}
-            paymentId={selectedPaymentId}
-          />
-        </Paper>
+      {loading ? (
+        <Box textAlign="center" mt={4}>
+          <CircularProgress />
+          <Typography mt={2}>Cargando pagos...</Typography>
+        </Box>
+      ) : (
+        <MaterialReactTable
+          columns={columns}
+          data={payments}
+          enablePagination
+          manualPagination
+          rowCount={totalItems}
+          pageCount={Math.ceil(totalItems / 20)}
+          onPaginationChange={(updater) => {
+            const newPage =
+              typeof updater === "function"
+                ? updater({ pageIndex: page, pageSize: 20 }).pageIndex
+                : updater.pageIndex;
+            setPage(newPage);
+          }}
+          state={{
+            pagination: {
+              pageIndex: page,
+              pageSize: 20,
+            },
+          }}
+          muiPaginationProps={{
+            rowsPerPageOptions: [20],
+          }}
+          localization={{
+            ...MRT_Localization_ES,
+            noRecordsToDisplay: "No hay pagos registrados.",
+          }}
+        />
       )}
-    </>
+
+      <PaymentDetailsModal
+        open={openModal}
+        onClose={handleCloseModal}
+        paymentId={selectedPaymentId}
+      />
+    </Paper>
   );
 };
 

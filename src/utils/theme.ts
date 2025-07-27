@@ -305,6 +305,8 @@ const theme = createTheme({
         root: {
           backgroundColor: ColorPalette.BACKGROUND,
           color: ColorPalette.NEUTRAL_BLACK,
+          tableLayout: "auto", // or "fixed"
+          minWidth: 600,
         },
       },
     },
@@ -312,6 +314,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+          whiteSpace: "nowrap", // prevents wrapping
         },
         head: {
           fontWeight: 600,
@@ -480,6 +483,14 @@ const theme = createTheme({
           paddingLeft: "6px",
           boxShadow: "0px 1px 4px rgba(0, 0, 0, 0.25)",
           background: ColorPalette.NEUTRAL_WHITE,
+        },
+      },
+    },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          overflowX: "auto",
+          width: "100%",
         },
       },
     },

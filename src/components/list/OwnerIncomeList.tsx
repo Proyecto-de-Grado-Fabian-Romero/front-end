@@ -2,34 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Card,
   Box,
-  Typography,
-  Pagination,
   CircularProgress,
+  Typography,
+  Paper,
   Button,
 } from "@mui/material";
-import { getIncomeList } from "../../services/ownerPaymentService";
+import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import { getIncomeList } from "@/services/ownerPaymentService";
 import { IncomeDetail } from "@/types/Payments";
 import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 
 const OwnerIncomeList = () => {
   const [incomes, setIncomes] = useState<IncomeDetail[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [loading, setLoading] = useState(true);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = useState(0); // 0-based index
+  const router = useRouter();
 
   useEffect(() => {
     const fetchIncomes = async () => {
       try {
-        const data = await getIncomeList(page, 20);
+        const data = await getIncomeList(page + 1, 20);
         setIncomes(data.items);
         setTotalItems(data.totalItems);
       } catch {
@@ -38,67 +35,88 @@ const OwnerIncomeList = () => {
         setLoading(false);
       }
     };
+
     fetchIncomes();
   }, [page]);
 
-  if (loading) {
-    return (
-      <Box display="flex" flexDirection="column" alignItems="center" mt={5}>
-        <CircularProgress />
-        <Typography mt={2}>Cargando ingresos...</Typography>
-      </Box>
-    );
-  }
+  const columns: MRT_ColumnDef<IncomeDetail>[] = [
+    {
+      header: "Monto",
+      accessorKey: "amount",
+      Cell: ({ cell }) => `Bs. ${cell.getValue<number>()}`,
+    },
+    {
+      header: "Moneda",
+      accessorKey: "currency",
+    },
+    {
+      header: "Fecha Generada",
+      accessorKey: "generatedAt",
+      Cell: ({ cell }) =>
+        new Date(cell.getValue<string>()).toLocaleDateString(),
+    },
+    {
+      header: "Acciones",
+      accessorKey: "id",
+      Cell: ({ cell }) => (
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={() =>
+            router.push(`${PageRoutes.Incomes}/${cell.getValue<string>()}`)
+          }
+        >
+          Ver Detalles
+        </Button>
+      ),
+    },
+  ];
 
   return (
-    <Box>
+    <Box sx={{ width: "100%" }}>
       <OwnerPaymentDashboard />
+
       <Typography variant="h5" gutterBottom mb={4} mt={6}>
         Lista de Ingresos
       </Typography>
-      <Card>
-        <Box p={2}>
-          {incomes.length === 0 ? (
-            <Typography variant="subtitle1">Aún no tienes ingresos.</Typography>
-          ) : (
-            <>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Monto</TableCell>
-                    <TableCell>Fecha Generada</TableCell>
-                    <TableCell>Acciones</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {incomes.map((income) => (
-                    <TableRow key={income.reservationId}>
-                      <TableCell>Bs. {income.amount}</TableCell>
-                      <TableCell>{income.currency}</TableCell>
-                      <TableCell>
-                        {new Date(income.generatedAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        <Link href={`${PageRoutes.Incomes}/${income.id}`}>
-                          <Button>Ver Detalles</Button>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
 
-              <Box display="flex" justifyContent="center" mt={2}>
-                <Pagination
-                  count={Math.ceil(totalItems / 20)}
-                  page={page}
-                  onChange={(_, value) => setPage(value)}
-                />
-              </Box>
-            </>
-          )}
-        </Box>
-      </Card>
+      <Paper sx={{ p: 2 }}>
+        {loading ? (
+          <Box textAlign="center" mt={4}>
+            <CircularProgress />
+            <Typography mt={2}>Cargando ingresos...</Typography>
+          </Box>
+        ) : (
+          <MaterialReactTable
+            columns={columns}
+            data={incomes}
+            enablePagination
+            manualPagination
+            rowCount={totalItems}
+            pageCount={Math.ceil(totalItems / 20)}
+            onPaginationChange={(updater) => {
+              const newPage =
+                typeof updater === "function"
+                  ? updater({ pageIndex: page, pageSize: 20 }).pageIndex
+                  : updater.pageIndex;
+              setPage(newPage);
+            }}
+            state={{
+              pagination: {
+                pageIndex: page,
+                pageSize: 20,
+              },
+            }}
+            muiPaginationProps={{
+              rowsPerPageOptions: [20],
+            }}
+            localization={{
+              ...MRT_Localization_ES,
+              noRecordsToDisplay: "Aún no tienes ingresos.",
+            }}
+          />
+        )}
+      </Paper>
     </Box>
   );
 };

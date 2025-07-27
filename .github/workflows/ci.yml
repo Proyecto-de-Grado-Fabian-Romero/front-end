@@ -25,7 +25,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run Prettier
         run: npm run prettier:check
@@ -51,7 +51,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run ESLint
         run: npm run lint
@@ -77,7 +77,7 @@ jobs:
             npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Run TypeScript check
         run: npm run type-check

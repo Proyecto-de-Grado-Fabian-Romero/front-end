@@ -34,7 +34,6 @@ const ClientTour360RequestsPage = () => {
       setLoading(true);
       try {
         const data = await getTour360Requests(page, limit, statusFilter);
-        console.log(data);
         setRequests(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
@@ -65,8 +64,14 @@ const ClientTour360RequestsPage = () => {
   };
 
   return (
-    <Container maxWidth={false} sx={{ py: 4 }}>
-      <Typography variant="h4" mb={4} mt={5}>
+    <Container
+      maxWidth={false}
+      sx={{
+        py: 4,
+        minHeight: "100vh",
+      }}
+    >
+      <Typography variant="h4" mb={4} mt={8}>
         Solicitudes de Tour 360
       </Typography>
 
@@ -84,6 +89,7 @@ const ClientTour360RequestsPage = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+      <div style={{ marginBottom: "400px" }}></div>
     </Container>
   );
 };

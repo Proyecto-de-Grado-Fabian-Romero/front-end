@@ -17,6 +17,7 @@ import {
 import { validatePassword } from "@/utils/methods/validations";
 import PasswordField from "../inputs/field/PasswordField";
 import Image from "next/image";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const RestorePasswordClient = () => {
   const [email, setEmail] = useState("");
@@ -62,7 +63,7 @@ const RestorePasswordClient = () => {
     try {
       await confirmRestorePassword(email, code, newPassword);
       setMensaje("Contraseña restablecida con éxito. Puedes iniciar sesión.");
-      setTimeout(() => router.push("/login"), 2000);
+      setTimeout(() => router.push(PageRoutes.LogIn), 2000);
     } catch {
       setError(
         "El código es inválido o la contraseña no cumple los requisitos.",
@@ -90,6 +91,7 @@ const RestorePasswordClient = () => {
     <Box
       display="flex"
       flexDirection="column"
+      alignItems={"center"}
       component="form"
       onSubmit={(e) => {
         e.preventDefault();
