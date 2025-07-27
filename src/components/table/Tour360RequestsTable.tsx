@@ -133,7 +133,6 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
     );
   }
 
-  // ✅ Tabla para pantallas grandes
   const columns = [
     {
       name: "environmentName",
