@@ -61,7 +61,11 @@ export default function ProfileSidebarActions() {
               Pagos Recibidos
             </Button>
             <Button
-              variant="outlined"
+              variant={
+                isCurrent(PageRoutes.Update_Bank_Data)
+                  ? "contained"
+                  : "outlined"
+              }
               fullWidth
               startIcon={<AccountBalanceIcon />}
               onClick={() => router.push(PageRoutes.Update_Bank_Data)}

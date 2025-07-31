@@ -67,12 +67,12 @@ const ClientTour360RequestsPage = () => {
     <Container
       maxWidth={false}
       sx={{
-        py: 4,
+        py: 6,
         minHeight: "100vh",
       }}
     >
       <Typography variant="h4" mb={4} mt={8}>
-        Solicitudes de Tour 360
+        Solicitudes de Capturas 360
       </Typography>
 
       <Box mb={4} display="flex" justifyContent="flex-end">
@@ -89,7 +89,7 @@ const ClientTour360RequestsPage = () => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-      <div style={{ marginBottom: "400px" }}></div>
+      <br />
     </Container>
   );
 };

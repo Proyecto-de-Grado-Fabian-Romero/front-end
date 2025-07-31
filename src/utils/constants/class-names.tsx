@@ -8,14 +8,14 @@ import SinkIcon from "@mui/icons-material/Wash";
 import FridgeIcon from "@mui/icons-material/Kitchen";
 import BreakfastDiningIcon from "@mui/icons-material/BreakfastDining";
 import { JSX } from "react";
-import { Cookie, EventSeat } from "@mui/icons-material";
+import { Bathroom, Cookie, EventSeat } from "@mui/icons-material";
 
 export const OBJECT_ICONS: Record<string, JSX.Element> = {
   "56": <EventSeat />,
   "57": <WeekendIcon />,
   "59": <BedIcon />,
   "60": <DiningIcon />,
-  "61": <ToiletIcon />,
+  "61": <Bathroom />,
   "62": <TvIcon />,
   "68": <MicrowaveIcon />,
   "69": <Cookie />,

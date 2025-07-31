@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -21,8 +21,13 @@ import ImagesForm from "./ImagesForm";
 import PricingPoliciesForm from "./PricingPoliciesForm";
 import DiscountPoliciesForm from "./DiscountPoliciesForm";
 import WeeklySchedulesForm from "./WeeklySchedulesForm";
+import { Environment } from "@/types/GetEnvironment";
 
-const CreateEnvironmentForm = () => {
+type Props = {
+  initialData?: Environment;
+};
+
+const CreateEnvironmentForm: React.FC<Props> = ({ initialData }) => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<FormDataCreateEnv>({
@@ -47,13 +52,40 @@ const CreateEnvironmentForm = () => {
     rentalUnit: "Horas",
   });
 
+  useEffect(() => {
+    if (initialData) {
+      console.log(initialData);
+      setFormData(()=> ({
+        title: initialData.title,
+        description: initialData.description,
+        location: initialData.location,
+        latitude: initialData.latitude,
+        longitude: initialData.longitude,
+        typePublicKey: initialData.type.publicKey,
+        servicePublicKeys: initialData.services.map((s) => s.publicKey),
+        areas: [],
+        images: [],
+        equipment: initialData.equipment,
+        pricingPolicies: [],
+        discountPolicies: [],
+        weeklySchedules: [],
+        request360Tour: !!initialData.tour360Id,
+        capacity: initialData.capacity,
+        instantBooking: initialData.instantBooking,
+        minRentalTime: initialData.minRentalTime,
+        maxRentalTime: initialData.maxRentalTime,
+        rentalUnit: initialData.rentalUnit,
+      }));
+    }
+  }, [initialData]);
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFormData((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -141,7 +173,7 @@ const CreateEnvironmentForm = () => {
       sx={{ py: 4, px: { xs: 0, md: 6, lg: 24 }, width: "100%" }}
     >
       <Typography variant="h5" mb={4} textAlign={"center"}>
-        Crear Nuevo Ambiente
+        {initialData ? "Editar Ambiente" : "Crear Nuevo Ambiente"}
       </Typography>
 
       <Grid container spacing={10}>

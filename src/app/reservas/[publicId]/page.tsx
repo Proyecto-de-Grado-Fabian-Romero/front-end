@@ -23,6 +23,7 @@ import { PageRoutes } from "@/utils/constants/page-routes";
 import ConfirmReservationDialog from "@/components/modal/ConfirmReservationDialog";
 import EnvironmentReservationCard from "@/components/card/EnvironmentReservationCard";
 import ReservationStatusChip from "@/components/chip/ReservationStatusChip";
+import CenteredLayout from "@/components/layouts/CenteredLayout";
 
 const getLatestEndDate = (reservation: ReservationResponse | null): number => {
   return reservation
@@ -41,7 +42,7 @@ const ReservationDetailPage = () => {
   }, [router, userRole]);
 
   const [reservation, setReservation] = useState<ReservationResponse | null>(
-    null,
+    null
   );
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
@@ -85,14 +86,14 @@ const ReservationDetailPage = () => {
         await updateReservationStatus(reservation.publicId, newStatus);
       } else {
         const start = Math.min(
-          ...reservation.timeRanges.map((r) => r.startDate),
+          ...reservation.timeRanges.map((r) => r.startDate)
         );
         const end = Math.max(...reservation.timeRanges.map((r) => r.endDate));
 
         const conflicts = await checkReservationConflicts(
           reservation.environmentId,
           start,
-          end,
+          end
         );
 
         if (conflicts) {
@@ -102,7 +103,7 @@ const ReservationDetailPage = () => {
         }
       }
       setSuccessMessage(
-        `Reserva ${newStatus === "confirmed" ? "confirmada" : "rechazada"} correctamente`,
+        `Reserva ${newStatus === "confirmed" ? "confirmada" : "rechazada"} correctamente`
       );
       setReservation({ ...reservation, status: newStatus });
     } catch {
@@ -123,76 +124,78 @@ const ReservationDetailPage = () => {
   const isOwner = reservation.ownerId === userId;
 
   return (
-    <Box mt={4} px={2}>
-      <Typography variant="h5" gutterBottom>
-        Detalle de Reserva
-      </Typography>
+    <CenteredLayout>
+      <Box mt={4} px={2}>
+        <Typography variant="h5" gutterBottom mb={4}>
+          Detalle de Reserva
+        </Typography>
 
-      <EnvironmentReservationCard reservation={reservation} />
+        <EnvironmentReservationCard reservation={reservation} />
 
-      <Typography>
-        {reservation.timeRanges.map((r) => {
-          const start = moment(r.startDate);
-          const end = moment(r.endDate);
-          const isHospedaje = reservation.rentalUnit === "Días";
+        <Typography>
+          {reservation.timeRanges.map((r) => {
+            const start = moment(r.startDate);
+            const end = moment(r.endDate);
+            const isHospedaje = reservation.rentalUnit === "Días";
 
-          return isHospedaje
-            ? `${start.format("DD MMM")} → ${end.format("DD MMM")}`
-            : `${start.format("DD MMM HH:mm")} → ${end.format("HH:mm")}`;
-        })}
-      </Typography>
+            return isHospedaje
+              ? `${start.format("DD MMM")} → ${end.format("DD MMM")}`
+              : `${start.format("DD MMM HH:mm")} → ${end.format("HH:mm")}`;
+          })}
+        </Typography>
 
-      <Typography sx={{ mt: 1 }}>
-        Total:{" "}
-        <b>
-          {reservation.currency} {reservation.totalPrice.toFixed(2)}
-        </b>
-      </Typography>
+        <Typography sx={{ mt: 1 }}>
+          Total:{" "}
+          <b>
+            {reservation.currency} {reservation.totalPrice.toFixed(2)}
+          </b>
+        </Typography>
 
-      <ReservationStatusChip reservation={reservation} />
+        <ReservationStatusChip reservation={reservation} />
 
-      <ConfirmReservationDialog
-        open={showDialog}
-        onClose={() => setShowDialog(false)}
-        onConfirm={async () => {
-          setShowDialog(false);
-          await updateReservationStatus(reservation.publicId, "confirmed");
-        }}
-      />
+        <ConfirmReservationDialog
+          open={showDialog}
+          onClose={() => setShowDialog(false)}
+          onConfirm={async () => {
+            setShowDialog(false);
+            await updateReservationStatus(reservation.publicId, "confirmed");
+          }}
+        />
 
-      {isOwner && reservation.status === "pending" && !isExpired && (
-        <Box mt={3}>
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ mr: 1 }}
-            onClick={() => handleStatusChange("confirmed")}
-            disabled={updatingStatus}
-          >
-            {updatingStatus ? "Actualizando..." : "Confirmar"}
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => handleStatusChange("rejected")}
-            disabled={updatingStatus}
-          >
-            {updatingStatus ? "Actualizando..." : "Rechazar"}
-          </Button>
-        </Box>
-      )}
+        {isOwner && reservation.status === "pending" && !isExpired && (
+          <Box mt={3}>
+            <Button
+              variant="contained"
+              color="success"
+              sx={{ mr: 1 }}
+              onClick={() => handleStatusChange("confirmed")}
+              disabled={updatingStatus}
+            >
+              {updatingStatus ? "Actualizando..." : "Confirmar"}
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => handleStatusChange("rejected")}
+              disabled={updatingStatus}
+            >
+              {updatingStatus ? "Actualizando..." : "Rechazar"}
+            </Button>
+          </Box>
+        )}
 
-      <Snackbar
-        open={!!successMessage}
-        autoHideDuration={3000}
-        onClose={() => setSuccessMessage(null)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert severity="success" onClose={() => setSuccessMessage(null)}>
-          {successMessage}
-        </Alert>
-      </Snackbar>
-    </Box>
+        <Snackbar
+          open={!!successMessage}
+          autoHideDuration={3000}
+          onClose={() => setSuccessMessage(null)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity="success" onClose={() => setSuccessMessage(null)}>
+            {successMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </CenteredLayout>
   );
 };
 

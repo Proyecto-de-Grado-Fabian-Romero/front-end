@@ -51,7 +51,7 @@ export type Environment = {
     publicKey: string;
   };
   photos: Photo[];
-  rentalUnit: string;
+  rentalUnit: "Horas" | "Días";
   services: Service[];
   environmentAreas: AreaItem[];
   equipment: string;

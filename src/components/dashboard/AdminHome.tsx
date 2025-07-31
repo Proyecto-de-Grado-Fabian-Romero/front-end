@@ -10,18 +10,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import ImageIcon from "@mui/icons-material/Image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import { PanoramaHorizontal } from "@mui/icons-material";
 
 const AdminHome = () => {
   const router = useRouter();
 
   const menuItems = [
     {
-      label: "Capturas",
-      icon: <ImageIcon fontSize="large" />,
+      label: "Capturas 360",
+      icon: <PanoramaHorizontal fontSize="large" />,
       route: PageRoutes.Shots_360,
     },
     {

@@ -6,7 +6,7 @@ import {
 
 export const createReservation = async (
   payload: CreateReservationPayload,
-): Promise<void> => {
+): Promise<ReservationResponse> => {
   const res = await fetch("http://localhost:5150/api/Reservations", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -18,6 +18,8 @@ export const createReservation = async (
     const error = await res.json();
     throw new Error(error.mensaje || "Error al crear la reserva");
   }
+
+  return await res.json() as ReservationResponse;
 };
 
 export const getMyReservations = async (
@@ -30,6 +32,8 @@ export const getMyReservations = async (
     page: page.toString(),
     limit: limit.toString(),
   });
+
+  console.log(params, status)
 
   const res = await fetch(
     `http://localhost:5150/api/Reservations/mine?${params.toString()}`,

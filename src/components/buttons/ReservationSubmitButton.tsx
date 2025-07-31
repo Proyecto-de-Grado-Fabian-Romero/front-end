@@ -5,9 +5,12 @@ import { Button, Alert, Box } from "@mui/material";
 import moment, { Moment } from "moment";
 import { useRouter } from "next/navigation";
 import { createReservation } from "@/services/reservationService";
+import { createPayment } from "@/services/paymentService"; // ✅ nuevo import
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { ScheduleBlock } from "@/types/Booking";
 import { Environment } from "@/types/GetEnvironment";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 interface Props {
   environment: Environment;
@@ -27,6 +30,7 @@ const ReservationSubmitButton: React.FC<Props> = ({
   const router = useRouter();
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
 
   const handleSubmit = async () => {
     try {
@@ -64,12 +68,28 @@ const ReservationSubmitButton: React.FC<Props> = ({
       }
 
       setLoading(true);
-      await createReservation({
+
+      const reservation = await createReservation({
         environmentId,
         timeRanges,
         totalPrice: calculatedPrice,
         currency: "Bs.",
       });
+
+      if (environment.instantBooking) {
+        const paymentDto = {
+          reservationId: reservation.publicId, 
+          clientEmail: user.email!,
+          clientFullName: user.name!,
+          clientCI: user.phone || "0", 
+          clientNIT: "0",
+        };
+
+        const { url } = await createPayment(paymentDto, "Libelula");
+
+        window.location.href = url;
+        return;
+      }
 
       setSuccess(true);
       setTimeout(() => {
@@ -97,7 +117,7 @@ const ReservationSubmitButton: React.FC<Props> = ({
         onClick={handleSubmit}
         disabled={loading || success}
       >
-        {environment.instantBooking ? "RESERVAR" : "SOLICITAR RESERVA"}
+        {environment.instantBooking ? "RESERVAR Y PAGAR" : "SOLICITAR RESERVA"}
       </Button>
     </Box>
   );

@@ -1,12 +1,14 @@
 import { Box, Button, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import ScheduleIcon from "@mui/icons-material/Schedule";
+// import ScheduleIcon from "@mui/icons-material/Schedule";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { requestTour360 } from "@/services/adminService";
+import Link from "next/link";
+import { PageRoutes } from "@/utils/constants/page-routes";
+import EquipmentModal from "../modal/EquipmentModal";
 
 type OwnerEnvironmentButtonsProps = {
   envPubId: string;
@@ -17,6 +19,7 @@ const OwnerEnvironmentButtons: React.FC<OwnerEnvironmentButtonsProps> = ({
 }) => {
   const user = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState(false);
+  const [openEquipmentModal, setOpenEquipmentModal] = useState(false);
 
   const handleRequest360Tour = async () => {
     setLoading(true);
@@ -39,17 +42,23 @@ const OwnerEnvironmentButtons: React.FC<OwnerEnvironmentButtonsProps> = ({
         justifyContent: "center",
       }}
     >
-      <Button variant="outlined" startIcon={<EditIcon />}>
-        Editar Ambiente
+      <Link href={`${PageRoutes.Environment_Details}/${envPubId}/editar`}>
+        <Button variant="outlined" startIcon={<EditIcon />}>
+          Editar Ambiente
+        </Button>
+      </Link>
+
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => setOpenEquipmentModal(true)}
+      >
+        Editar Equipamiento
       </Button>
 
-      <Button variant="outlined" startIcon={<CalendarMonthIcon />}>
-        Ver calendario de reservas
-      </Button>
-
-      <Button variant="outlined" startIcon={<ScheduleIcon />}>
+      {/* <Button variant="outlined" startIcon={<ScheduleIcon />}>
         Editar disponibilidad
-      </Button>
+      </Button> */}
 
       <Button
         variant="outlined"
@@ -60,6 +69,12 @@ const OwnerEnvironmentButtons: React.FC<OwnerEnvironmentButtonsProps> = ({
       >
         Solicitar captura 360
       </Button>
+
+      <EquipmentModal
+        open={openEquipmentModal}
+        onClose={() => setOpenEquipmentModal(false)}
+        publicId={envPubId}
+      />
     </Box>
   );
 };

@@ -51,6 +51,7 @@ const MyReservationsPage = () => {
   };
 
   useEffect(() => {
+    console.log("CALLED")
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -69,7 +70,7 @@ const MyReservationsPage = () => {
     };
 
     fetchData();
-  }, [status, page, limit]);
+  }, [status, page, limit, searchParams]);
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", mt: 6, px: 2 }}>

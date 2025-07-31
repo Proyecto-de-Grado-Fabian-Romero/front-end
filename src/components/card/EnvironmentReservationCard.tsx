@@ -1,5 +1,7 @@
 import { ReservationResponse } from "@/types/Reservations";
+import { PageRoutes } from "@/utils/constants/page-routes";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 
 interface EnvironmentReservationCardProps {
@@ -10,6 +12,7 @@ const EnvironmentReservationCard: React.FC<EnvironmentReservationCardProps> = ({
   reservation,
 }) => {
   return (
+    // <Link href={`${PageRoutes.Environment_Details}/${reservation.environmentId}`}>
     <Card
       sx={{
         display: "flex",
@@ -28,6 +31,7 @@ const EnvironmentReservationCard: React.FC<EnvironmentReservationCardProps> = ({
         <Typography variant="h6">{reservation.environmentTitle}</Typography>
       </CardContent>
     </Card>
+    // </Link>
   );
 };
 

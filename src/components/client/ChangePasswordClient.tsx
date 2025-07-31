@@ -18,6 +18,7 @@ import ProfileSidebarActions from "../profile/ProfileSidebarActions";
 import LoggedOutProfile from "../profile/LoggedOutProfile";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { PageRoutes } from "@/utils/constants/page-routes";
 
 const ChangePasswordClient = () => {
   const user = useSelector((state: RootState) => state.user);
@@ -43,7 +44,7 @@ const ChangePasswordClient = () => {
 
     try {
       await changePassword(currentPassword, newPassword);
-      router.push("/profile");
+      router.push(PageRoutes.Profile);
     } catch {
       setError("La contraseña actual es incorrecta. Intenta de nuevo.");
     } finally {
@@ -73,7 +74,7 @@ const ChangePasswordClient = () => {
           <Box
             component="form"
             onSubmit={handleSubmit}
-            sx={{ mt: 8, maxWidth: 400, mx: "auto", width: "100%" }}
+            sx={{ mt: 8, mb: 8, maxWidth: 400, mx: "auto", width: "100%" }}
             display="flex"
             flexDirection="column"
             gap={2}
@@ -105,7 +106,7 @@ const ChangePasswordClient = () => {
               {loading ? (
                 <CircularProgress size={24} sx={{ color: "white" }} />
               ) : (
-                "Update Password"
+                "Actualizar contraseña"
               )}
             </Button>
           </Box>
