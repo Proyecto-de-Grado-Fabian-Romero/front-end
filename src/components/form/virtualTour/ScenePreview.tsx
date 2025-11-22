@@ -15,6 +15,7 @@ type Props = {
 
 const ScenePreview: React.FC<Props> = ({ scene, onSceneClick, onPOIClick }) => {
   useEffect(() => {
+    if (typeof document === "undefined") return;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler = (e: any) => {
       if (e?.target?.classList?.contains("clickable")) return;
@@ -40,6 +41,7 @@ const ScenePreview: React.FC<Props> = ({ scene, onSceneClick, onPOIClick }) => {
   }, [onSceneClick]);
 
   useEffect(() => {
+    if (typeof document === "undefined") return;
     const sceneEl = document.querySelector("a-scene");
     const skyEl = sceneEl?.querySelector("a-sky");
 
@@ -52,6 +54,7 @@ const ScenePreview: React.FC<Props> = ({ scene, onSceneClick, onPOIClick }) => {
   }, [scene]);
 
   useEffect(() => {
+    if (typeof document === "undefined") return;
     const interval = setInterval(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const camera = document.querySelector("#camera") as any;

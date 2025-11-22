@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { Scene360, POI } from "@/types/Tour360";
 import SceneSelector from "./SceneSelector";
-import ScenePreview from "./ScenePreview";
 import AddPOIDialog from "./AddPOIDialog";
 import POIActionDialog from "./POIActionDialog";
 import { UploadImageResult } from "@/types/UploadImageResult";
@@ -14,6 +13,9 @@ import ConfirmUploadDialog from "./ConfirmUploadDialog";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { uploadVirtualTour } from "@/services/adminService";
 import { uploadVirtualTourDirect } from "@/services/environmentService";
+import dynamic from "next/dynamic";
+
+const ScenePreview = dynamic(() => import("./ScenePreview"), { ssr: false });
 
 type Props = {
   uploadedImages: UploadImageResult[];
