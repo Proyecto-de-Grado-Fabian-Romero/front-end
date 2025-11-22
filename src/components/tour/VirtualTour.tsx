@@ -7,6 +7,8 @@ import "aframe-event-set-component";
 import { Scene360, Tour360 } from "@/types/Tour360";
 import { fetchTourData } from "@/services/environmentService";
 import { ColorPalette } from "@/utils/constants/ui-constants";
+import { Box, Chip } from "@mui/material";
+import { CalendarToday } from "@mui/icons-material";
 
 type VirtualTourProps = {
   tour360Id: string;
@@ -46,6 +48,15 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
   const handleSceneChange = (sceneId: string) => {
     const nextScene = tourData?.scenes.find((scene) => scene.id === sceneId);
     if (nextScene) setCurrentScene(nextScene);
+  };
+
+  const formatDateLiteral = (unixSeconds: number) => {
+    const date = new Date(unixSeconds * 1000);
+    return date.toLocaleDateString("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   if (!currentScene) return <p>Cargando recorrido virtual...</p>;
@@ -117,6 +128,23 @@ const VirtualTour = ({ tour360Id }: VirtualTourProps) => {
           />
         ))}
       </Scene>
+      <Box sx={{ position: "absolute", top: 12, left: 12, zIndex: 10 }}>
+        <Chip
+          icon={<CalendarToday />}
+          label={
+            tourData?.createdDate
+              ? `Tomado el ${formatDateLiteral(tourData.createdDate)}`
+              : "Fecha no disponible"
+          }
+          sx={{
+            bgcolor: "rgba(0,0,0,0.6)",
+            color: "#fff",
+            "& .MuiChip-icon": { color: "#fff" },
+            fontSize: 12.4,
+            height: 32,
+          }}
+        />
+      </Box>
     </div>
   );
 };

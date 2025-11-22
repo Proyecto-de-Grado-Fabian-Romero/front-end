@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import ResponsiveFab from "@/components/buttons/ResponsiveFabButton";
 import { Environment } from "@/types/AllEnvironments";
@@ -60,20 +60,26 @@ const ClientOwnerEnvironments = () => {
     <>
       <Box sx={{ p: 3 }}></Box>
 
-      <Typography variant="h4" mt={24}>
-        MIS AMBIENTES
-      </Typography>
+      {user.role === UserRole.Owner ? (
+        <>
+          <Typography variant="h4" mt={24}>
+            MIS AMBIENTES
+          </Typography>
 
-      <EnvironmentGrid
-        environments={environments}
-        loading={loading}
-        totalPages={totalPages}
-        page={page}
-        onPageChange={handlePageChange}
-        emptyMessage="Aún no has creado ningún ambiente"
-      />
+          <EnvironmentGrid
+            environments={environments}
+            loading={loading}
+            totalPages={totalPages}
+            page={page}
+            onPageChange={handlePageChange}
+            emptyMessage="Aún no has creado ningún ambiente"
+          />
 
-      <ResponsiveFab onClick={handleFabAdd} />
+          <ResponsiveFab onClick={handleFabAdd} />
+        </>
+      ) : (
+        <CircularProgress />
+      )}
     </>
   );
 };

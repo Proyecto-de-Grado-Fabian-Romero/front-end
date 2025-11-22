@@ -14,12 +14,14 @@ import { UserType } from "@/utils/constants/user-constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import { UserRole } from "@/types/Users";
 
 type Props = {
   basePrice: number;
   rentalUnit: string;
   envPubId: string;
   forOwner?: boolean;
+  hidden?: boolean;
 };
 
 const UsersEnvironmentButtons = ({
@@ -27,7 +29,10 @@ const UsersEnvironmentButtons = ({
   rentalUnit,
   forOwner,
   envPubId,
+  hidden,
 }: Props) => {
+  const user = useSelector((state: RootState) => state.user);
+
   const role = useSelector((state: RootState) => state.user.role);
   const userType: UserType =
     (role?.toLowerCase() as UserType) || UserType.UNLOGGED;
@@ -58,55 +63,58 @@ const UsersEnvironmentButtons = ({
 
   return (
     <>
-      <Box
-        position="fixed"
-        left={0}
-        right={0}
-        bottom={0}
-        zIndex={1300}
-        bgcolor="background.paper"
-        p={2}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.1)" }}
-      >
+      {user.role !== UserRole.Admin && (
         <Box
-          sx={{ maxWidth: 800, width: "100%", padding: "0 12px" }}
+          position="fixed"
+          left={0}
+          right={0}
+          bottom={0}
+          zIndex={1300}
+          bgcolor="background.paper"
+          p={2}
           display="flex"
-          justifyContent="space-between"
+          justifyContent="center"
           alignItems="center"
+          sx={{ boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.1)" }}
         >
-          {forOwner ? (
-            <OwnerEnvironmentButtons envPubId={envPubId} />
-          ) : (
-            <>
-              <Box flex={1}>
-                <Typography variant="h6" fontWeight="bold">
-                  Bs. {basePrice} / {rentalUnit.slice(0, rentalUnit.length - 1)}
-                </Typography>
-              </Box>
-              <Box flex={1} display="flex" justifyContent="flex-end">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{
-                    paddingLeft: "16px",
-                    paddingRight: "16px",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    maxWidth: "100%",
-                  }}
-                  onClick={handleReserveClick}
-                >
-                  Reservar
-                </Button>
-              </Box>
-            </>
-          )}
+          <Box
+            sx={{ maxWidth: 800, width: "100%", padding: "0 12px" }}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            {forOwner ? (
+              <OwnerEnvironmentButtons envPubId={envPubId} hidden={hidden} />
+            ) : (
+              <>
+                <Box flex={1}>
+                  <Typography variant="h6" fontWeight="bold">
+                    Bs. {basePrice} /{" "}
+                    {rentalUnit.slice(0, rentalUnit.length - 1)}
+                  </Typography>
+                </Box>
+                <Box flex={1} display="flex" justifyContent="flex-end">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      paddingLeft: "16px",
+                      paddingRight: "16px",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      maxWidth: "100%",
+                    }}
+                    onClick={handleReserveClick}
+                  >
+                    Reservar
+                  </Button>
+                </Box>
+              </>
+            )}
+          </Box>
         </Box>
-      </Box>
+      )}
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Inicia sesión para continuar</DialogTitle>

@@ -12,7 +12,6 @@ export default function EnvironmentsPage() {
       <br />
       <br />
       <br />
-      <br />
       <ClientEnvironmentsPage />
     </CenteredLayout>
   );

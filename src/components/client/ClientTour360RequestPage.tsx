@@ -21,9 +21,9 @@ const ClientTour360RequestsPage = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
 
-  const page = parseInt(searchParams.get("page") || "1", 10);
+  const page = parseInt(searchParams.get("page") || "1");
   const limit = 16;
-  const statusFilter = parseInt(searchParams.get("status") || "0", 10);
+  const statusFilter = parseInt(searchParams.get("status") || "0");
 
   useEffect(() => {
     if (user.role !== UserRole.Admin) router.replace("/");
@@ -33,7 +33,11 @@ const ClientTour360RequestsPage = () => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const data = await getTour360Requests(page, limit, statusFilter);
+        const data = await getTour360Requests(
+          page,
+          limit,
+          statusFilter.valueOf(),
+        );
         setRequests(data.items || []);
         setTotalPages(data.totalPages || 1);
       } catch {
@@ -57,7 +61,7 @@ const ClientTour360RequestsPage = () => {
     if (value) {
       params.set("status", value.toString());
     } else {
-      params.delete("status");
+      params.set("status", "0");
     }
     params.set("page", "1");
     router.push(`${PageRoutes.Shots_360}?${params.toString()}`);
@@ -69,13 +73,16 @@ const ClientTour360RequestsPage = () => {
       sx={{
         py: 6,
         minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
       }}
     >
-      <Typography variant="h4" mb={4} mt={8}>
+      <Typography variant="h4" mt={10} mb={4}>
         Solicitudes de Capturas 360
       </Typography>
 
-      <Box mb={4} display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="flex-end">
         <Tour360Filter
           statusFilter={statusFilter}
           onStatusChange={handleStatusChange}

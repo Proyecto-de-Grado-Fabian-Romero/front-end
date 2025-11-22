@@ -11,17 +11,20 @@ import {
 import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { getIncomeList } from "@/services/ownerPaymentService";
-import { IncomeDetail } from "@/types/Payments";
+import { type IncomeDetail } from "@/types/Payments";
 import OwnerPaymentDashboard from "../dashboard/OwnerPaymentDashboard";
-import { useRouter } from "next/navigation";
-import { PageRoutes } from "@/utils/constants/page-routes";
+import OwnerIncomeDetailModal from "../modal/OwnerIncomeDetailModal";
+// import { useRouter } from "next/navigation"; // ya no navegamos
 
 const OwnerIncomeList = () => {
   const [incomes, setIncomes] = useState<IncomeDetail[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
   const [page, setPage] = useState(0); // 0-based index
-  const router = useRouter();
+
+  // Modal state
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [selectedIncomeId, setSelectedIncomeId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchIncomes = async () => {
@@ -46,10 +49,6 @@ const OwnerIncomeList = () => {
       Cell: ({ cell }) => `Bs. ${cell.getValue<number>()}`,
     },
     {
-      header: "Moneda",
-      accessorKey: "currency",
-    },
-    {
       header: "Fecha Generada",
       accessorKey: "generatedAt",
       Cell: ({ cell }) =>
@@ -62,9 +61,10 @@ const OwnerIncomeList = () => {
         <Button
           size="small"
           variant="outlined"
-          onClick={() =>
-            router.push(`${PageRoutes.Incomes}/${cell.getValue<string>()}`)
-          }
+          onClick={() => {
+            setSelectedIncomeId(cell.getValue<string>());
+            setDetailOpen(true); // 🔓 abre modal
+          }}
         >
           Ver Detalles
         </Button>
@@ -92,6 +92,10 @@ const OwnerIncomeList = () => {
             data={incomes}
             enablePagination
             manualPagination
+            enableStickyHeader={false}
+            enableStickyFooter={false}
+            muiTableContainerProps={{ sx: { maxHeight: "none" } }}
+            muiTablePaperProps={{ sx: { overflow: "visible" } }}
             rowCount={totalItems}
             pageCount={Math.ceil(totalItems / 20)}
             onPaginationChange={(updater) => {
@@ -117,6 +121,15 @@ const OwnerIncomeList = () => {
           />
         )}
       </Paper>
+
+      <OwnerIncomeDetailModal
+        open={detailOpen}
+        onClose={() => {
+          setDetailOpen(false);
+          setSelectedIncomeId(null);
+        }}
+        incomeId={selectedIncomeId}
+      />
     </Box>
   );
 };

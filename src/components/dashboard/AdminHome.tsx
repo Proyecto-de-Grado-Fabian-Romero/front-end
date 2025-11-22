@@ -38,25 +38,35 @@ const AdminHome = () => {
 
   return (
     <Container>
-      <Box sx={{ width: "100%" }}>
-        <Typography variant="h4" textAlign="center" mb={4}>
-          Panel de Administración
-        </Typography>
-        <Grid justifyContent={"center"} container spacing={4}>
-          {menuItems.map((item) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.label}>
-              <Card>
-                <CardActionArea onClick={() => router.push(item.route)}>
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Box sx={{ mb: 2 }}>{item.icon}</Box>
-                    <Typography variant="h6">{item.label}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+      <div
+        style={{
+          minHeight: "90vh",
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box sx={{ width: "100%" }}>
+          <Typography variant="h4" textAlign="center" mb={4}>
+            Panel de Administración
+          </Typography>
+          <Grid justifyContent={"center"} container spacing={4}>
+            {menuItems.map((item) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={item.label}>
+                <Card>
+                  <CardActionArea onClick={() => router.push(item.route)}>
+                    <CardContent sx={{ textAlign: "center" }}>
+                      <Box sx={{ mb: 2 }}>{item.icon}</Box>
+                      <Typography variant="h6">{item.label}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </div>
     </Container>
   );
 };

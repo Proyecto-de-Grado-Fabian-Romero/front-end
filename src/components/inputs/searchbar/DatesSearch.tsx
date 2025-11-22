@@ -1,8 +1,8 @@
 "use client";
+import React from "react";
 import { Grid } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import moment from "moment";
-import React from "react";
 
 interface DatesSearchProps {
   startDate: moment.Moment | null;
@@ -31,28 +31,39 @@ const DatesSearch: React.FC<DatesSearchProps> = ({
 
   const handleStartDateChange = (date: moment.Moment | null) => {
     setStartDate(date);
-    if (date) {
+
+    if (!date) {
+      setEndDate(null);
+      return;
+    }
+
+    if (isHospedaje) {
       setEndDate(date.clone().add(1, "day"));
+    } else {
+      setEndDate(date.clone());
+      // if (startTime) {
+      //   const newEnd = startTime.clone().add(2, "hours");
+      //   setEndTime(newEnd);
+      // }
     }
   };
 
   const handleStartTimeChange = (time: moment.Moment | null) => {
     setStartTime(time);
     if (time) {
-      const newEndTime = time.clone().add(1, "hour");
-      if (newEndTime.hour() <= 23) {
-        setEndTime(newEndTime);
-      } else {
-        setEndTime(moment(time).hour(23).minute(0));
-      }
+      const newEndTime = time.clone().add(2, "hours"); // 2 horas como pediste
+      // si newEndTime pasa de 23:59, lo dejamos en next day time correcto (moment lo maneja)
+      setEndTime(newEndTime);
     }
   };
 
+  const now = moment();
+
   return (
-    <Grid container spacing={2} alignItems="center">
+    <Grid container spacing={2} alignItems="center" pt={1}>
       {isHospedaje ? (
         <>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <DatePicker
               label="Llegada"
               value={startDate}
@@ -61,7 +72,7 @@ const DatesSearch: React.FC<DatesSearchProps> = ({
               slotProps={{ textField: { fullWidth: true } }}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <DatePicker
               label="Salida"
               value={endDate}
@@ -83,18 +94,19 @@ const DatesSearch: React.FC<DatesSearchProps> = ({
               slotProps={{ textField: { fullWidth: true } }}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TimePicker
               label="Hora de inicio"
               value={startTime}
               onChange={handleStartTimeChange}
-              disablePast={startDate?.isSame(moment(), "day")}
+              // si el startDate es hoy, no permitir horas pasadas:
+              disablePast={!!startDate && startDate.isSame(now, "day")}
               minTime={moment().startOf("day")}
-              maxTime={moment().hour(23).minute(0)}
+              maxTime={moment().hour(23).minute(59)}
               slotProps={{ textField: { fullWidth: true } }}
             />
           </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TimePicker
               label="Hora de fin"
               value={endTime}

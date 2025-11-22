@@ -1,26 +1,22 @@
 import React from "react";
 import ImageUploader from "@/components/inputs/form/InputUploader";
 import { FormDataCreateEnv } from "@/types/Environments";
-import {
-  Box,
-  FormControl,
-  FormGroup,
-  FormHelperText,
-  FormLabel,
-  Switch,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
+import { Photo } from "@/types/GetEnvironment";
+import { Delete } from "@mui/icons-material";
 
 interface ImagesFormProps {
   formData: FormDataCreateEnv;
-  setFormData: (value: React.SetStateAction<FormDataCreateEnv>) => void;
-  handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataCreateEnv>>;
+  existingPhotos: Photo[];
+  onDeleteExisting: (fileId: string) => void;
 }
 
 const ImagesForm: React.FC<ImagesFormProps> = ({
   formData,
   setFormData,
-  handleCheckboxChange,
+  existingPhotos,
+  onDeleteExisting,
 }) => {
   return (
     <Box>
@@ -28,36 +24,32 @@ const ImagesForm: React.FC<ImagesFormProps> = ({
       <Typography variant="body2" color="text.secondary" mb={2}>
         Sube imágenes representativas del ambiente.
       </Typography>
+
+      {/* Galería de existentes */}
+      {existingPhotos.length > 0 && (
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
+          {existingPhotos.map((p) => (
+            <Box key={p.fileId} sx={{ width: 140 }}>
+              <img
+                src={p.url}
+                alt={p.fileName}
+                style={{ width: "100%", borderRadius: 8 }}
+              />
+              <IconButton onClick={() => onDeleteExisting(p.fileId)}>
+                <Delete />
+              </IconButton>
+            </Box>
+          ))}
+        </Box>
+      )}
+
+      {/* Uploader de nuevas */}
       <ImageUploader
-        images={formData.images}
+        images={formData.images} // File[]
         setImages={(newImages) =>
           setFormData((prev) => ({ ...prev, images: newImages }))
         }
       />
-
-      <br />
-      <br />
-      <hr />
-      <FormControl component="fieldset" variant="standard" sx={{ mt: 3 }}>
-        <FormLabel
-          component="legend"
-          sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
-        >
-          Tour Virtual 360°
-        </FormLabel>
-        <FormGroup>
-          <Switch
-            name="request360Tour"
-            checked={formData.request360Tour}
-            onChange={handleCheckboxChange}
-            color="secondary"
-          />
-        </FormGroup>
-        <FormHelperText>
-          Activa esta opción si deseas solicitar la creación de un Tour Virtual
-          360° del ambiente.
-        </FormHelperText>
-      </FormControl>
     </Box>
   );
 };

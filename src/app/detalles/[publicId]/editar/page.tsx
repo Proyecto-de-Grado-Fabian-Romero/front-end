@@ -7,7 +7,7 @@ import CreateEnvironmentForm from "@/components/form/createEnvironment/CreateEnv
 import { Environment } from "@/types/GetEnvironment";
 
 const EditEnvironmentPage = () => {
-  const { publicId } = useParams(); 
+  const { publicId } = useParams();
   const [data, setData] = useState<Environment | null>(null);
   const [loading, setLoading] = useState(true);
 

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { AppBar, useTheme, useMediaQuery } from "@mui/material";
 import { useSelector } from "react-redux";
 import MobileHeader from "./header/MobileHeader";
@@ -14,6 +14,15 @@ const Header: React.FC = () => {
   const role = useSelector((state: RootState) => state.user.role);
   const userType: UserType =
     (role?.toLowerCase() as UserType) || UserType.UNLOGGED;
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/firebase-messaging-sw.js")
+        .then((reg) => console.log("SW registrado", reg.scope))
+        .catch((err) => console.error("SW falló", err));
+    }
+  }, []);
 
   return (
     <AppBar

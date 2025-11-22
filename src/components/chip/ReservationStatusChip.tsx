@@ -7,7 +7,7 @@ type Props = {
 };
 
 const getLatestEndDate = (reservation: ReservationResponse): number => {
-  return Math.max(...reservation.timeRanges.map((r) => r.endDate));
+  return Math.max(...reservation.timeRanges.map((r) => r.endDate * 1000));
 };
 
 const ReservationStatusChip: React.FC<Props> = ({ reservation }) => {

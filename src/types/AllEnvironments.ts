@@ -30,4 +30,5 @@ export interface Environment {
   photoUrls: string[];
   pricingPolicies: PricingPolicy[];
   equipment: string;
+  hidden?: boolean;
 }

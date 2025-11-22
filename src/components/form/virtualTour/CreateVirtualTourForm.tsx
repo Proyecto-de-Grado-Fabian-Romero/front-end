@@ -13,15 +13,20 @@ import { useRouter } from "next/navigation";
 import ConfirmUploadDialog from "./ConfirmUploadDialog";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { uploadVirtualTour } from "@/services/adminService";
+import { uploadVirtualTourDirect } from "@/services/environmentService";
 
 type Props = {
   uploadedImages: UploadImageResult[];
   environmentPublicId: string;
+  publicId: string;
+  isAdmin?: boolean;
 };
 
 const CreateVirtualTourForm = ({
   uploadedImages,
   environmentPublicId,
+  publicId,
+  isAdmin = true,
 }: Props) => {
   const [scenes, setScenes] = useState<Scene360[]>([]);
   const [selectedImageId, setSelectedImageId] = useState<string>("");
@@ -131,7 +136,8 @@ const CreateVirtualTourForm = ({
   const handleUpload = async () => {
     try {
       setUploading(true);
-      await uploadVirtualTour(environmentPublicId, scenes);
+      if (isAdmin) await uploadVirtualTour(publicId, scenes);
+      else await uploadVirtualTourDirect(environmentPublicId, scenes);
 
       setConfirmDialogOpen(false);
       router.push(`${PageRoutes.Environment_Details}/${environmentPublicId}`);
@@ -203,6 +209,8 @@ const CreateVirtualTourForm = ({
           />
         </Box>
       )}
+      <br />
+      <br />
     </Box>
   );
 };

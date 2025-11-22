@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { CircularProgress, Typography, Box, Button } from "@mui/material";
 import { checkPaymentStatus } from "@/services/paymentService";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
+import { updateReservationStatus } from "@/services/reservationService";
 
 export default function ConfirmacionReservaPage() {
   const { publicId } = useParams<{ publicId: string }>();
@@ -12,20 +13,38 @@ export default function ConfirmacionReservaPage() {
   const [status, setStatus] = useState<
     "loading" | "paid" | "pending" | "error"
   >("loading");
-  const [invoiceUrl, setInvoiceUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function checkPayment() {
       try {
         const result = await checkPaymentStatus(publicId);
         setStatus(result.status);
-        if (result.invoiceUrl) setInvoiceUrl(result.invoiceUrl);
       } catch {
         setStatus("error");
       }
     }
 
     checkPayment();
+  }, [publicId]);
+
+  const executedRef = useRef(false);
+
+  useEffect(() => {
+    if (executedRef.current) return;
+    executedRef.current = true;
+
+    updateReservationStatus(publicId, "paid");
+
+    // getReservationById(publicId).then(({ ownerId, totalPrice }) => {
+    //   console.log({ ownerId, reservationId: publicId, totalPrice });
+    //   registerOwnerEarning({
+    //     ownerId,
+    //     reservationId: publicId,
+    //     amount: totalPrice,
+    //     currency: 0,
+    //     generatedAt: Date.now(),
+    //   }).catch(console.error);
+    // });
   }, [publicId]);
 
   if (status === "loading") {

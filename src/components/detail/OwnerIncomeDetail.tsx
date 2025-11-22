@@ -12,6 +12,7 @@ import { useParams } from "next/navigation";
 import { getIncomeDetails } from "../../services/ownerPaymentService";
 import Link from "next/link";
 import { IncomeDetail } from "@/types/Payments";
+import moment from "moment";
 
 const OwnerIncomeDetail = () => {
   const [income, setIncome] = useState<IncomeDetail | null>(null);
@@ -43,8 +44,10 @@ const OwnerIncomeDetail = () => {
 
   const reservation = income.reservation;
 
-  const formatDate = (timestamp: number) =>
-    new Date(timestamp).toLocaleDateString();
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return moment(date).locale("es").format("MMMM YYYY");
+  };
 
   return (
     <Paper elevation={3} sx={{ p: 4, borderRadius: 4, mt: 4 }}>
@@ -63,16 +66,21 @@ const OwnerIncomeDetail = () => {
         {reservation.rentalUnit === "Días" && (
           <>
             <Typography variant="body1">
-              Check-in: {formatDate(reservation.timeRanges[0].startDate)}
+              Check-in:
+              {formatDate(reservation.timeRanges[0].startDate)}
             </Typography>
             <Typography variant="body1">
-              Check-out: {formatDate(reservation.timeRanges[0].endDate)}
+              Check-out:
+              {formatDate(reservation.timeRanges[0].endDate)}
             </Typography>
           </>
         )}
 
         {reservation.rentalUnit === "Horas" && (
           <>
+            <Typography variant="body1">
+              Día: {formatDate(reservation.timeRanges[0].startDate)}
+            </Typography>
             <Typography variant="body1">
               Check-in:{" "}
               {new Date(
@@ -88,7 +96,7 @@ const OwnerIncomeDetail = () => {
       </Box>
 
       <Box sx={{ mt: 3 }}>
-        <Link href={`/reservations/${income.reservationId}`} passHref>
+        <Link href={`/reservas/${income.reservationId}`} passHref>
           <Button variant="contained" color="primary">
             Ver detalles de la reserva
           </Button>

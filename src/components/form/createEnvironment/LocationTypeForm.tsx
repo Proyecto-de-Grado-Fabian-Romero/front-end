@@ -22,7 +22,7 @@ const LocationTypeForm: React.FC<LocationTypeFormProps> = ({
   handleSelectChange,
 }) => {
   return (
-    <Box>
+    <Box sx={{ maxWidth: "800px", width: "100%" }}>
       <Typography variant="h6">Ubicación y Tipo de Ambiente</Typography>
       <Typography variant="body2" color="text.secondary" mb={2}>
         Selecciona la ubicación y la categoría a la que pertenece el ambiente.

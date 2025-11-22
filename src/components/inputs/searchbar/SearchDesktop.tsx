@@ -1,6 +1,15 @@
 "use client";
-import React from "react";
-import { Button, TextField, MenuItem, Grid, IconButton } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  MenuItem,
+  Grid,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import moment from "moment";
 import { ColorPalette } from "@/utils/constants/ui-constants";
@@ -41,87 +50,138 @@ const SearchDesktop: React.FC<SearchDesktopProps> = ({
   handleSearch,
   setFiltersOpen,
 }) => {
+  const [openDatesModal, setOpenDatesModal] = useState(false);
+
+  const formatDateRange = () => {
+    if (!startDate || !endDate) return "";
+    const startStr = startDate.format("DD MMM");
+    if (selectedEnv === "hospedajes")
+      return `${startStr} - ${endDate.format("DD MMM")}`;
+    if (startTime && endTime)
+      return `${startTime.format("DD MMM")} ● ${startTime.format("HH:mm")} - ${endTime.format("HH:mm")}`;
+    return startStr;
+  };
+
   return (
-    <Grid
-      container
-      spacing={1}
-      alignItems="center"
-      sx={{
-        backgroundColor: ColorPalette.NEUTRAL_WHITE,
-        padding: "20px 24px",
-        borderRadius: 4,
-      }}
-    >
-      <Grid size={{ xs: 12, sm: 4, md: 2.5 }}>
-        <TextField
-          select
-          label="Tipo de ambiente"
-          value={selectedEnv}
-          onChange={(e) => setSelectedEnv(e.target.value)}
-          fullWidth
+    <>
+      <Grid
+        container
+        spacing={1}
+        alignItems="center"
+        sx={{
+          backgroundColor: ColorPalette.NEUTRAL_WHITE,
+          padding: "20px 24px",
+          borderRadius: 4,
+          width: "100%",
+          maxWidth: "1200px",
+          mx: "auto",
+        }}
+      >
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
+          <TextField
+            select
+            label="Tipo de ambiente"
+            value={selectedEnv}
+            onChange={(e) => setSelectedEnv(e.target.value)}
+            fullWidth
+          >
+            {environments.map((env) => (
+              <MenuItem key={env.key} value={env.key}>
+                {env.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
+          <TextField
+            select
+            label="Ciudad"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            fullWidth
+          >
+            {cities.map((c) => (
+              <MenuItem key={c} value={c}>
+                {c}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
+          <TextField
+            label="Fechas"
+            value={formatDateRange()}
+            onClick={() => setOpenDatesModal(true)}
+            fullWidth
+            InputProps={{ readOnly: true }}
+          />
+        </Grid>
+
+        <Grid
+          size={{ xs: 12, sm: 12, md: 3 }}
+          display={"flex"}
+          alignItems="center"
         >
-          {environments.map((env) => (
-            <MenuItem key={env.key} value={env.key}>
-              {env.label}
-            </MenuItem>
-          ))}
-        </TextField>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<SearchIcon />}
+            sx={{
+              height: "52px",
+              flex: 1,
+              minWidth: 0,
+            }}
+            onClick={handleSearch}
+          >
+            Buscar
+          </Button>
+          <IconButton
+            sx={{
+              backgroundColor: ColorPalette.SECONDARY_DEFAULT,
+              color: ColorPalette.NEUTRAL_WHITE,
+              ml: 1,
+              flexShrink: 0,
+            }}
+            onClick={() => setFiltersOpen(true)}
+          >
+            <FilterList fontSize="large" />
+          </IconButton>
+        </Grid>
       </Grid>
 
-      <Grid size={{ xs: 12, sm: 4, md: 2 }}>
-        <TextField
-          select
-          label="Ciudad"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          fullWidth
-        >
-          {cities.map((c) => (
-            <MenuItem key={c} value={c}>
-              {c}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Grid>
-
-      <Grid size={{ xs: 12, sm: 4, md: 4 }}>
-        <DatesSearch
-          startDate={startDate}
-          endDate={endDate}
-          startTime={startTime}
-          endTime={endTime}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
-          setStartTime={setStartTime}
-          setEndTime={setEndTime}
-          selectedEnv={selectedEnv}
-        />
-      </Grid>
-
-      <Grid size={{ xs: 10, sm: 10, md: 3 }}>
-        <Button
-          variant="contained"
-          color="success"
-          startIcon={<SearchIcon />}
-          fullWidth
-          sx={{ height: "52px" }}
-          onClick={handleSearch}
-        >
-          Buscar
-        </Button>
-      </Grid>
-      <Grid size={{ xs: 2, sm: 2, md: 0.5 }}>
-        <IconButton
-          sx={{
-            backgroundColor: ColorPalette.SECONDARY_DEFAULT,
-            color: ColorPalette.NEUTRAL_WHITE,
-          }}
-          onClick={() => setFiltersOpen(true)}
-        >
-          <FilterList fontSize="large" />
-        </IconButton>
-      </Grid>
-    </Grid>
+      <Dialog
+        open={openDatesModal}
+        onClose={() => setOpenDatesModal(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Seleccionar fechas</DialogTitle>
+        <DialogContent>
+          <DatesSearch
+            startDate={startDate}
+            endDate={endDate}
+            startTime={startTime}
+            endTime={endTime}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            setStartTime={setStartTime}
+            setEndTime={setEndTime}
+            selectedEnv={selectedEnv}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setOpenDatesModal(false)}
+            sx={{ mt: 2 }}
+            fullWidth
+          >
+            Confirmar
+          </Button>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

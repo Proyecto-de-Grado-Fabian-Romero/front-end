@@ -45,18 +45,22 @@ const RentSettingForm: React.FC<RentSettingFormProps> = ({
         placeholder="Ej: 2"
         type="number"
         fullWidth
+        value={formData.minRentalTime ?? ""}
         onChange={handleInputChange}
         sx={{ mt: 2 }}
       />
+
       <TextField
         name="maxRentalTime"
         label={`Tiempo máximo de alquiler (en ${formData.rentalUnit})`}
         placeholder="Ej: 8"
         type="number"
         fullWidth
+        value={formData.maxRentalTime ?? ""}
         onChange={handleInputChange}
         sx={{ mt: 2 }}
       />
+
       <br />
       <br />
       <hr />

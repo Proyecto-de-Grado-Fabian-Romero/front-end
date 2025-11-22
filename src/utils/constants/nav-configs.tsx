@@ -42,6 +42,11 @@ const NAV_ITEMS = {
     icon: <CalendarToday />,
     to: PageRoutes.Calendar,
   },
+  AdminCalendario: {
+    label: "Calendario",
+    icon: <CalendarToday />,
+    to: PageRoutes.Admin_Calendar,
+  },
   Capturas: {
     label: "Capturas",
     icon: <Vrpano />,
@@ -86,9 +91,8 @@ export const NAV_CONFIGS: Record<
   ],
   [UserType.ADMIN]: [
     { ...NAV_ITEMS.Capturas, showInHeader: true, showInBottomNav: true },
-    { ...NAV_ITEMS.Calendario, showInHeader: true, showInBottomNav: true },
+    { ...NAV_ITEMS.AdminCalendario, showInHeader: true, showInBottomNav: true },
     { ...NAV_ITEMS.Deudas, showInHeader: true, showInBottomNav: true },
-    { ...NAV_ITEMS.Notificaciones, showInHeader: true, showInBottomNav: false },
     { ...NAV_ITEMS.Perfil, showInHeader: true, showInBottomNav: true },
   ],
 };

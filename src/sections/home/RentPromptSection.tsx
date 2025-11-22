@@ -1,17 +1,16 @@
 "use client";
 
+import BankPaymentModal from "@/components/modal/BankPaymentModal";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
 import { ColorPalette } from "@/utils/constants/ui-constants";
 import { Box, Button, Typography } from "@mui/material";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
-type RentPromptProps = {
-  onClick?: () => void;
-};
-
-const RentPromptSection = ({ onClick }: RentPromptProps) => {
+const RentPromptSection = () => {
   const user = useSelector((state: RootState) => state.user);
+  const [openBankModal, setOpenBankModal] = useState(false);
 
   if (user.role === UserRole.Owner || user.role === UserRole.Admin)
     return <></>;
@@ -34,7 +33,7 @@ const RentPromptSection = ({ onClick }: RentPromptProps) => {
         alquilarla.
       </Typography>
       <Button
-        onClick={onClick}
+        onClick={() => setOpenBankModal(true)}
         variant="contained"
         sx={{
           mt: 2,
@@ -45,6 +44,12 @@ const RentPromptSection = ({ onClick }: RentPromptProps) => {
       >
         Publica tu Ambiente Ahora
       </Button>
+
+      <BankPaymentModal
+        open={openBankModal}
+        onClose={() => setOpenBankModal(false)}
+        mode={"create"}
+      />
     </Box>
   );
 };

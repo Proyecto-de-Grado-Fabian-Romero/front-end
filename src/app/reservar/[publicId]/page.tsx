@@ -142,7 +142,7 @@ const Page: React.FC = () => {
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="es">
       <Box sx={{ padding: 2, maxWidth: 800, margin: "auto", marginTop: 8 }}>
         <Typography variant="h5" mb={2}>
           Reservar Ambiente
@@ -240,6 +240,7 @@ const Page: React.FC = () => {
           dateRange={dateRange}
           scheduleBlocks={scheduleBlocks}
           calculatedPrice={calculatedPrice}
+          peopleQuantity={guests}
         />
       </Box>
     </LocalizationProvider>

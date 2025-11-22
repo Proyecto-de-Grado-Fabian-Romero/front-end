@@ -23,7 +23,8 @@ const groupReservations = (reservations: ReservationResponse[]) => {
 
   for (const res of reservations) {
     for (const range of res.timeRanges) {
-      const date = moment(range.startDate).format("YYYY-MM-DD");
+      // Convertir de segundos a milisegundos para moment.js
+      const date = moment(range.startDate * 1000).format("YYYY-MM-DD"); // ← ×1000 aquí
       const env = res.environmentTitle;
 
       if (!grouped[date]) grouped[date] = {};
@@ -48,14 +49,16 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
   }
 
   const grouped = groupReservations(reservations);
-  const sortedDates = Object.keys(grouped).sort();
+  const sortedDates = Object.keys(grouped).sort((a, b) => {
+    return moment(b).valueOf() - moment(a).valueOf(); // descendente
+  });
 
   return (
     <Box>
       {sortedDates.map((date) => (
         <Box key={date} mb={4}>
           <Typography variant="h6" gutterBottom>
-            🗕️ {moment(date).format("DD MMMM YYYY")}
+            🗕️ {moment(date).locale("es").format("DD MMMM YYYY")}
           </Typography>
 
           {Object.entries(grouped[date]).map(([envTitle, res]) => (
@@ -65,8 +68,9 @@ const ReservationList: React.FC<Props> = ({ reservations }) => {
               </Typography>
               <List dense>
                 {res.timeRanges.map((range, index) => {
-                  const start = moment(range.startDate);
-                  const end = moment(range.endDate);
+                  // Convertir de segundos a milisegundos para moment.js
+                  const start = moment(range.startDate * 1000); // ← ×1000 aquí
+                  const end = moment(range.endDate * 1000); // ← ×1000 aquí
                   const isHospedaje = res.rentalUnit === "Días";
                   const rangeText = isHospedaje
                     ? `${start.format("DD MMM")} → ${end.format("DD MMM")}`

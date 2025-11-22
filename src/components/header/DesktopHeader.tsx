@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
-import { Toolbar, IconButton, Box, Button, Badge } from "@mui/material";
+import { Toolbar, IconButton, Box, Button } from "@mui/material";
 import Link from "next/link";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { UserType } from "@/utils/constants/user-constants";
 import { getHeaderNavItems } from "@/utils/constants/nav-configs";
 import LogoImage from "./LogoImage";
 import { useRouter } from "next/navigation";
+import { NotificationsIconButton } from "../buttons/NotificationsIconButton";
 
 interface DesktopHeaderProps {
   userType?: UserType;
@@ -15,7 +16,6 @@ interface DesktopHeaderProps {
 const DesktopHeader: React.FC<DesktopHeaderProps> = ({
   userType = UserType.UNLOGGED,
 }) => {
-  const hasNotifications = true;
   const headerItems = getHeaderNavItems(userType);
   const router = useRouter();
 
@@ -62,20 +62,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
                   </Button>
                 ),
             )}
-            <Link href={PageRoutes.Notifications} passHref>
-              <IconButton color="secondary">
-                <Badge
-                  color="error"
-                  variant="dot"
-                  invisible={!hasNotifications}
-                >
-                  {
-                    headerItems.find((item) => item.label === "Notificaciones")
-                      ?.icon
-                  }
-                </Badge>
-              </IconButton>
-            </Link>
+            <NotificationsIconButton headerItems={headerItems} />
 
             <Link href={PageRoutes.Profile} passHref>
               <IconButton color="secondary">

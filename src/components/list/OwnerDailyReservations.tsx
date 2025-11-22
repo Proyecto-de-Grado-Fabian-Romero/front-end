@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { ReservationResponse } from "@/types/Reservations";
-import { getReservationsByDay } from "@/services/reservationService";
+import { getMyReservationsByDay } from "@/services/reservationService";
 import { Moment } from "moment";
 import ReservationList from "../card/ReservationList";
 
@@ -21,8 +21,8 @@ const OwnerDailyReservations: React.FC<Props> = ({ date }) => {
       try {
         setLoading(true);
         const timestamp = date.startOf("day").valueOf();
-        const res = await getReservationsByDay(timestamp);
-        setReservations(res);
+        const res = await getMyReservationsByDay(timestamp);
+        setReservations(res.items);
       } catch {
         setError("Error al cargar las reservas.");
       } finally {

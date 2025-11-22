@@ -40,7 +40,9 @@ interface FiltersModalProps {
   selectedServices: string[];
   setSelectedServices: (services: string[]) => void;
   areaCounts: Record<string, number>;
+  equipmentCounts: Record<string, number>;
   setAreaCounts: (counts: Record<string, number>) => void;
+  setEquipmentCounts: (counts: Record<string, number>) => void;
   selectedEnv: string;
   minCapacity: number;
   setMinCapacity: React.Dispatch<React.SetStateAction<number>>;
@@ -57,6 +59,8 @@ export default function FiltersModal({
   setSelectedServices,
   areaCounts,
   setAreaCounts,
+  equipmentCounts,
+  setEquipmentCounts,
   selectedEnv,
   minCapacity,
   setMinCapacity,
@@ -260,19 +264,32 @@ export default function FiltersModal({
             <Box display="flex" alignItems="center">
               <IconButton
                 onClick={() =>
-                  handleCountChange(item.name, -1, areaCounts, setAreaCounts)
+                  handleCountChange(
+                    item.name,
+                    -1,
+                    equipmentCounts,
+                    setEquipmentCounts,
+                  )
                 }
               >
                 <RemoveIcon />
               </IconButton>
               <Typography>
-                {areaCounts[item.name] >= 4 ? "4+" : areaCounts[item.name] || 0}
+                {equipmentCounts[item.name] >= 4
+                  ? "4+"
+                  : equipmentCounts[item.name] || 0}
               </Typography>
               <IconButton
                 onClick={() =>
-                  handleCountChange(item.name, 1, areaCounts, setAreaCounts, 4)
+                  handleCountChange(
+                    item.name,
+                    1,
+                    equipmentCounts,
+                    setEquipmentCounts,
+                    4,
+                  )
                 }
-                disabled={areaCounts[item.name] >= 4}
+                disabled={equipmentCounts[item.name] >= 4}
               >
                 <AddIcon />
               </IconButton>

@@ -35,8 +35,7 @@ const EquipmentModal: React.FC<Props> = ({ open, onClose, publicId }) => {
         setLoading(true);
         const env = await getEnvironmentByPublicId(publicId);
         setEquipment(JSON.parse(env.equipment || "{}"));
-      } catch (err) {
-        console.error("Error al cargar equipamiento:", err);
+      } catch {
         setError("No se pudo cargar el equipamiento.");
       } finally {
         setLoading(false);
@@ -56,6 +55,7 @@ const EquipmentModal: React.FC<Props> = ({ open, onClose, publicId }) => {
     setEquipment((prev) => {
       const current = prev[id] || 0;
       if (current <= 1) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [id]: _, ...rest } = prev;
         return rest;
       }
@@ -76,15 +76,14 @@ const EquipmentModal: React.FC<Props> = ({ open, onClose, publicId }) => {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ detectedObjects: equipment }),
-        }
+        },
       );
 
       if (!res.ok) throw new Error("Error al guardar el equipamiento");
 
       onClose();
-    } catch (err: any) {
-      console.error("Error PATCH:", err);
-      setError(err.message || "Hubo un problema al guardar");
+    } catch {
+      setError("Hubo un problema al guardar");
     } finally {
       setSaving(false);
     }

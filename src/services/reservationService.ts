@@ -3,11 +3,14 @@ import {
   CreateReservationPayload,
   ReservationResponse,
 } from "@/types/Reservations";
+import { trackEvent } from "./logEvent";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_ENVIRONMENTS_URL ?? "";
 
 export const createReservation = async (
   payload: CreateReservationPayload,
 ): Promise<ReservationResponse> => {
-  const res = await fetch("http://localhost:5150/api/Reservations", {
+  const res = await fetch(`${API_BASE}/api/Reservations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -15,28 +18,32 @@ export const createReservation = async (
   });
 
   if (!res.ok) {
+    trackEvent("reservation_create_failed");
     const error = await res.json();
-    throw new Error(error.mensaje || "Error al crear la reserva");
+    console.log(error);
+    throw new Error(error.message || "Error al crear la reserva");
   }
 
-  return await res.json() as ReservationResponse;
+  trackEvent("reservation_created", { environmentId: payload.environmentId });
+
+  return (await res.json()) as ReservationResponse;
 };
 
 export const getMyReservations = async (
   status: string = "confirmed",
   page: number = 1,
   limit: number = 10,
+  type: string = "mine", // nuevo param por defecto
 ): Promise<PagedResult<ReservationResponse>> => {
   const params = new URLSearchParams({
     status,
     page: page.toString(),
     limit: limit.toString(),
+    type,
   });
 
-  console.log(params, status)
-
   const res = await fetch(
-    `http://localhost:5150/api/Reservations/mine?${params.toString()}`,
+    `${API_BASE}/api/Reservations/mine?${params.toString()}`,
     {
       method: "GET",
       credentials: "include",
@@ -44,9 +51,11 @@ export const getMyReservations = async (
   );
 
   if (!res.ok) {
+    trackEvent("reservations_list_failed");
     throw new Error("Error al obtener las reservas");
   }
 
+  trackEvent("reservations_list_success");
   const data: PagedResult<ReservationResponse> = await res.json();
   return data;
 };
@@ -54,16 +63,16 @@ export const getMyReservations = async (
 export const getReservationById = async (
   publicId: string,
 ): Promise<ReservationResponse> => {
-  const res = await fetch(
-    `http://localhost:5150/api/Reservations/${publicId}`,
-    {
-      credentials: "include",
-    },
-  );
+  const res = await fetch(`${API_BASE}/api/Reservations/${publicId}`, {
+    credentials: "include",
+  });
 
   if (!res.ok) {
+    trackEvent("reservation_detail_failed", { publicId });
     throw new Error("Error al obtener la reserva");
   }
+
+  trackEvent("reservation_detail_success", { publicId });
 
   return res.json();
 };
@@ -72,22 +81,21 @@ export const updateReservationStatus = async (
   publicId: string,
   newStatus: string,
 ): Promise<void> => {
-  const res = await fetch(
-    `http://localhost:5150/api/Reservations/${publicId}/status`,
-    {
-      method: "PATCH",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status: newStatus }),
+  const res = await fetch(`${API_BASE}/api/Reservations/${publicId}/status`, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({ status: newStatus }),
+  });
 
   if (!res.ok) {
-    const { mensaje } = await res.json();
-    throw new Error(mensaje || "Error al actualizar el estado de la reserva");
+    trackEvent("reservation_status_update_failed", { publicId, newStatus });
+    throw new Error("Error al actualizar el estado de la reserva");
   }
+
+  trackEvent("reservation_status_update_success", { publicId, newStatus });
 };
 
 export const checkReservationConflicts = async (
@@ -101,35 +109,81 @@ export const checkReservationConflicts = async (
     end: end.toString(),
   });
 
-  const res = await fetch(
-    `http://localhost:5150/api/Reservations/conflicts?${params}`,
+  const res = await fetch(`${API_BASE}/api/Reservations/conflicts?${params}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    trackEvent("reservation_conflict_check_failed", {
+      environmentId,
+      start,
+      end,
+    });
+    throw new Error("Error al verificar conflictos de reservas");
+  }
+
+  const { hasConflict } = await res.json();
+
+  trackEvent("reservation_conflict_check_success", {
+    environmentId,
+    start,
+    end,
+    hasConflict,
+  });
+  return hasConflict;
+};
+
+export const getMyReservationsByDay = async (
+  scheduledDayTimestamp: number,
+  status?: string,
+  page: number = 1,
+  limit: number = 10,
+  type?: string,
+): Promise<{
+  items: ReservationResponse[];
+  totalPages: number;
+  totalItems: number;
+}> => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+    scheduledDayTimestamp: scheduledDayTimestamp.toString(),
+  });
+
+  if (status) {
+    params.append("status", status);
+  }
+  if (type) {
+    params.append("type", type);
+  }
+
+  const response = await fetch(
+    `${API_BASE}/api/Reservations/mine/by-day?${params.toString()}`,
     {
       method: "GET",
       credentials: "include",
     },
   );
 
-  if (!res.ok) {
-    throw new Error("Error al verificar conflictos de reservas");
+  if (!response.ok) {
+    trackEvent("reservations_by_day_failed", {
+      scheduledDayTimestamp,
+      status,
+      page,
+      limit,
+      type,
+    });
+    throw new Error("Error fetching reservations by day");
   }
 
-  const { hasConflict } = await res.json();
-  return hasConflict;
-};
+  trackEvent("reservations_by_day_success", {
+    scheduledDayTimestamp,
+    status,
+    page,
+    limit,
+    type,
+  });
 
-export const getReservationsByDay = async (
-  timestamp: number,
-): Promise<ReservationResponse[]> => {
-  const res = await fetch(
-    `http://localhost:5150/api/Reservations/day?timestamp=${timestamp}`,
-    {
-      credentials: "include",
-    },
-  );
-
-  if (!res.ok) {
-    throw new Error("Error al obtener las reservas del día");
-  }
-
-  return await res.json();
+  return response.json();
 };

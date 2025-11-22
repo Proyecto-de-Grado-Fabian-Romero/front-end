@@ -17,13 +17,20 @@ import {
   Cancel,
   CheckCircle,
   HourglassEmpty,
+  Save,
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { Tour360Request } from "@/types/Tour360Request";
-import { updateTour360Status } from "@/services/adminService";
+import {
+  updateTour360Schedule,
+  updateTour360Status,
+} from "@/services/adminService";
 import { MaterialReactTable, type MRT_ColumnDef } from "material-react-table";
 import Link from "next/link";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import moment from "moment";
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp * 1000);
@@ -61,7 +68,7 @@ const statusOptions = [
     value: 3,
     label: "Cancelado",
     icon: <Cancel fontSize="small" sx={{ color: "#d32f2f" }} />,
-    color: "#d32f2f", // rojo
+    color: "#d32f2f",
   },
 ];
 
@@ -77,6 +84,41 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
     setLocalRequests(requests);
   }, [requests]);
 
+  const [editingDateById, setEditingDateById] = useState<
+    Record<string, string>
+  >({}); // yyyy-MM-dd
+  const [dateSavingId, setDateSavingId] = useState<string | null>(null);
+
+  const toUnixStartOfDayLaPaz = (yyyyMMdd: string) => {
+    // La Paz = UTC-04:00 ⇒ 00:00 local = 04:00 UTC
+    const [y, m, d] = yyyyMMdd.split("-").map(Number);
+    return Math.floor(Date.UTC(y, (m ?? 1) - 1, d ?? 1, 4, 0, 0) / 1000);
+  };
+
+  const handleScheduleSave = async (publicId: string) => {
+    const val = editingDateById[publicId];
+    if (!val) return;
+    const unix = toUnixStartOfDayLaPaz(val);
+    setDateSavingId(publicId);
+    try {
+      await updateTour360Schedule(publicId, unix);
+      setLocalRequests((prev) =>
+        prev.map((r) =>
+          r.publicId === publicId ? { ...r, scheduledDate: unix } : r,
+        ),
+      );
+    } catch {
+      alert("No se pudo actualizar la fecha programada.");
+    } finally {
+      setDateSavingId(null);
+      setEditingDateById((s) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [publicId]: _, ...rest } = s;
+        return rest;
+      });
+    }
+  };
+
   const handleStatusChange = async (publicId: string, newStatus: number) => {
     setStatusLoadingId(publicId);
     try {
@@ -91,6 +133,12 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
     } finally {
       setStatusLoadingId(null);
     }
+  };
+
+  const minDateForReq = (req: Tour360Request) => {
+    const today = moment().startOf("day");
+    const requestDay = moment.unix(req.requestDate).startOf("day");
+    return moment.max(today, requestDay);
   };
 
   if (loading) {
@@ -159,9 +207,72 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
             <Typography variant="subtitle2" mt={2}>
               Fecha Programada
             </Typography>
-            <Typography variant="body1">
-              {req.scheduledDate ? formatDate(req.scheduledDate) : "-"}
-            </Typography>
+
+            <Box display="flex" alignItems="center" gap={1}>
+              <LocalizationProvider
+                dateAdapter={AdapterMoment}
+                adapterLocale="es"
+              >
+                <Box display="flex" alignItems="center" gap={1}>
+                  <Box sx={{ flex: 1.2 }}>
+                    <DatePicker
+                      label="Seleccionar fecha"
+                      value={
+                        editingDateById[req.publicId]
+                          ? moment(editingDateById[req.publicId])
+                          : req.scheduledDate
+                            ? moment.unix(req.scheduledDate)
+                            : null
+                      }
+                      onChange={(newValue) => {
+                        if (newValue) {
+                          setEditingDateById((s) => ({
+                            ...s,
+                            [req.publicId]: newValue
+                              .startOf("day")
+                              .format("YYYY-MM-DD"),
+                          }));
+                        }
+                      }}
+                      disablePast
+                      minDate={moment.max(
+                        moment().startOf("day"),
+                        moment.unix(req.requestDate).startOf("day"),
+                      )}
+                      disabled={req.status === 2 || req.status === 3} // 2 = Completado, 3 = Cancelado
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          fullWidth: true,
+                        },
+                      }}
+                    />
+                  </Box>
+
+                  {editingDateById[req.publicId] && (
+                    <Button
+                      sx={{ flex: 0.7 }}
+                      variant="outlined"
+                      size="small"
+                      disabled={
+                        !editingDateById[req.publicId] ||
+                        dateSavingId === req.publicId
+                      }
+                      onClick={() => handleScheduleSave(req.publicId)}
+                      startIcon={
+                        dateSavingId === req.publicId ? (
+                          <CircularProgress size={16} />
+                        ) : (
+                          <Save fontSize="small" />
+                        )
+                      }
+                    >
+                      Guardar
+                    </Button>
+                  )}
+                </Box>
+              </LocalizationProvider>
+            </Box>
 
             {req.status <= 1 && (
               <Button
@@ -195,6 +306,7 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
           <Link
             href={`${PageRoutes.Environment_Details}/${id}`}
             style={{ color: "#000", textDecoration: "underline" }}
+            target="_blank"
           >
             {name}
           </Link>
@@ -252,9 +364,66 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
     {
       header: "Fecha Programada",
       accessorKey: "scheduledDate",
-      Cell: ({ cell }) => {
-        const value = cell.getValue<number>();
-        return value ? formatDate(value) : "-";
+      Cell: ({ row }) => {
+        const req = row.original;
+        const currentValue = req.scheduledDate
+          ? moment.unix(req.scheduledDate)
+          : null;
+
+        const minDate = minDateForReq(req);
+        const selectedDate = editingDateById[req.publicId]
+          ? moment(editingDateById[req.publicId])
+          : currentValue;
+
+        return (
+          <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="es">
+            <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ flex: 1 }}>
+                <DatePicker
+                  label="Seleccionar fecha"
+                  value={selectedDate}
+                  onChange={(newValue) => {
+                    if (newValue)
+                      setEditingDateById((s) => ({
+                        ...s,
+                        [req.publicId]: newValue
+                          .startOf("day")
+                          .format("YYYY-MM-DD"),
+                      }));
+                  }}
+                  disablePast
+                  minDate={minDate}
+                  disabled={req.status === 2 || req.status === 3} // 2=Completado,3=Cancelado
+                  slotProps={{
+                    textField: { size: "small", fullWidth: true },
+                  }}
+                />
+              </Box>
+
+              {editingDateById[req.publicId] && (
+                <Button
+                  sx={{ flex: 0.5 }}
+                  variant="outlined"
+                  size="small"
+                  disabled={
+                    !editingDateById[req.publicId] ||
+                    dateSavingId === req.publicId
+                  }
+                  onClick={() => handleScheduleSave(req.publicId)}
+                  startIcon={
+                    dateSavingId === req.publicId ? (
+                      <CircularProgress size={16} />
+                    ) : (
+                      <Save fontSize="small" />
+                    )
+                  }
+                >
+                  Guardar
+                </Button>
+              )}
+            </Box>
+          </LocalizationProvider>
+        );
       },
     },
     {
@@ -280,9 +449,6 @@ const Tour360RequestsTable = ({ requests, loading }: Props) => {
 
   return (
     <Box sx={{ mt: 4, width: "100%" }}>
-      <Typography variant="h5" mb={2}>
-        Solicitudes de Recorridos 360°
-      </Typography>
       <MaterialReactTable
         columns={columns}
         data={localRequests}

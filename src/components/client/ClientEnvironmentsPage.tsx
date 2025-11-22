@@ -9,6 +9,8 @@ import { RootState } from "@/store";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import EnvironmentGrid from "@/components/grid/EnvironmentGrid";
 import { fetchEnvironments } from "@/services/environmentService";
+import SearchComponent from "../inputs/searchbar/SearchComponent";
+import { Box } from "@mui/material";
 
 const ClientEnvironmentsPage = () => {
   const [environments, setEnvironments] = useState<Environment[]>([]);
@@ -46,14 +48,19 @@ const ClientEnvironmentsPage = () => {
   };
 
   return (
-    <EnvironmentGrid
-      environments={environments.filter((env) => env.ownerId !== user.publicId)}
-      loading={loading}
-      totalPages={totalPages}
-      page={page}
-      onPageChange={handlePageChange}
-      emptyMessage="No hay Ambientes que coincidan con tu criterio de búsqueda"
-    />
+    <Box sx={{ width: "100%", marginTop: 8 }}>
+      <SearchComponent />
+      <EnvironmentGrid
+        environments={environments.filter(
+          (env) => env.ownerId !== user.publicId,
+        )}
+        loading={loading}
+        totalPages={totalPages}
+        page={page}
+        onPageChange={handlePageChange}
+        emptyMessage="No hay Ambientes que coincidan con tu criterio de búsqueda"
+      />
+    </Box>
   );
 };
 

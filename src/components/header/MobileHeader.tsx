@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { Toolbar, IconButton, Box, Badge } from "@mui/material";
+import { Toolbar, Box } from "@mui/material";
 import { UserType } from "@/utils/constants/user-constants";
 import { getHeaderNavItems } from "@/utils/constants/nav-configs";
-import { PageRoutes } from "@/utils/constants/page-routes";
 import LogoImage from "./LogoImage";
+import { NotificationsIconButton } from "../buttons/NotificationsIconButton";
 
 interface MobileHeaderProps {
   userType?: UserType;
@@ -13,8 +13,6 @@ interface MobileHeaderProps {
 const MobileHeader: React.FC<MobileHeaderProps> = ({
   userType = UserType.UNLOGGED,
 }) => {
-  const hasNotifications = false;
-
   const headerItems = getHeaderNavItems(userType);
 
   return (
@@ -24,14 +22,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       </Box>
       <Box>
         {userType !== UserType.UNLOGGED && userType !== UserType.RENTER && (
-          <IconButton color="inherit" href={PageRoutes.Notifications}>
-            <Badge color="error" variant="dot" invisible={!hasNotifications}>
-              {
-                headerItems.find((item) => item.label === "Notificaciones")
-                  ?.icon
-              }
-            </Badge>
-          </IconButton>
+          <NotificationsIconButton headerItems={headerItems} />
         )}
       </Box>
     </Toolbar>

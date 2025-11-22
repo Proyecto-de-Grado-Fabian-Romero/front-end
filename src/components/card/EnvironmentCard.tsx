@@ -3,13 +3,14 @@
 import { Environment } from "@/types/AllEnvironments";
 import { CLASS_ID_TO_NAME, OBJECT_ICONS } from "@/utils/constants/class-names";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import { Vrpano } from "@mui/icons-material";
+import { VisibilityOff, Vrpano } from "@mui/icons-material";
 import {
   Box,
   Card,
   CardContent,
   CardMedia,
   Chip,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -106,7 +107,20 @@ const EnvironmentCard = ({ environment }: Props) => {
             }}
           />
         )}
-        <Card sx={{ borderRadius: 2, cursor: "pointer", height: "100%" }}>
+        <Card
+          sx={{
+            borderRadius: 2,
+            cursor: "pointer",
+            height: "100%",
+            background: "#fbfbfbff",
+            transition: "box-shadow 0.2s ease, transform 0.2s ease",
+            boxShadow: "20px 2px 8px rgba(28, 6, 6, 0.24)",
+            "&:hover": {
+              boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.3)",
+              transform: "translateY(-2px)",
+            },
+          }}
+        >
           <CardMedia
             component="img"
             height="180"
@@ -130,6 +144,36 @@ const EnvironmentCard = ({ environment }: Props) => {
               👥 Máx: {capacity} asistentes
             </Typography>
 
+            {environment.hidden && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "rgba(0,0,0,0.45)",
+                  zIndex: 4,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Tooltip title="Ambiente oculto" arrow>
+                  <Box
+                    sx={{
+                      color: "white",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <VisibilityOff fontSize="large" />
+                    <Typography variant="subtitle1" color="white">
+                      Oculto
+                    </Typography>
+                  </Box>
+                </Tooltip>
+              </Box>
+            )}
+
             {equipmentChips.length > 0 && (
               <Box
                 sx={{
@@ -152,14 +196,13 @@ const EnvironmentCard = ({ environment }: Props) => {
                     icon={OBJECT_ICONS[id]}
                     label={`${CLASS_ID_TO_NAME[id] || id} x${qty}`}
                     size="small"
-                    color={
-                      userEquipmentFilter.includes(id) ? "primary" : "default"
-                    }
+                    color={"primary"}
                     sx={{
                       flexShrink: 0,
                       userSelect: "none",
                       mb: 1,
                       fontSize: 16,
+                      color: "#424242ff",
                     }}
                   />
                 ))}

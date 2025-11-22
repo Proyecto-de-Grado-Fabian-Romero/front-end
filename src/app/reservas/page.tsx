@@ -35,7 +35,24 @@ const MyReservationsPage = () => {
   const status = searchParams.get("status") || "confirmed";
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
-  const type = searchParams.get("type") || "mine";
+
+  const [currentType, setCurrentType] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!userRole) return;
+
+    const type = searchParams.get("type");
+
+    let newType: string;
+
+    if (type) {
+      newType = type;
+    } else {
+      newType = userRole === UserRole.Owner ? "mine" : "others";
+    }
+
+    setCurrentType(newType);
+  }, [userRole, searchParams]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -51,14 +68,16 @@ const MyReservationsPage = () => {
   };
 
   useEffect(() => {
-    console.log("CALLED")
     const fetchData = async () => {
+      if (!currentType) return;
+
       try {
         setLoading(true);
         const { items, totalPages } = await getMyReservations(
           status,
           page,
           limit,
+          currentType,
         );
         setReservations(items);
         setTotalPages(totalPages);
@@ -70,7 +89,7 @@ const MyReservationsPage = () => {
     };
 
     fetchData();
-  }, [status, page, limit, searchParams]);
+  }, [status, page, limit, currentType, searchParams]);
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", mt: 6, px: 2 }}>
@@ -79,7 +98,7 @@ const MyReservationsPage = () => {
       </Typography>
 
       {userRole === UserRole.Owner && (
-        <Tabs value={type} onChange={handleTabChange} sx={{ mb: 2 }}>
+        <Tabs value={currentType} onChange={handleTabChange} sx={{ mb: 2 }}>
           <Tab label="Reservas de mis ambientes" value="mine" />
           <Tab label="Reservas que hice" value="others" />
         </Tabs>

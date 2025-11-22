@@ -49,7 +49,7 @@ const DebtDetailsModal = ({
             <Typography variant="body1">
               Monto a Pagar: {debt.totalAmount}
             </Typography>
-            <Typography variant="body1">Moneda: {debt.currency}</Typography>
+            <Typography variant="body1">Moneda: Bs. </Typography>
             <Typography variant="body1">
               Fecha de Actualización:{" "}
               {new Date(debt.updatedAt).toLocaleDateString()}

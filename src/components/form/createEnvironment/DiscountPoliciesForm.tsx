@@ -56,7 +56,7 @@ const DiscountPoliciesForm: React.FC<Props> = ({ formData, setFormData }) => {
   const dayHours = formData.typePublicKey === "hospedajes" ? "días" : "horas";
 
   return (
-    <Box>
+    <Box sx={{ maxWidth: "800px", width: "100%", mb: 4 }}>
       <Typography variant="h6" gutterBottom>
         Políticas de Descuento
       </Typography>

@@ -1,6 +1,14 @@
 "use client";
 
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Tabs,
+  Tab,
+  useMediaQuery,
+} from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { UserRole } from "@/types/Users";
@@ -11,87 +19,151 @@ import SecurityIcon from "@mui/icons-material/Security";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import { useMemo } from "react";
+import { useTheme } from "@mui/material/styles";
 
 export default function ProfileSidebarActions() {
   const user = useSelector((state: RootState) => state.user);
-
   const router = useRouter();
   const pathname = usePathname();
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("md")); // xs/sm => Tabs, md+ => sidebar
 
-  const isCurrent = (path: string) => pathname === path;
+  // Definimos las opciones una sola vez
+  const allItems = useMemo(() => {
+    const base = [
+      {
+        label: "Perfil",
+        icon: <AccountCircleIcon fontSize="small" />,
+        route: PageRoutes.Profile,
+        show: true,
+      },
+      {
+        label: "Ingresos",
+        icon: <PaymentsIcon fontSize="small" />,
+        route: PageRoutes.Incomes,
+        show: user.role === UserRole.Owner,
+      },
+      {
+        label: "Pagos Recibidos",
+        icon: <CreditScoreIcon fontSize="small" />,
+        route: PageRoutes.Received_Payments,
+        show: user.role === UserRole.Owner,
+      },
+      {
+        label: "Datos bancarios",
+        icon: <AccountBalanceIcon fontSize="small" />,
+        route: PageRoutes.Update_Bank_Data,
+        show: user.role === UserRole.Owner,
+      },
+      {
+        label: "Seguridad",
+        icon: <SecurityIcon fontSize="small" />,
+        route: PageRoutes.Seguridad,
+        show: true,
+      },
+    ];
+    return base.filter((i) => i.show);
+  }, [user.role]);
 
-  const content = (
-    <Paper elevation={2} sx={{ p: 3, borderRadius: 3 }}>
-      <Typography variant="h6" fontWeight="bold" mb={2}>
-        Opciones
-      </Typography>
-      <Stack spacing={2} alignItems="stretch">
-        <Button
-          variant={isCurrent(PageRoutes.Profile) ? "contained" : "outlined"}
-          fullWidth
-          startIcon={<AccountCircleIcon />}
-          onClick={() => router.push(PageRoutes.Profile)}
-          sx={{ justifyContent: "flex-start" }}
+  // Index actual según ruta
+  const currentIndex = useMemo(() => {
+    const idx = allItems.findIndex((i) => i.route === pathname);
+    return idx === -1 ? 0 : idx;
+  }, [allItems, pathname]);
+
+  const handleTabChange = (_: React.SyntheticEvent, newIndex: number) => {
+    const item = allItems[newIndex];
+    if (item) router.push(item.route);
+  };
+
+  // --- Mobile/Tablet: Tabs horizontales scrollables ---
+  if (isSmall) {
+    return (
+      <Box sx={{ width: "100%", mb: 2 }}>
+        <Paper
+          elevation={1}
+          sx={{
+            borderRadius: 2,
+            px: 1,
+            // que los tabs no “salten” al hacer scroll
+            position: "sticky",
+            top: 0,
+            zIndex: 2,
+            bgcolor: "background.paper",
+          }}
         >
-          Perfil
-        </Button>
+          <Tabs
+            value={currentIndex}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            aria-label="Navegación perfil"
+            sx={{
+              minHeight: 48,
+              "& .MuiTab-root": {
+                minHeight: 48,
+                textTransform: "none",
+                fontSize: 13,
+                px: 1.25,
+              },
+              "& .MuiTabs-indicator": { height: 2 },
+            }}
+          >
+            {allItems.map((item) => (
+              <Tab
+                key={item.route}
+                icon={item.icon}
+                iconPosition="start"
+                label={item.label}
+              />
+            ))}
+          </Tabs>
+        </Paper>
+      </Box>
+    );
+  }
 
-        {user.role === UserRole.Owner && (
-          <>
-            <Button
-              variant={isCurrent(PageRoutes.Incomes) ? "contained" : "outlined"}
-              fullWidth
-              startIcon={<PaymentsIcon />}
-              onClick={() => router.push(PageRoutes.Incomes)}
-              sx={{ justifyContent: "flex-start" }}
-            >
-              Ingresos
-            </Button>
-            <Button
-              variant={
-                isCurrent(PageRoutes.Received_Payments)
-                  ? "contained"
-                  : "outlined"
-              }
-              fullWidth
-              startIcon={<CreditScoreIcon />}
-              onClick={() => router.push(PageRoutes.Received_Payments)}
-              sx={{ justifyContent: "flex-start" }}
-            >
-              Pagos Recibidos
-            </Button>
-            <Button
-              variant={
-                isCurrent(PageRoutes.Update_Bank_Data)
-                  ? "contained"
-                  : "outlined"
-              }
-              fullWidth
-              startIcon={<AccountBalanceIcon />}
-              onClick={() => router.push(PageRoutes.Update_Bank_Data)}
-              sx={{ justifyContent: "flex-start" }}
-            >
-              Datos bancarios
-            </Button>
-          </>
-        )}
-
-        <Button
-          variant={isCurrent(PageRoutes.Seguridad) ? "contained" : "outlined"}
-          fullWidth
-          startIcon={<SecurityIcon />}
-          onClick={() => router.push(PageRoutes.Seguridad)}
-          sx={{ justifyContent: "flex-start" }}
-        >
-          Seguridad
-        </Button>
-      </Stack>
-    </Paper>
-  );
-
+  // --- Desktop (md+): Sidebar vertical clásico (sin título) ---
   return (
-    <Box sx={{ minWidth: { md: 280 }, mt: { xs: 4, md: 0 }, pr: { md: 4 } }}>
-      {content}
+    <Box
+      sx={{
+        width: "auto",
+        minWidth: 280,
+        pr: 4,
+        position: "sticky",
+        top: 24,
+        alignSelf: "flex-start",
+      }}
+    >
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          width: 360,
+        }}
+      >
+        <Stack spacing={1.25} alignItems="stretch">
+          {allItems.map((item) => {
+            const isActive = pathname === item.route;
+            return (
+              <Button
+                key={item.route}
+                size="small"
+                variant={isActive ? "contained" : "outlined"}
+                fullWidth
+                startIcon={item.icon}
+                onClick={() => router.push(item.route)}
+                sx={{ justifyContent: "flex-start", textTransform: "none" }}
+              >
+                {item.label}
+              </Button>
+            );
+          })}
+        </Stack>
+      </Paper>
     </Box>
   );
 }

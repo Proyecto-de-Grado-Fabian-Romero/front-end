@@ -141,8 +141,8 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           maxWidth: "800px",
-          paddingLeft: "60px",
-          paddingRight: "60px",
+          // paddingLeft: "60px",
+          // paddingRight: "60px",
           borderRadius: "8px",
           fontWeight: 500,
           [theme.breakpoints.up("xs")]: {

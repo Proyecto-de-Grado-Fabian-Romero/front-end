@@ -3,7 +3,9 @@
 import { Box, Chip, CircularProgress, Grid, Typography } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
+// @ts-ignore - allow side-effect CSS imports without type declarations
 import "swiper/css";
+// @ts-ignore - allow side-effect CSS imports without type declarations
 import "swiper/css/pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
@@ -16,10 +18,13 @@ import { Environment } from "@/types/GetEnvironment";
 import { CLASS_ID_TO_NAME, OBJECT_ICONS } from "@/utils/constants/class-names";
 import { HelpOutline } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getEnvironmentByPublicId } from "@/services/environmentService";
+import LocationMapStep from "../map/LocationMapStep";
+import UserPreviewCard from "../card/UserPreviewCard";
 
 export default function EnvironmentDetailsClient() {
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.user);
 
   const { publicId } = useParams();
@@ -30,7 +35,12 @@ export default function EnvironmentDetailsClient() {
     const fetchEnvironment = async () => {
       try {
         if (typeof publicId === "string") {
-          const res = await getEnvironmentByPublicId(publicId);
+          const res = (await getEnvironmentByPublicId(publicId)) as Environment;
+          if (res.hidden && user.publicId !== res.ownerId) {
+            alert("Este ambiente no se encuentra disponible. Vuelve atrás");
+            router.replace("/");
+            return;
+          }
           setData(res);
         }
       } catch (err) {
@@ -207,13 +217,32 @@ export default function EnvironmentDetailsClient() {
       {renderPricingPolicies()}
       {renderDiscountPolicies()}
 
+      <br />
+      <hr />
+      <br />
+      <UserPreviewCard publicId={data.ownerId} />
+      <br />
+      <hr />
+      <br />
+      <LocationMapStep
+        latitude={data.latitude}
+        longitude={data.longitude}
+        onChange={() => {}}
+        title="Ubicación del Ambiente"
+        forEdition={false}
+      />
+
       <Box mt={16} />
+      <br />
+      <br />
+      <br />
 
       <UsersEnvironmentButtons
         basePrice={data.pricingPolicies[0]?.basePrice ?? 0}
         rentalUnit={data.rentalUnit}
         forOwner={user.publicId === data.ownerId}
         envPubId={data.publicId}
+        hidden={data.hidden}
       />
     </Box>
   );

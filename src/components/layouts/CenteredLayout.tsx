@@ -10,7 +10,10 @@ const CenteredLayout = ({ children }: CenteredLayoutProps) => {
     <Container
       maxWidth={false}
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-start",
       }}
     >
       {children}

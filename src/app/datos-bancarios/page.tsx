@@ -1,11 +1,18 @@
-import BankInfoClient from "@/components/client/BankInfoClient";
+"use client";
+
 import CenteredLayout from "@/components/layouts/CenteredLayout";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const ClientBankInfo = dynamic(
+  () => import("@/components/client/BankInfoClient"),
+  { ssr: false },
+);
 
 const page = () => {
   return (
     <CenteredLayout>
-      <BankInfoClient />
+      <ClientBankInfo />
     </CenteredLayout>
   );
 };

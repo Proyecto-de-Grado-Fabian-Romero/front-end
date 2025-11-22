@@ -25,7 +25,7 @@ const Home = () => {
         <>
           <Banner />
           <OccasionsSection />
-          <RentPromptSection />
+          {user.role === UserRole.User && <RentPromptSection />}
           <ExperienceSection />
         </>
       )}

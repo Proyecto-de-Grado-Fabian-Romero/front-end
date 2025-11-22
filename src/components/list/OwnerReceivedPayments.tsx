@@ -40,11 +40,7 @@ const OwnerReceivedPayments = () => {
       accessorKey: "reference",
     },
     {
-      header: "Método de Pago",
-      accessorKey: "paymentMethod",
-    },
-    {
-      header: "Fecha de Creación",
+      header: "Fecha de Depósito",
       accessorKey: "createdAt",
       Cell: ({ cell }) =>
         new Date(cell.getValue<string>()).toLocaleDateString(),

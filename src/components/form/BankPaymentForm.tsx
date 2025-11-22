@@ -6,8 +6,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BankPaymentData } from "@/types/BankPaymentData";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 interface Props {
   initialValues?: Partial<BankPaymentData>;
@@ -24,6 +26,7 @@ export default function BankPaymentForm({
   onSubmit,
   onCancel,
 }: Props) {
+  const user = useSelector((state: RootState) => state.user);
   const [accountNumber, setAccountNumber] = useState(
     initialValues.bankAccountNumber || "",
   );
@@ -38,7 +41,12 @@ export default function BankPaymentForm({
       bankAccountHolder: accountHolder,
       bankName,
     });
+    window.location.reload();
   };
+
+  useEffect(() => {
+    setAccountHolder(user.name || "");
+  }, [user.name]);
 
   return (
     <>
@@ -50,17 +58,21 @@ export default function BankPaymentForm({
           value={accountNumber}
           onChange={(e) => setAccountNumber(e.target.value)}
           fullWidth
+          placeholder="Ej: 1234567890"
+          sx={{ mt: 2 }}
         />
         <TextField
           label="Titular de la cuenta"
           value={accountHolder}
           onChange={(e) => setAccountHolder(e.target.value)}
+          placeholder="Ej: Juan Pérez"
           fullWidth
         />
         <TextField
           label="Banco"
           value={bankName}
           onChange={(e) => setBankName(e.target.value)}
+          placeholder="Ej: Banco Sol"
           fullWidth
         />
         {error && (

@@ -40,7 +40,7 @@ const CreateVirtualTourPage = () => {
 
   return (
     <CenteredLayout>
-      <Typography mb={4} mt={4} variant="h1">
+      <Typography mb={4} mt={12} variant="h4">
         Subir Recorrido 360
       </Typography>
       {publicId && uploadResults.length === 0 && (
@@ -53,6 +53,7 @@ const CreateVirtualTourPage = () => {
         <CreateVirtualTourForm
           uploadedImages={uploadResults}
           environmentPublicId={environmentId ?? ""}
+          publicId={publicId ?? ""}
         />
       )}
     </CenteredLayout>

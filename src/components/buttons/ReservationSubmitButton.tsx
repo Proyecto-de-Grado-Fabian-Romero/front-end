@@ -1,23 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Alert, Box } from "@mui/material";
-import moment, { Moment } from "moment";
+import moment from "moment";
 import { useRouter } from "next/navigation";
-import { createReservation } from "@/services/reservationService";
-import { createPayment } from "@/services/paymentService"; // ✅ nuevo import
+import {
+  createReservation,
+  updateReservationStatus,
+} from "@/services/reservationService";
+import { createPayment } from "@/services/paymentService";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import { ScheduleBlock } from "@/types/Booking";
 import { Environment } from "@/types/GetEnvironment";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
+import PaymentModal from "@/components/modal/PaymentModal";
 
 interface Props {
   environment: Environment;
   isHospedaje: boolean;
-  dateRange: [Moment | null, Moment | null];
+  dateRange: [moment.Moment | null, moment.Moment | null];
   scheduleBlocks: ScheduleBlock[];
   calculatedPrice: number;
+  peopleQuantity: number;
 }
 
 const ReservationSubmitButton: React.FC<Props> = ({
@@ -26,11 +31,18 @@ const ReservationSubmitButton: React.FC<Props> = ({
   dateRange,
   scheduleBlocks,
   calculatedPrice,
+  peopleQuantity,
 }) => {
   const router = useRouter();
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.user);
+
+  // State para el modal de pago
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+  const [reservationId, setReservationId] = useState("");
+  const [paymentFailed, setPaymentFailed] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -40,26 +52,30 @@ const ReservationSubmitButton: React.FC<Props> = ({
         ? dateRange[0] && dateRange[1]
           ? [
               {
-                startDate: dateRange[0].valueOf(),
-                endDate: dateRange[1].valueOf(),
+                startDate: Math.floor(dateRange[0]?.valueOf() / 1000),
+                endDate: Math.floor(dateRange[1]?.valueOf() / 1000),
               },
             ]
           : []
         : scheduleBlocks
             .filter((b) => b.date && b.start && b.end)
             .map((b) => ({
-              startDate: moment(b.date)
-                .set({
-                  hour: b.start!.hour(),
-                  minute: b.start!.minute(),
-                })
-                .valueOf(),
-              endDate: moment(b.date)
-                .set({
-                  hour: b.end!.hour(),
-                  minute: b.end!.minute(),
-                })
-                .valueOf(),
+              startDate: Math.floor(
+                moment(b.date)
+                  .set({
+                    hour: b.start!.hour(),
+                    minute: b.start!.minute(),
+                  })
+                  .valueOf() / 1000,
+              ),
+              endDate: Math.floor(
+                moment(b.date)
+                  .set({
+                    hour: b.end!.hour(),
+                    minute: b.end!.minute(),
+                  })
+                  .valueOf() / 1000,
+              ),
             }));
 
       if (!timeRanges.length) {
@@ -73,21 +89,32 @@ const ReservationSubmitButton: React.FC<Props> = ({
         environmentId,
         timeRanges,
         totalPrice: calculatedPrice,
+        peopleQuantity,
         currency: "Bs.",
       });
 
+      setReservationId(reservation.publicId);
+
       if (environment.instantBooking) {
         const paymentDto = {
-          reservationId: reservation.publicId, 
+          reservationId: reservation.publicId,
           clientEmail: user.email!,
           clientFullName: user.name!,
-          clientCI: user.phone || "0", 
+          clientCI: user.phone || "0",
           clientNIT: "0",
         };
 
-        const { url } = await createPayment(paymentDto, "Libelula");
+        const fechaVencimiento = moment()
+          .utcOffset(-4)
+          .add(16, "minutes")
+          .format("YYYY-MM-DD HH:mm");
 
-        window.location.href = url;
+        const { url } = await createPayment(paymentDto, fechaVencimiento);
+
+        setPaymentUrl(url);
+        setPaymentModalOpen(true);
+        setPaymentFailed(false);
+
         return;
       }
 
@@ -95,11 +122,32 @@ const ReservationSubmitButton: React.FC<Props> = ({
       setTimeout(() => {
         router.push(PageRoutes.Booking);
       }, 3000);
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Ocurrió un error al realizar la reserva, intenta de nuevo.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePaymentSuccess = () => {
+    setSuccess(true);
+    setTimeout(() => {
+      router.push(PageRoutes.Booking);
+    }, 2000);
+  };
+
+  const handlePaymentFailure = async () => {
+    setPaymentFailed(true);
+    // Cancelar la reserva si el pago falla
+    if (reservationId) {
+      await updateReservationStatus(reservationId, "cancelled");
+    }
+  };
+
+  const handleClosePaymentModal = () => {
+    setPaymentModalOpen(false);
+    setPaymentUrl(null);
   };
 
   return (
@@ -107,6 +155,12 @@ const ReservationSubmitButton: React.FC<Props> = ({
       {success && (
         <Alert severity="success" sx={{ mb: 2 }}>
           ¡Reserva realizada correctamente! Serás redirigido en unos segundos...
+        </Alert>
+      )}
+
+      {paymentFailed && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Pago fallido — intenta de nuevo.
         </Alert>
       )}
 
@@ -119,6 +173,16 @@ const ReservationSubmitButton: React.FC<Props> = ({
       >
         {environment.instantBooking ? "RESERVAR Y PAGAR" : "SOLICITAR RESERVA"}
       </Button>
+
+      <PaymentModal
+        open={paymentModalOpen}
+        paymentUrl={paymentUrl}
+        reservationId={reservationId}
+        environmentPublicId={environment.publicId}
+        onClose={handleClosePaymentModal}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentFailure={handlePaymentFailure}
+      />
     </Box>
   );
 };

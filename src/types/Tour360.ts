@@ -16,4 +16,5 @@ export type Scene360 = {
 export type Tour360 = {
   id: string;
   scenes: Scene360[];
+  createdDate: number;
 };

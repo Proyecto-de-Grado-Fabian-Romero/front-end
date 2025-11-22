@@ -1,3 +1,5 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_ENVIRONMENTS_URL ?? "";
+
 export const loadUnavailableRanges = async (
   publicId: string,
   startMs: number,
@@ -7,7 +9,7 @@ export const loadUnavailableRanges = async (
   const end = Math.floor(endMs / 1000);
 
   const res = await fetch(
-    `http://localhost:5150/api/Availability/unavailable?envId=${publicId}&start=${start}&end=${end}`,
+    `${API_BASE}/api/Availability/unavailable?envId=${publicId}&start=${start}&end=${end}`,
   );
   if (!res.ok) throw new Error("Error loading unavailable ranges");
   return await res.json();
@@ -25,7 +27,7 @@ export const getBlockedEnvironmentsByDay = async (
   }[]
 > => {
   const res = await fetch(
-    `http://localhost:5150/api/Availability/blocked?timestamp=${timestamp}`,
+    `${API_BASE}/api/Availability/blocked?timestamp=${timestamp}`,
     {
       credentials: "include",
     },
@@ -47,7 +49,7 @@ export const blockEnvironment = async ({
   startDate: number;
   endDate: number;
 }) => {
-  const res = await fetch("http://localhost:5150/api/Availability/block", {
+  const res = await fetch(`${API_BASE}/api/Availability/block`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

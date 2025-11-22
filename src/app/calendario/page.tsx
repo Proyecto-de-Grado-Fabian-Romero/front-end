@@ -1,125 +1,172 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Box, styled } from "@mui/material";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { Moment } from "moment";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Typography,
+  Tabs,
+  Tab,
+  CircularProgress,
+  Pagination,
+  Skeleton,
+} from "@mui/material";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
+import {
+  getMyReservations,
+  getMyReservationsByDay,
+} from "@/services/reservationService";
+import { ReservationResponse } from "@/types/Reservations";
+import ReservationList from "@/components/card/ReservationList";
+import ExpandableCalendar from "@/components/calendar/ExpandableCalendar";
 import { PageRoutes } from "@/utils/constants/page-routes";
-import OwnerDailyReservations from "@/components/list/OwnerDailyReservations";
-// import BlockedEnvironments from "@/components/list/BlockedEnvironments";
-import BlockTimeDialog from "@/components/modal/BlockTimeDialog";
-// import { BlockedDate } from "@/types/Availability";
-import moment from "moment";
+import moment, { Moment } from "moment";
 
-const StyledCalendar = styled(DateCalendar)(({ theme }) => ({
-  "& .MuiPickersCalendarHeader-root": {
-    fontSize: "1.2rem",
-    padding: theme.spacing(2),
-  },
-  "& .MuiPickersDay-root": {
-    fontSize: "1rem",
-    margin: theme.spacing(0.5),
-    width: 44,
-    height: 44,
-  },
-  "& .MuiPickersDay-dayWithMargin": {
-    fontSize: "1rem",
-  },
-  "& .MuiPickersCalendarHeader-label": {
-    fontWeight: "bold",
-  },
-  "& .MuiPickersCalendarHeader-switchViewButton": {
-    fontSize: "1.2rem",
-  },
-  "& .MuiDayCalendar-weekDayLabel": {
-    fontSize: "0.9rem",
-    fontWeight: 500,
-  },
-}));
-
-const OwnerBlockedCalendar: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Moment | null>(moment());
-  const [dialogOpen, setDialogOpen] = useState(false);
-  // const [blockedItems, setBlockedItems] = useState<BlockedDate[]>([]);
-
-  const role = useSelector((state: RootState) => state.user.role);
+const MyReservationsPage = () => {
+  const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [reservations, setReservations] = useState<ReservationResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+  const [selectedDate, setSelectedDate] = useState<Moment>(moment());
+
+  const status = searchParams.get("status") || "confirmed";
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "10");
+  const type = searchParams.get("type");
+  const [currentType, setCurrentType] = useState<string>("others");
 
   useEffect(() => {
-    if (!role || role !== UserRole.Owner) {
-      router.push(PageRoutes.Home);
+    if (!user.role) return;
+
+    let newType: string;
+
+    if (type) {
+      newType = type;
+    } else {
+      newType = user.role === UserRole.Owner ? "mine" : "others";
     }
-  }, [role, router]);
+
+    setCurrentType(newType);
+  }, [user.role, type]);
+
+  useEffect(() => {
+    if (!user.role) router.replace(`/`);
+  }, [router, user.role]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        let data;
+
+        if (selectedDate) {
+          const scheduledDayTimestamp = selectedDate
+            .utcOffset(-4 * 60)
+            .startOf("day")
+            .unix();
+
+          data = await getMyReservationsByDay(
+            scheduledDayTimestamp,
+            status,
+            page,
+            limit,
+            currentType,
+          );
+        } else {
+          data = await getMyReservations(status, page, limit, currentType);
+        }
+
+        setReservations(data.items);
+        setTotalPages(data.totalPages);
+      } catch {
+        alert("No se pudo obtener tus reservas, intenta de nuevo");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [status, page, limit, currentType, selectedDate, user.role]);
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("type", newValue);
+    newParams.set("page", "1");
+    router.push(`${PageRoutes.Calendar}?${newParams.toString()}`);
+  };
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set("page", page.toString());
+    router.push(`${PageRoutes.Calendar}?${newParams.toString()}`);
+  };
+
+  const handleDateChange = (newValue: Moment) => {
+    setSelectedDate(newValue);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", "1");
+    router.push(`${PageRoutes.Calendar}?${params.toString()}`);
+  };
 
   return (
-    <>
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: 420,
-          mx: "auto",
-          mt: 12,
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          <StyledCalendar
-            value={selectedDate}
-            onChange={(newValue) => setSelectedDate(newValue)}
-            views={["day", "month"]}
-            showDaysOutsideCurrentMonth
-            disablePast={false}
-            reduceAnimations={false}
-          />
-        </LocalizationProvider>
-      </Box>
-      {selectedDate && (
+    <Box sx={{ maxWidth: 900, mx: "auto", mt: 6, px: 2 }}>
+      <Typography variant="h5" mb={2} mt={12}>
+        Mis Reservas
+      </Typography>
+
+      <ExpandableCalendar
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
+        title="Seleccionar Día de las Reservas"
+        defaultExpanded={true}
+        timezoneOffset={-4}
+      />
+
+      {user.role === UserRole.Owner && (
+        <Tabs value={currentType} onChange={handleTabChange} sx={{ mb: 2 }}>
+          <Tab label="Reservas de mis ambientes" value="mine" />
+          <Tab label="Reservas que hice" value="others" />
+        </Tabs>
+      )}
+
+      {loading ? (
         <>
-          <Box mt={4}>
-            <OwnerDailyReservations date={selectedDate} />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              height={110}
+              variant="rectangular"
+              sx={{ mb: 2 }}
+            />
+          ))}
+          <Box display="flex" justifyContent="center" my={4}>
+            <CircularProgress />
           </Box>
-          <Box mt={4}>
-            {/* <BlockedEnvironments
-              date={selectedDate}
-              onLoad={(items) => setBlockedItems(items)}
-            /> */}
+        </>
+      ) : reservations.length === 0 ? (
+        <Typography color="text.secondary" textAlign="center" mt={4}>
+          No hay reservas registradas.
+        </Typography>
+      ) : (
+        <>
+          <ReservationList reservations={reservations} />
+
+          <Box display="flex" justifyContent="center" my={4}>
+            <Pagination
+              count={totalPages}
+              page={page} // ← Esto SÍ debe reaccionar a cambios
+              onChange={handlePageChange}
+            />
           </Box>
         </>
       )}
-      {selectedDate && (
-        <Box mt={2} display="flex" justifyContent="center">
-          {/* <Button
-            onClick={() => setDialogOpen(true)}
-            style={{
-              padding: "8px 16px",
-              backgroundColor: "#1976d2",
-              color: "#fff",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-            variant="outlined"
-          >
-            Bloquear Fecha/Horario de Ambiente
-          </Button> */}
-        </Box>
-      )}
-      {selectedDate && (
-        <BlockTimeDialog
-          open={dialogOpen}
-          onClose={() => setDialogOpen(false)}
-          selectedDate={selectedDate}
-          existingBlocks={[]}
-          // existingBlocks={blockedItems}
-        />
-      )}
-    </>
+    </Box>
   );
 };
 
-export default OwnerBlockedCalendar;
+export default MyReservationsPage;

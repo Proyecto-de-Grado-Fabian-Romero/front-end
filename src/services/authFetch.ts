@@ -1,5 +1,7 @@
 let isRefreshing = false;
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_USERS_URL ?? "";
+
 export async function authFetch(
   input: RequestInfo,
   init?: RequestInit,
@@ -11,7 +13,7 @@ export async function authFetch(
 
   if (res.status === 401 && !isRefreshing) {
     isRefreshing = true;
-    const refreshRes = await fetch("http://localhost:5123/api/Users/refresh", {
+    const refreshRes = await fetch(`${API_BASE}/api/Users/refresh`, {
       method: "POST",
       credentials: "include",
     });

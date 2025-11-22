@@ -1,7 +1,6 @@
 import WeekendIcon from "@mui/icons-material/Weekend";
 import BedIcon from "@mui/icons-material/Bed";
 import DiningIcon from "@mui/icons-material/Restaurant";
-import ToiletIcon from "@mui/icons-material/Wc";
 import TvIcon from "@mui/icons-material/Tv";
 import MicrowaveIcon from "@mui/icons-material/Microwave";
 import SinkIcon from "@mui/icons-material/Wash";

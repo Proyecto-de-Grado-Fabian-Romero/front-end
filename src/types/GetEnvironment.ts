@@ -1,4 +1,4 @@
-type Photo = {
+export type Photo = {
   fileId: string;
   fileName: string;
   url: string;
@@ -61,4 +61,5 @@ export type Environment = {
   tour360Id?: string;
   ownerId: string;
   instantBooking: boolean;
+  hidden: boolean;
 };
