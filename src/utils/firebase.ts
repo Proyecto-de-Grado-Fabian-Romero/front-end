@@ -1,6 +1,7 @@
-// firebaseAnalytics.ts
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let analyticsInstance: any = null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getAnalyticsSafe(app: any) {
   if (typeof window === "undefined") return null;
   if (analyticsInstance) return analyticsInstance;
@@ -27,7 +28,7 @@ let messaging: any = null;
 let analytics: any = null;
 
 if (typeof window !== "undefined") {
-  const { getAnalytics } = require("firebase/analytics");
+  // const { getAnalytics } = require("firebase/analytics");
   const { getApps, initializeApp } = require("firebase/app");
   const {
     getMessaging,
