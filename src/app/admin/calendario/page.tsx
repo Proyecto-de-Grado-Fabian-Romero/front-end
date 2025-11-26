@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 const ClientTour360RequestsPage = dynamic(
   () => import("@/components/client/ClientTour360ByDayPage"),
-  { ssr: true },
+  { ssr: false },
 );
 
 export default function Tour360RequestsPage() {

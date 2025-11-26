@@ -6,7 +6,7 @@ import { CircularProgress, Box } from "@mui/material";
 const OwnerPaymentsClient = dynamic(
   () => import("../../components/client/OwnerPaymentsClient"),
   {
-    ssr: true,
+    ssr: false,
     loading: () => (
       <Box display="flex" justifyContent="center" mt={4}>
         <CircularProgress />

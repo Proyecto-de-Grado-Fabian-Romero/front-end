@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 const ClientPayments = dynamic(
   () => import("@/components/client/AdminPaymentsClient"),
   {
-    ssr: true,
+    ssr: false,
   },
 );
 

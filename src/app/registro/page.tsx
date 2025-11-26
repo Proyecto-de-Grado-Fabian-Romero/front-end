@@ -4,7 +4,7 @@ import CenteredLayout from "@/components/layouts/CenteredLayout";
 const SignUpContent = dynamic(
   () => import("@/components/client/SignUpContent"),
   {
-    ssr: true,
+    ssr: false,
   },
 );
 

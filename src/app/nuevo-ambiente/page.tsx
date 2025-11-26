@@ -5,7 +5,7 @@ import React from "react";
 const CreateEnvironmentForm = dynamic(
   () => import("@/components/form/createEnvironment/CreateEnvironmentForm"),
   {
-    ssr: true,
+    ssr: false,
     loading: () => (
       <Box display="flex" justifyContent="center" mt={4}>
         <CircularProgress />

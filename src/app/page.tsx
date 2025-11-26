@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 const HomeClient = dynamic(() => import("@/components/client/HomeClient"), {
-  ssr: true,
+  ssr: false,
 });
 
 export default function EnvironmentsPage() {

@@ -3,7 +3,7 @@ import CenteredLayout from "@/components/layouts/CenteredLayout";
 
 const ClientOwnerEnvironments = dynamic(
   () => import("@/components/client/ClientOwnerEnvironments"),
-  { ssr: true },
+  { ssr: false },
 );
 
 export default function OwnerEnvironmentsPage() {
