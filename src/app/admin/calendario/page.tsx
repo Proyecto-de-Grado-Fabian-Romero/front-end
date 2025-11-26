@@ -1,3 +1,5 @@
+"use client";
+
 import CenteredLayout from "@/components/layouts/CenteredLayout";
 import dynamic from "next/dynamic";
 

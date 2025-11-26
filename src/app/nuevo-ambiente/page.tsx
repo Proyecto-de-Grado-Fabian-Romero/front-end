@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import { Container, CircularProgress, Box } from "@mui/material";
 import React from "react";
