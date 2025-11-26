@@ -1,3 +1,24 @@
+// firebaseAnalytics.ts
+let analyticsInstance: any = null;
+
+export function getAnalyticsSafe(app: any) {
+  if (typeof window === "undefined") return null;
+  if (analyticsInstance) return analyticsInstance;
+
+  try {
+    const { getAnalytics, isSupported } = require("firebase/analytics");
+    isSupported().then((ok: boolean) => {
+      if (ok) {
+        analyticsInstance = getAnalytics(app);
+      }
+    });
+  } catch (err) {
+    console.error("Analytics init failed:", err);
+  }
+
+  return null;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let app: any = null;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +48,7 @@ if (typeof window !== "undefined") {
       ? initializeApp(firebaseConfig)
       : getApps()[0] || null;
   messaging = app ? getMessaging(app) : null;
-  analytics = app ? getAnalytics(app) : null;
+  analytics = getAnalyticsSafe(app);
 }
 
 export { app, messaging, analytics };
