@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Box, Button, Typography, Stack } from "@mui/material";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
-import { useMap, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import Link from "next/link";
 
 // Dynamic imports para evitar SSR
@@ -22,9 +20,60 @@ const Marker = dynamic(async () => (await import("react-leaflet")).Marker, {
   ssr: false,
 });
 
+// Dynamic components that use react-leaflet hooks
+const MapClickHandler = dynamic(
+  async () => {
+    const { useMapEvents } = await import("react-leaflet");
+    return function MapClickHandlerComponent({
+      onMapClick,
+    }: {
+      onMapClick: (lat: number, lng: number) => void;
+    }) {
+      useMapEvents({
+        click(e: any) {
+          onMapClick(e.latlng.lat, e.latlng.lng);
+        },
+      });
+      return null;
+    };
+  },
+  { ssr: false },
+);
+
+const RecenterOnPosition = dynamic(
+  async () => {
+    const { useMap } = await import("react-leaflet");
+    const { useEffect } = await import("react");
+    return function RecenterOnPositionComponent({
+      lat,
+      lng,
+      zoom = 18,
+    }: {
+      lat: number;
+      lng: number;
+      zoom?: number;
+    }) {
+      const map = useMap();
+      useEffect(() => {
+        if (
+          Number.isFinite(lat) &&
+          Number.isFinite(lng) &&
+          !(lat === 0 && lng === 0)
+        ) {
+          map.flyTo([lat, lng], zoom, { duration: 0.8 });
+        }
+      }, [lat, lng, zoom, map]);
+      return null;
+    };
+  },
+  { ssr: false },
+);
+
 // Crear el icono solo en el cliente
 const createOrangeIcon = () => {
   if (typeof window === "undefined") return null;
+  // Dynamic require para Leaflet - solo en cliente
+  const L = require("leaflet");
   return new L.Icon({
     iconUrl:
       "data:image/svg+xml;base64," +
@@ -48,43 +97,6 @@ type Props = {
   title?: string;
   forEdition?: boolean;
 };
-
-// Componente para manejar clicks
-function MapClickHandler({
-  onMapClick,
-}: {
-  onMapClick: (lat: number, lng: number) => void;
-}) {
-  useMapEvents({
-    click(e) {
-      onMapClick(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return null;
-}
-
-// Componente que "vuela" cuando cambian coords
-function RecenterOnPosition({
-  lat,
-  lng,
-  zoom = 18,
-}: {
-  lat: number;
-  lng: number;
-  zoom?: number;
-}) {
-  const map = useMap();
-  useEffect(() => {
-    if (
-      Number.isFinite(lat) &&
-      Number.isFinite(lng) &&
-      !(lat === 0 && lng === 0)
-    ) {
-      map.flyTo([lat, lng], zoom, { duration: 0.8 });
-    }
-  }, [lat, lng, zoom, map]);
-  return null;
-}
 
 const LocationMapStep = ({
   latitude,
