@@ -1,5 +1,3 @@
-"use client";
-
 import dynamic from "next/dynamic";
 
 const EnvironmentDetailsClient = dynamic(
@@ -7,6 +5,6 @@ const EnvironmentDetailsClient = dynamic(
   { ssr: false },
 );
 
-export default async function EnvironmentDetailsPage() {
+export default function EnvironmentDetailsPage() {
   return <EnvironmentDetailsClient />;
 }

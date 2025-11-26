@@ -30,6 +30,7 @@ const MapClickHandler = dynamic(
       onMapClick: (lat: number, lng: number) => void;
     }) {
       useMapEvents({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         click(e: any) {
           onMapClick(e.latlng.lat, e.latlng.lng);
         },

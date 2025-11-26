@@ -1,5 +1,8 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let app: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let messaging: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let analytics: any = null;
 
 if (typeof window !== "undefined") {
@@ -45,7 +48,10 @@ export async function getFcmToken(): Promise<string | null> {
   }
 }
 
-export async function listenForeground(handler: (payload: any) => void) {
+export async function listenForeground(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handler: (payload: any) => void,
+) {
   if (!messaging) return;
   const { onMessage } = await import("firebase/messaging");
   onMessage(messaging, handler);
