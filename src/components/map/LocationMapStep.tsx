@@ -22,21 +22,24 @@ const Marker = dynamic(async () => (await import("react-leaflet")).Marker, {
   ssr: false,
 });
 
-// Icono naranja personalizado
-const orangeIcon = new L.Icon({
-  iconUrl:
-    "data:image/svg+xml;base64," +
-    btoa(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-        <path fill="#F24F13" d="M172.3 501.7C26.5 291.3 0 269.4 0 192C0 86 86 0 192 0s192 86 192 192c0 77.4-26.5 99.3-172.3 309.7a24 24 0 0 1-39.4 0zM192 272a80 80 0 1 0 0-160 80 80 0 0 0 0 160z"/>
-      </svg>
-    `),
-  iconSize: [35, 56],
-  iconAnchor: [17, 54],
-  popupAnchor: [1, -34],
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  shadowSize: [41, 41],
-});
+// Crear el icono solo en el cliente
+const createOrangeIcon = () => {
+  if (typeof window === "undefined") return null;
+  return new L.Icon({
+    iconUrl:
+      "data:image/svg+xml;base64," +
+      btoa(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <path fill="#F24F13" d="M172.3 501.7C26.5 291.3 0 269.4 0 192C0 86 86 0 192 0s192 86 192 192c0 77.4-26.5 99.3-172.3 309.7a24 24 0 0 1-39.4 0zM192 272a80 80 0 1 0 0-160 80 80 0 0 0 0 160z"/>
+        </svg>
+      `),
+    iconSize: [35, 56],
+    iconAnchor: [17, 54],
+    popupAnchor: [1, -34],
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    shadowSize: [41, 41],
+  });
+};
 
 type Props = {
   latitude: number;
@@ -184,7 +187,7 @@ const LocationMapStep = ({
             <Marker
               position={[currentLat, currentLng]}
               draggable={forEdition}
-              icon={orangeIcon}
+              icon={createOrangeIcon() || undefined}
               eventHandlers={{
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 dragend: (e: any) => {
