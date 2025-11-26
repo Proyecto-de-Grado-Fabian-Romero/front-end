@@ -2,10 +2,10 @@ import * as React from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { close } from "@/store/slices/notificationSlice";
 import { Alert, Slide, Snackbar } from "@mui/material";
-import { usePushSetup } from "@/hooks/usePushSetUp";
+// import { usePushSetup } from "@/hooks/usePushSetUp";
 
 export function SnackbarHub() {
-  usePushSetup();
+  // usePushSetup();
   const dispatch = useAppDispatch();
   const { open, current } = useAppSelector((s) => s.notifications);
 
