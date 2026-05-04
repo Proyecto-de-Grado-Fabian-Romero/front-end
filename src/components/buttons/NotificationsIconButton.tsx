@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { IconButton, Badge } from "@mui/material";
 import {
-  getUnreadCount,
   markAllNotificationsRead,
 } from "@/services/notificationsService";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { PageRoutes } from "@/utils/constants/page-routes";
@@ -20,17 +19,17 @@ export function NotificationsIconButton({
 
   const user = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      if (!user.publicId) return;
-      const count = await getUnreadCount(user.publicId);
-      if (mounted) setHasNotifications(count > 0);
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [user.publicId]);
+  // useEffect(() => {
+  //   let mounted = true;
+  //   (async () => {
+  //     if (!user.publicId) return;
+  //     const count = await getUnreadCount(user.publicId);
+  //     if (mounted) setHasNotifications(count > 0);
+  //   })();
+  //   return () => {
+  //     mounted = false;
+  //   };
+  // }, [user.publicId]);
 
   const handleClick = async () => {
     setHasNotifications(false);
