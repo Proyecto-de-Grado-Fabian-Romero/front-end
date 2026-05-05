@@ -20,6 +20,8 @@ import { MonthlyEarningsResponseDto } from "@/types/Earnings";
 import { monthLabel } from "@/utils/methods/formatMonth";
 import { PaymentSummary } from "@/types/Payments";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_ADMIN_URL ?? "";
+
 export default function MonthlyEarningsChart({
   summary,
 }: {
@@ -41,7 +43,7 @@ export default function MonthlyEarningsChart({
       const toMs = to.clone().utc().startOf("month").add(1, "month").valueOf();
 
       const res = await fetch(
-        `http://localhost:5101/api/owners/earnings/monthly?fromMs=${fromMs}&toMs=${toMs}`,
+        `${API_BASE}/api/owners/earnings/monthly?fromMs=${fromMs}&toMs=${toMs}`,
         { credentials: "include" },
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

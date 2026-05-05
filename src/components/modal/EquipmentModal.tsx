@@ -23,6 +23,8 @@ type Props = {
   publicId: string;
 };
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_ENVIRONMENTS_URL ?? "";
+
 const EquipmentModal: React.FC<Props> = ({ open, onClose, publicId }) => {
   const [equipment, setEquipment] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -71,7 +73,7 @@ const EquipmentModal: React.FC<Props> = ({ open, onClose, publicId }) => {
     setError("");
     try {
       const res = await fetch(
-        `http://localhost:5150/api/environments/${publicId}/detected-objects`,
+        `${API_BASE}/api/environments/${publicId}/detected-objects`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
