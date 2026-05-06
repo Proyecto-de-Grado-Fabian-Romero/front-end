@@ -138,9 +138,10 @@ const EnvironmentCard = ({ environment }: Props) => {
               Bs. {pricingPolicies[0]?.basePrice} por{" "}
               {(() => {
                 const unit = pricingPolicies[0]?.priceUnit?.toLowerCase() ?? "";
-                if (unit === "dias" || unit === "días" || unit === "día")
-                  return unit;
-                return unit.slice(0, Math.max(unit.length - 1, 0));
+                if (unit.endsWith("s")) {
+                  return unit.slice(0, Math.max(unit.length - 1, 0));
+                }
+                return unit;
               })()}
             </Typography>
             <Typography variant="body2" color="text.secondary">
