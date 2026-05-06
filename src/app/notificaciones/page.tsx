@@ -2,12 +2,7 @@
 
 import React from "react";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-import dynamic from "next/dynamic";
-
-const ClientNotifications = dynamic(
-  () => import("@/components/client/NotificationsClient"),
-  { ssr: false },
-);
+import ClientNotifications from "@/components/client/NotificationsClient";
 
 const IncomePage = () => {
   return (

@@ -1,12 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-
-const ClientOwnerEnvironments = dynamic(
-  () => import("@/components/client/ClientOwnerEnvironments"),
-  { ssr: false },
-);
+import ClientOwnerEnvironments from "@/components/client/ClientOwnerEnvironments";
 
 export default function OwnerEnvironmentsPage() {
   return (

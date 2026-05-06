@@ -1,21 +1,8 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-import { CircularProgress, Box } from "@mui/material";
-
-const OwnerPaymentsClient = dynamic(
-  () => import("../../components/client/OwnerPaymentsClient"),
-  {
-    ssr: false,
-    loading: () => (
-      <Box display="flex" justifyContent="center" mt={4}>
-        <CircularProgress />
-      </Box>
-    ),
-  },
-);
+import OwnerPaymentsClient from "../../components/client/OwnerPaymentsClient";
 
 const ReceivedPaymentsPage = () => {
   return (

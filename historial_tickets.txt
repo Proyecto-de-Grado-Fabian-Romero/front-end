@@ -1,0 +1,143 @@
+f448068 | Merge branch 'develop' of https://github.com/Proyecto-de-Grado-Fabian-Romero/frotnend into feature/SPACIO-94/pay-booking | 2025-11-22
+c2bdfd4 | SPACIO-94 feat: pay instant booking | 2025-07-31
+3258ed7 | Merge pull request #31 from Proyecto-de-Grado-Fabian-Romero/bugfix/SPACIO-354/360-requests-table-not-responsive | 2025-07-27
+b84e21b | SPACIO-354 feat: change package to material database | 2025-07-27
+648fb36 | SPACIO-354 feat: change package to material database | 2025-07-27
+f3edbb8 | SPACIO-354 chore: downgrade icons package for compatibility | 2025-07-23
+8afbac3 | SPACIO-354 chore: downgrade icons package for compatibility | 2025-07-23
+5ff7483 | SPACIO-354 chore: downgrade icons package for compatibility | 2025-07-23
+1627bb5 | SPACIO-354 chore: delete unused vars | 2025-07-23
+481172b | SPACIO-354 fix: captura request table responsive | 2025-07-23
+3ded479 | Merge pull request #30 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-40/change-and-reset-password | 2025-07-11
+a2b513c | SPACIO-40 chore: fix styles in restore password | 2025-07-11
+30fbb03 | SPACIO-40 feat: change function condition in step password | 2025-07-11
+afd737e | SPACIO-40 feat: restore password page and client | 2025-07-11
+5ba6b59 | SPACIO-40 feat: add change password page | 2025-07-11
+c77bf03 | SPACIO-40 feat: add change password service | 2025-07-06
+7df6e0d | Merge pull request #29 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-30/verify-email | 2025-06-28
+ddfbd5a | SPACIO-30 chore: remove unused vars | 2025-06-28
+f22bb3a | SPACIO-30 feat: make page responsive | 2025-06-28
+3a750ab | SPACIO-30 feat: resend code and confirm email page | 2025-06-28
+6e56a5f | SPACIO-30 feat: add service function | 2025-06-28
+ccf7069 | Merge pull request #28 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-26/sign-up | 2025-06-26
+dc7f312 | SPACIO-26 feat: sign up page and validations | 2025-06-26
+14c7fa0 | SPACIO-26 feat: add sign up form and content | 2025-06-26
+c8eb994 | SPACIO-26 feat: add sign up service function | 2025-06-26
+a785cf4 | Merge pull request #27 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-37/update-user-info | 2025-06-20
+6e4bbec | SPACIO-37 feat: connect to service to update profile data | 2025-06-20
+94c0b51 | SPACIO-37 feat: add sidebar to payments and incomes | 2025-06-20
+371b981 | SPACIO-37 feat: add side bar profile | 2025-06-20
+ed7ca9e | SPACIO-37 feat: add layout to update profile | 2025-06-20
+1354be9 | Merge pull request #26 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-107/become-an-owner | 2025-06-20
+d98e62e | SPACIO-107 feat: delete handler called from server page | 2025-06-20
+63986aa | SPACIO-107 feat: upadte bank data default | 2025-06-20
+6c96826 | SPACIO-107 chore: update lint and styles errors | 2025-06-20
+de04c06 | SPACIO-107 feat: add create bank data to bank payment modal | 2025-06-19
+3761214 | Merge pull request #25 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-116/update-debt-with-owner | 2025-06-19
+b5e3762 | SPACIO-116 fix: update code styles | 2025-06-19
+8bc46eb | SPACIO-116 feat: add payments summary to owner views | 2025-06-19
+ac70ec7 | SPACIO-116 feat: update styles and types for payments | 2025-06-16
+3b9f997 | SPACIO-116 feat: add modal to mark a debt as paid | 2025-06-15
+3f851d8 | Merge pull request #24 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-113/debts-and-owners-payment-history | 2025-06-15
+476c564 | SPACIO-113 fix: delete unused vars | 2025-06-15
+d33f058 | SPACIO-113 styles: update code styles | 2025-06-15
+a16978f | SPACIO-113 fix: delete params with page props from page | 2025-06-15
+759ee78 | SPACIO-113 feat: fix params type in page details | 2025-06-15
+e1c92e5 | SPACIO-113 styles: fix code styles | 2025-06-15
+e037491 | SPACIO-113 feat: add use client flag to client component income detail | 2025-06-14
+8b6eef9 | SPACIO-113 feat: delete unused vars and fix styles | 2025-06-14
+a366bed | SPACIO-113 feat: add admin payments pages | 2025-06-14
+99d1459 | SPACIO-113 feat: update endpoints to refresh the token in every fetch | 2025-06-14
+082a00c | SPACIO-113 feat: owner payments views | 2025-06-13
+75ac6ea | SPACIO-113 feat: add owner payments endpoints | 2025-06-12
+ede551f | Merge pull request #23 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-106/update-owner-bank-payment-data | 2025-06-09
+4d1e15d | SPACIO-106 feat: add service function to update bank data | 2025-06-09
+b5fe28d | SPACIO-106 feat: add bank payment modal form | 2025-06-09
+cb21b1d | Merge pull request #22 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-136/filter-environments-by-detected-objects | 2025-06-08
+96006bb | SPACIO-136 fix: delete ununused vars on environment card | 2025-06-08
+30ea38b | SPACIO-136 feat: show chips of environment equipment when user searched for environments with given filtered objects | 2025-06-08
+f818d4b | SPACIO-136 feat: add detected object to filter to get the available environments | 2025-06-08
+dd8a1c4 | SPACIO-136 feat: get available objects to filter | 2025-06-08
+647604e | Merge pull request #21 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-28/log-out | 2025-06-05
+58bf35a | SPACIO-28 feat: delete unused vars on log out components | 2025-06-05
+904c877 | SPACIO-28 feat: add log out button | 2025-06-05
+b51a6b7 | Merge pull request #20 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-90/bookings-calendar | 2025-06-03
+e2f8fee | SPACIO-90 feat: filter environments searched by no owner id | 2025-06-03
+2733779 | SPACIO-90 feat: block dates view | 2025-06-03
+36e45c3 | SPACIO-90 feat: get environments blocked given a date | 2025-06-03
+48d6284 | SPACIO-90 feat: show reservations on a date | 2025-06-03
+70eab3c | Merge pull request #19 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-84/update-booking-request-status | 2025-06-03
+ca08003 | SPACIO-84 feat: add client to reservation details page | 2025-06-03
+1da20d2 | SPACIO-84 feat: navigate to single reservation details | 2025-06-03
+2529753 | SPACIO-84 feat: update status on reservation | 2025-06-03
+78e6395 | SPACIO-84 feat: update reservation status and get confflicts in reservation date | 2025-06-03
+b14d4c5 | SPACIO-84 feat: show reservation page | 2025-06-03
+2f7c431 | SPACIO-84 feat: update reservation response type | 2025-06-01
+bdfc2be | Merge pull request #18 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-76/user-booking-history | 2025-05-30
+e252877 | SPACIO-76 feat: show reservations list with pagination | 2025-05-30
+6b4b98f | SPACIO-76 feat: add reservation list component | 2025-05-30
+d2815b9 | SPACIO-76 feat: add service function to get user reservations | 2025-05-30
+62c2ae5 | Merge pull request #17 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-71/create-booking | 2025-05-29
+f0eca85 | SPACIO-71 feat: submit reservation | 2025-05-29
+a989e06 | SPACIO-71 feat: receive booking details from params | 2025-05-26
+013e5f2 | SPACIO-71 feat: create booking view | 2025-05-23
+f510b36 | SPACIO-71 feat: add missing fields to create an environment view | 2025-05-23
+3e16745 | SPACIO-71 refactor: form to create environment | 2025-05-23
+a70f6d7 | Merge pull request #16 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-125/tag-detected-objects-on-environment | 2025-05-17
+598c179 | SPACIO-125 feat: display objects with icons | 2025-05-17
+9bca9ff | SPACIO-125 fix: styling on details environment page | 2025-05-17
+3c1c274 | SPACIO-125 feat: show detected objects on environment | 2025-05-17
+3a89888 | Merge pull request #15 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-63/admin-update-tour360-status | 2025-05-10
+9fd8312 | SPACIO-63 feat: call api to update status | 2025-05-10
+e7f25fe | SPACIO-63 feat: implement select field to update status | 2025-05-10
+004a5cd | Merge pull request #14 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-55/admin-upload-virtual-tour | 2025-05-09
+475f23e | SPACIO-55 feat: upload virtual tour | 2025-05-09
+e0afcab | SPACIO-55 feat: create virtual tour form | 2025-05-09
+2465b12 | SPACIO-55 feat: add pois in scenes | 2025-05-09
+68f139a | SPACIO-55 feat: create scene | 2025-05-09
+c77cd06 | SPACIO-55 feat: upload 360 images to storage | 2025-05-09
+1915642 | SPACIO-55 feat: add page to create virtual tour | 2025-05-09
+85772d8 | Merge pull request #13 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-35/user-profile | 2025-05-09
+647f908 | SPACIO-35: implement profile page and refresh access token | 2025-05-09
+8a94bb8 | Merge pull request #12 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-102/owner-request-360-image-capture | 2025-05-08
+561a746 | SPACIO-102 feat: add loader when requesting tour 360 capture | 2025-05-08
+861e999 | SPACIO-102 feat: request tour360 post | 2025-05-08
+c220daa | SPACIO-102 feat: show buttons when environment belongs to logged owner | 2025-05-08
+13f1c5a | Merge pull request #11 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-61/admin-get-tour-360-requests | 2025-05-02
+543170d | SPACIO-61 feat: implement tour 360 requests page | 2025-05-02
+09a63f2 | SPACIO-61 feat: create grid and card components | 2025-05-02
+0a11a92 | Merge pull request #10 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-97/get-owner-environments-view | 2025-04-30
+9156122 | SPACIO-97 feat: add limit and page to pagination | 2025-04-30
+4a59f35 | SPACIO-97 feat: owner's environments view | 2025-04-30
+086015c | SPACIO-97 feat: fetch owner's environments | 2025-04-30
+fe8205a | Merge pull request #9 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-100/publish-new-environment-view | 2025-04-28
+311734e | SPACIO-100 feat: add create button fab responsive | 2025-04-28
+f26cedd | SPACIO-100 feat: change images to next img | 2025-04-28
+4800a6b | SPACIO-100 feat: code styling | 2025-04-24
+6910ef1 | SPACIO-100 feat: implement navigation | 2025-04-24
+543544a | SPACIO-100 feat: publish new environment | 2025-04-24
+6b49dd5 | Merge pull request #8 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-22/log-in-view | 2025-04-20
+694dfa1 | Merge branch 'feature/SPACIO-22/log-in-view' of https://github.com/Proyecto-de-Grado-Fabian-Romero/frotnend into feature/SPACIO-22/log-in-view | 2025-04-20
+0364a4a | SPACIO-22 feat: update header based on logged user | 2025-04-20
+732cc91 | SPACIO-22 feat: add log in view | 2025-04-20
+cbd140a | Merge pull request #7 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-161/splash-screen | 2025-04-20
+f33751c | SPACIO-161: finish splash screen | 2025-04-20
+8983c14 | SPACIO-161: add loader to splash screen | 2025-04-20
+589bc02 | Merge pull request #6 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-44/filtered-environments-view | 2025-04-20
+92db684 | SPACIO-42 feat: add pagination | 2025-04-20
+1337ab5 | SPACIO-42 feat: get all environments | 2025-04-20
+ddaa211 | SPACIO-42 feat: get areas and services globally | 2025-04-20
+df6d313 | Merge pull request #4 from Proyecto-de-Grado-Fabian-Romero/feature/SPACIO-42/initial-search-page-view | 2025-04-12
+6829dd2 | Merge branch 'develop' of https://github.com/Proyecto-de-Grado-Fabian-Romero/frotnend into feature/SPACIO-42/initial-search-page-view | 2025-04-12
+6e8a861 | SPACIO-42 feat: add home sections | 2025-04-12
+d9dd548 | SPACIO-42 feat: add banner section | 2025-04-11
+d5f697d | SPACIO-42 feat: create search component | 2025-04-11
+3929c5b | Merge pull request #3 from Proyecto-de-Grado-Fabian-Romero/SPACIO-134-story-create-header-and-bottom-navigation-view | 2025-04-07
+acf1f45 | SPACIO-134 feat: add link to header buttons | 2025-04-07
+0364616 | SPACIO-134 feat: add header component | 2025-04-07
+9da2b0a | SPACIO-134 feat: Create Bottom Navigation | 2025-04-04
+7ea1bc7 | Merge pull request #2 from Proyecto-de-Grado-Fabian-Romero/SPACIO-135-set-up-mui-theme | 2025-04-04
+9278ba7 | SPACIO-135 chore: change default font size to 14px | 2025-04-04
+8a4e3d3 | SPACIO-135 chore: add global context to set mui theme | 2025-04-04
+5c37454 | SPACIO-135 chore: add mui theme ui constants | 2025-04-04
+3dba219 | Merge pull request #1 from Proyecto-de-Grado-Fabian-Romero/feature/ID-12/front-end-set-up | 2025-04-03

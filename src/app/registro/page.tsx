@@ -1,14 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-
-const SignUpContent = dynamic(
-  () => import("@/components/client/SignUpContent"),
-  {
-    ssr: false,
-  },
-);
+import SignUpContent from "@/components/client/SignUpContent";
 
 export default function SignUpPage() {
   return (

@@ -17,7 +17,7 @@ export const createReservation = async (
     credentials: "include",
   });
 
-  console.log(payload)
+  console.log(payload);
 
   if (!res.ok) {
     trackEvent("reservation_create_failed");

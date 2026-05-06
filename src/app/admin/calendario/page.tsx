@@ -1,12 +1,7 @@
 "use client";
 
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-import dynamic from "next/dynamic";
-
-const ClientTour360RequestsPage = dynamic(
-  () => import("@/components/client/ClientTour360ByDayPage"),
-  { ssr: false },
-);
+import ClientTour360RequestsPage from "@/components/client/ClientTour360ByDayPage";
 
 export default function Tour360RequestsPage() {
   return (

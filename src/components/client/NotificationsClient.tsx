@@ -34,9 +34,11 @@ import { RootState } from "@/store";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import moment from "moment";
 import { DeleteForeverOutlined } from "@mui/icons-material";
+import LoggedOutProfile from "../profile/LoggedOutProfile";
 
 export default function NotificationsClient() {
   const user = useSelector((state: RootState) => state.user);
+  const isLoggedIn = !!user?.publicId;
 
   const router = useRouter();
   const [page, setPage] = useState<number>(1);
@@ -60,7 +62,6 @@ export default function NotificationsClient() {
     let isMounted = true;
     (async () => {
       if (!user.publicId) {
-        setError("No se encontró el publicId en cookies.");
         return;
       }
       setLoading(true);
@@ -85,6 +86,15 @@ export default function NotificationsClient() {
       Math.max(1, Math.ceil((data?.total ?? 0) / (data?.pageSize ?? pageSize))),
     [data, pageSize],
   );
+
+  if (!isLoggedIn) {
+    return (
+      <LoggedOutProfile
+        imageSrc="/images/illustrations/profile.svg"
+        title="Inicia sesión para ver tus notificaciones"
+      />
+    );
+  }
 
   const normalize = (s: string) =>
     s

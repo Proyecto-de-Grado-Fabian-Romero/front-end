@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import SplashScreen from "@/components/SplashScreen";
+import { useEffect } from "react";
 import { fetchAreas, fetchServices } from "@/services/environmentService";
 import { Provider, useDispatch } from "react-redux";
 import { setAreas, setServices } from "@/store/slices/optionsSlice";
@@ -10,12 +9,9 @@ import { fetchCurrentSession } from "@/services/authService";
 
 function InitLoader({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
-  const [loadingAreasServices, setLoadingAreasServices] = useState(true);
-  const [loadingSession, setLoadingSession] = useState(true);
 
   useEffect(() => {
-    async function loadData() {
+    async function preloadOptions() {
       try {
         const [areasData, servicesData] = await Promise.all([
           fetchAreas(),
@@ -25,28 +21,17 @@ function InitLoader({ children }: { children: React.ReactNode }) {
         dispatch(setAreas(areasData));
         dispatch(setServices(servicesData));
       } catch {
-        alert(
-          "Hubo un error cargando áreas o servicios, recarga la página por favor",
-        );
-      } finally {
-        setLoadingAreasServices(false);
+        // Avoid blocking UI with modal alerts during bootstrap.
+        console.error("No se pudieron precargar áreas y servicios");
       }
     }
 
-    loadData();
+    preloadOptions();
   }, [dispatch]);
 
   useEffect(() => {
-    fetchCurrentSession(dispatch).finally(() => setLoadingSession(false));
+    fetchCurrentSession(dispatch);
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!loadingAreasServices && !loadingSession) {
-      setLoading(false);
-    }
-  }, [loadingAreasServices, loadingSession]);
-
-  if (loading) return <SplashScreen />;
 
   return <>{children}</>;
 }

@@ -30,9 +30,7 @@ let analytics: any = null;
 if (typeof window !== "undefined") {
   // const { getAnalytics } = require("firebase/analytics");
   const { getApps, initializeApp } = require("firebase/app");
-  const {
-    getMessaging,
-  } = require("firebase/messaging");
+  const { getMessaging } = require("firebase/messaging");
 
   const firebaseConfig = {
     apiKey: "AIzaSyCQu4_0svGItpSShmPO2G1DX93aUhBDNHY",
@@ -44,10 +42,9 @@ if (typeof window !== "undefined") {
     measurementId: "G-L8Z0XPBL86",
   };
 
-  app =
-    !getApps().length
-      ? initializeApp(firebaseConfig)
-      : getApps()[0] || null;
+  app = !getApps().length
+    ? initializeApp(firebaseConfig)
+    : getApps()[0] || null;
   messaging = app ? getMessaging(app) : null;
   analytics = getAnalyticsSafe(app);
 }

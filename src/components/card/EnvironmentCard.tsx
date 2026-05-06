@@ -136,9 +136,12 @@ const EnvironmentCard = ({ environment }: Props) => {
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Bs. {pricingPolicies[0]?.basePrice} por{" "}
-              {pricingPolicies[0]?.priceUnit
-                .toLowerCase()
-                .slice(0, pricingPolicies[0]?.priceUnit.length - 1)}
+              {(() => {
+                const unit = pricingPolicies[0]?.priceUnit?.toLowerCase() ?? "";
+                if (unit === "dias" || unit === "días" || unit === "día")
+                  return unit;
+                return unit.slice(0, Math.max(unit.length - 1, 0));
+              })()}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               👥 Máx: {capacity} asistentes

@@ -1,13 +1,7 @@
 "use client";
 
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-import dynamic from "next/dynamic";
-const ClientDebts = dynamic(
-  () => import("@/components/client/AdminDebtsClient"),
-  {
-    ssr: false,
-  },
-);
+import ClientDebts from "@/components/client/AdminDebtsClient";
 
 export default function AdminDebtsPage() {
   return (

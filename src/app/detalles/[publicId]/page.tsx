@@ -1,11 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const EnvironmentDetailsClient = dynamic(
-  () => import("@/components/client/EnvironmentDetailsClient"),
-  { ssr: false },
-);
+import EnvironmentDetailsClient from "@/components/client/EnvironmentDetailsClient";
 
 export default function EnvironmentDetailsPage() {
   return <EnvironmentDetailsClient />;

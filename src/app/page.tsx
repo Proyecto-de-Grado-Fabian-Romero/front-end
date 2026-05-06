@@ -1,10 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const HomeClient = dynamic(() => import("@/components/client/HomeClient"), {
-  ssr: false,
-});
+import HomeClient from "@/components/client/HomeClient";
 
 export default function EnvironmentsPage() {
   return <HomeClient />;

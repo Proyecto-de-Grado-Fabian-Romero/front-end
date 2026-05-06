@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
@@ -25,6 +25,12 @@ const BottomNav: React.FC<BottomNavProps> = ({
 
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    navItems.forEach((item) => {
+      router.prefetch(item.to);
+    });
+  }, [router, navItems]);
 
   if (!isSmallScreen || pathname.includes(PageRoutes.Environment_Details))
     return null;

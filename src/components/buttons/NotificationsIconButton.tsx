@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { IconButton, Badge } from "@mui/material";
-import {
-  markAllNotificationsRead,
-} from "@/services/notificationsService";
+import { markAllNotificationsRead } from "@/services/notificationsService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";

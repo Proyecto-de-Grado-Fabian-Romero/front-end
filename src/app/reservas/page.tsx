@@ -18,28 +18,27 @@ import { ReservationResponse } from "@/types/Reservations";
 import { UserRole } from "@/types/Users";
 import ReservationList from "@/components/card/ReservationList";
 import { PageRoutes } from "@/utils/constants/page-routes";
+import LoggedOutProfile from "@/components/profile/LoggedOutProfile";
 
 const MyReservationsPage = () => {
+  const user = useSelector((state: RootState) => state.user);
   const userRole = useSelector((state: RootState) => state.user.role);
+  const isLoggedIn = !!user?.publicId;
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (!userRole) router.replace(`/`);
-  }, [router, userRole]);
 
   const [reservations, setReservations] = useState<ReservationResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
 
   const status = searchParams.get("status") || "confirmed";
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
+  const page = Number.parseInt(searchParams.get("page") || "1", 10);
+  const limit = Number.parseInt(searchParams.get("limit") || "10", 10);
 
   const [currentType, setCurrentType] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userRole) return;
+    if (!isLoggedIn || !userRole) return;
 
     const type = searchParams.get("type");
 
@@ -52,7 +51,7 @@ const MyReservationsPage = () => {
     }
 
     setCurrentType(newType);
-  }, [userRole, searchParams]);
+  }, [isLoggedIn, userRole, searchParams]);
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -69,6 +68,7 @@ const MyReservationsPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!isLoggedIn) return;
       if (!currentType) return;
 
       try {
@@ -89,7 +89,16 @@ const MyReservationsPage = () => {
     };
 
     fetchData();
-  }, [status, page, limit, currentType, searchParams]);
+  }, [isLoggedIn, status, page, limit, currentType]);
+
+  if (!isLoggedIn) {
+    return (
+      <LoggedOutProfile
+        imageSrc="/images/illustrations/profile.svg"
+        title="Inicia sesión para ver tus reservas"
+      />
+    );
+  }
 
   return (
     <Box sx={{ maxWidth: 900, mx: "auto", mt: 6, px: 2 }}>

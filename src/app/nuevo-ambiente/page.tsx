@@ -1,25 +1,21 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { Container, CircularProgress, Box } from "@mui/material";
 import React from "react";
-
-const CreateEnvironmentForm = dynamic(
-  () => import("@/components/form/createEnvironment/CreateEnvironmentForm"),
-  {
-    ssr: false,
-    loading: () => (
-      <Box display="flex" justifyContent="center" mt={4}>
-        <CircularProgress />
-      </Box>
-    ),
-  },
-);
+import CreateEnvironmentForm from "@/components/form/createEnvironment/CreateEnvironmentForm";
 
 const Page = () => {
   return (
     <Container maxWidth={false} sx={{ py: 4 }}>
-      <CreateEnvironmentForm />
+      <React.Suspense
+        fallback={
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <CreateEnvironmentForm />
+      </React.Suspense>
     </Container>
   );
 };

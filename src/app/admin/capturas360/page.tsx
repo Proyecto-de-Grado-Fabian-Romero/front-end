@@ -1,11 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const ClientTour360RequestsPage = dynamic(
-  () => import("@/components/client/ClientTour360RequestPage"),
-  { ssr: false },
-);
+import ClientTour360RequestsPage from "@/components/client/ClientTour360RequestPage";
 
 export default function Tour360RequestsPage() {
   return <ClientTour360RequestsPage />;

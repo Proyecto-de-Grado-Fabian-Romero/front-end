@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Toolbar, IconButton, Box, Button } from "@mui/material";
 import Link from "next/link";
 import { PageRoutes } from "@/utils/constants/page-routes";
@@ -18,6 +18,17 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({
 }) => {
   const headerItems = getHeaderNavItems(userType);
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch(PageRoutes.LogIn);
+    router.prefetch(PageRoutes.SignUp);
+    router.prefetch(PageRoutes.Profile);
+    router.prefetch(PageRoutes.Notifications);
+
+    headerItems.forEach((item) => {
+      router.prefetch(item.to);
+    });
+  }, [router, headerItems]);
 
   return (
     <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

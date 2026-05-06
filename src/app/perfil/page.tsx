@@ -1,12 +1,7 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
-
-const ProfileClient = dynamic(
-  () => import("@/components/client/ProfileClient"),
-  { ssr: false },
-);
+import ProfileClient from "@/components/client/ProfileClient";
 
 export default function OwnerEnvironmentsPage() {
   return (
