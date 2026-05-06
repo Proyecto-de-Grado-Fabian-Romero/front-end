@@ -2,6 +2,8 @@
 
 import CenteredLayout from "@/components/layouts/CenteredLayout";
 import ClientEnvironmentsPage from "@/components/client/ClientEnvironmentsPage";
+import { Box, CircularProgress } from "@mui/material";
+import { Suspense } from "react";
 
 export default function EnvironmentsPage() {
   return (
@@ -9,7 +11,15 @@ export default function EnvironmentsPage() {
       <br />
       <br />
       <br />
-      <ClientEnvironmentsPage />
+      <Suspense
+        fallback={
+          <Box display="flex" justifyContent="center" mt={6}>
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <ClientEnvironmentsPage />
+      </Suspense>
     </CenteredLayout>
   );
 }

@@ -19,8 +19,9 @@ import { UserRole } from "@/types/Users";
 import ReservationList from "@/components/card/ReservationList";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import LoggedOutProfile from "@/components/profile/LoggedOutProfile";
+import { Suspense } from "react";
 
-const MyReservationsPage = () => {
+const MyReservationsPageContent = () => {
   const user = useSelector((state: RootState) => state.user);
   const userRole = useSelector((state: RootState) => state.user.role);
   const isLoggedIn = !!user?.publicId;
@@ -145,6 +146,20 @@ const MyReservationsPage = () => {
         </>
       )}
     </Box>
+  );
+};
+
+const MyReservationsPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <Box display="flex" justifyContent="center" my={10}>
+          <CircularProgress />
+        </Box>
+      }
+    >
+      <MyReservationsPageContent />
+    </Suspense>
   );
 };
 

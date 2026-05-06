@@ -10,8 +10,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { UserRole } from "@/types/Users";
 import CenteredLayout from "@/components/layouts/CenteredLayout";
+import { Suspense } from "react";
 
-const CreateVirtualTourPage = () => {
+const CreateVirtualTourPageContent = () => {
   const searchParams = useSearchParams();
   const [publicId, setPublicId] = useState<string | null>(null);
   const [environmentId, setEnvironmentId] = useState<string | null>(null);
@@ -57,6 +58,14 @@ const CreateVirtualTourPage = () => {
         />
       )}
     </CenteredLayout>
+  );
+};
+
+const CreateVirtualTourPage = () => {
+  return (
+    <Suspense fallback={<Typography mt={12}>Cargando...</Typography>}>
+      <CreateVirtualTourPageContent />
+    </Suspense>
   );
 };
 

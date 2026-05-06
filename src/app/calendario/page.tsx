@@ -23,8 +23,9 @@ import ReservationList from "@/components/card/ReservationList";
 import ExpandableCalendar from "@/components/calendar/ExpandableCalendar";
 import { PageRoutes } from "@/utils/constants/page-routes";
 import moment, { Moment } from "moment";
+import { Suspense } from "react";
 
-const MyReservationsPage = () => {
+const MyReservationsPageContent = () => {
   const user = useSelector((state: RootState) => state.user);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -166,6 +167,20 @@ const MyReservationsPage = () => {
         </>
       )}
     </Box>
+  );
+};
+
+const MyReservationsPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <Box display="flex" justifyContent="center" my={10}>
+          <CircularProgress />
+        </Box>
+      }
+    >
+      <MyReservationsPageContent />
+    </Suspense>
   );
 };
 
